@@ -1,5 +1,9 @@
 package net.minecraft.client.entity;
 
+import github.qe7.detect.Detect;
+import github.qe7.detect.event.EventType;
+import github.qe7.detect.event.impl.EventMotion;
+import github.qe7.detect.event.impl.EventUpdate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSoundMinecartRiding;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -188,7 +192,18 @@ public class EntityPlayerSP extends AbstractClientPlayer
      */
     public void onUpdateWalkingPlayer()
     {
+        EventUpdate eventUpdate = new EventUpdate();
+        eventUpdate.setType(EventType.PRE);
+        Detect.i.moduleManager.onEvent(eventUpdate);
+
+        EventMotion eventMotion = new EventMotion(EventType.PRE, posX, getEntityBoundingBox().minY, posZ, rotationYaw, rotationPitch, onGround);
+        eventMotion.setType(EventType.PRE);
+        Detect.i.moduleManager.onEvent(eventMotion);
+
         boolean flag = this.isSprinting();
+
+        mc.thePlayer.rotationYawHead = eventMotion.getYaw();
+        mc.thePlayer.rotationPitchHead = eventMotion.getPitch();
 
         if (flag != this.serverSprintState)
         {
@@ -271,6 +286,12 @@ public class EntityPlayerSP extends AbstractClientPlayer
                 this.lastReportedPitch = this.rotationPitch;
             }
         }
+
+        eventUpdate.setType(EventType.POST);
+        Detect.i.moduleManager.onEvent(eventUpdate);
+
+        eventMotion.setType(EventType.POST);
+        Detect.i.moduleManager.onEvent(eventMotion);
     }
 
     /**

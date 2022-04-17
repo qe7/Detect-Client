@@ -35,6 +35,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import javax.imageio.ImageIO;
+
+import github.qe7.detect.Detect;
+import github.qe7.detect.event.impl.EventKey;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.audio.MusicTicker;
@@ -559,6 +562,9 @@ public class Minecraft implements IThreadListener, IPlayerUsage
         this.effectRenderer = new EffectRenderer(this.theWorld, this.renderEngine);
         this.checkGLError("Post startup");
         this.ingameGUI = new GuiIngame(this);
+
+        /* Injecting Detect clients code into Minecraft's startup */
+        Detect.i.init();
 
         if (this.serverName != null)
         {
@@ -1918,6 +1924,10 @@ public class Minecraft implements IThreadListener, IPlayerUsage
                     }
                     else
                     {
+
+                        EventKey eventKey = new EventKey(k);
+                        Detect.i.moduleManager.onEvent(eventKey);
+
                         if (k == 1)
                         {
                             this.displayInGameMenu();

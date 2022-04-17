@@ -6,6 +6,9 @@ import com.google.common.collect.Lists;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+
+import github.qe7.detect.Detect;
+import github.qe7.detect.event.impl.EventRender2D;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -159,7 +162,14 @@ public class GuiIngame extends Gui
         this.mc.getTextureManager().bindTexture(icons);
         GlStateManager.enableBlend();
 
-        if (this.showCrosshair())
+        ScaledResolution sr = new ScaledResolution(mc);
+        Detect.i.moduleManager.onEvent(new EventRender2D(sr.getScaledWidth() * 2, sr.getScaledHeight() * 2));
+
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        this.mc.getTextureManager().bindTexture(icons);
+        GlStateManager.enableBlend();
+
+        if (this.showCrosshair() && this.mc.gameSettings.thirdPersonView < 1)
         {
             GlStateManager.tryBlendFuncSeparate(775, 769, 1, 0);
             GlStateManager.enableAlpha();

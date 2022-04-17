@@ -2,6 +2,9 @@ package net.minecraft.network;
 
 import com.google.common.collect.Queues;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import github.qe7.detect.Detect;
+import github.qe7.detect.event.EventDirection;
+import github.qe7.detect.event.impl.EventPacket;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelException;
@@ -148,6 +151,13 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet>
 
     protected void channelRead0(ChannelHandlerContext p_channelRead0_1_, Packet p_channelRead0_2_) throws Exception
     {
+
+        EventPacket eventPacket = new EventPacket(EventDirection.INCOMING, p_channelRead0_2_);
+        Detect.i.moduleManager.onEvent(eventPacket);
+
+        if (eventPacket.isCancelled())
+            return;
+
         if (this.channel.isOpen())
         {
             try
@@ -174,6 +184,13 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet>
 
     public void sendPacket(Packet packetIn)
     {
+
+        EventPacket eventPacket = new EventPacket(EventDirection.OUTGOING, packetIn);
+        Detect.i.moduleManager.onEvent(eventPacket);
+
+        if (eventPacket.isCancelled())
+            return;
+
         if (this.isChannelOpen())
         {
             this.flushOutboundQueue();
@@ -195,6 +212,57 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet>
     }
 
     public void sendPacket(Packet packetIn, GenericFutureListener <? extends Future <? super Void >> listener, GenericFutureListener <? extends Future <? super Void >> ... listeners)
+    {
+
+        EventPacket eventPacket = new EventPacket(EventDirection.OUTGOING, packetIn);
+        Detect.i.moduleManager.onEvent(eventPacket);
+
+        if (eventPacket.isCancelled())
+            return;
+
+        if (this.isChannelOpen())
+        {
+            this.flushOutboundQueue();
+            this.dispatchPacket(packetIn, (GenericFutureListener[])ArrayUtils.add(listeners, 0, listener));
+        }
+        else
+        {
+            this.field_181680_j.writeLock().lock();
+
+            try
+            {
+                this.outboundPacketsQueue.add(new NetworkManager.InboundHandlerTuplePacketListener(packetIn, (GenericFutureListener[])ArrayUtils.add(listeners, 0, listener)));
+            }
+            finally
+            {
+                this.field_181680_j.writeLock().unlock();
+            }
+        }
+    }
+
+    public void sendPacketNoEvent(Packet packetIn)
+    {
+        if (this.isChannelOpen())
+        {
+            this.flushOutboundQueue();
+            this.dispatchPacket(packetIn, (GenericFutureListener <? extends Future <? super Void >> [])null);
+        }
+        else
+        {
+            this.field_181680_j.writeLock().lock();
+
+            try
+            {
+                this.outboundPacketsQueue.add(new NetworkManager.InboundHandlerTuplePacketListener(packetIn, (GenericFutureListener[])null));
+            }
+            finally
+            {
+                this.field_181680_j.writeLock().unlock();
+            }
+        }
+    }
+
+    public void sendPacketNoEvent(Packet packetIn, GenericFutureListener <? extends Future <? super Void >> listener, GenericFutureListener <? extends Future <? super Void >> ... listeners)
     {
         if (this.isChannelOpen())
         {
