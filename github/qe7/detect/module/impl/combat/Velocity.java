@@ -8,13 +8,14 @@ import net.minecraft.network.play.server.S27PacketExplosion;
 import github.qe7.detect.event.Event;
 import github.qe7.detect.module.Module;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
+import org.lwjgl.input.Keyboard;
 
 public class Velocity extends Module {
 
 	public SettingMode mode;
 
 	public Velocity() {
-		super("Velocity", 0, Category.COMBAT);
+		super("Velocity", Keyboard.KEY_U, Category.COMBAT);
 		mode = new SettingMode("mode", "Cancel");
 		addSettings(mode);
 	}

@@ -13,6 +13,8 @@ import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
+
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +40,9 @@ import javax.imageio.ImageIO;
 
 import github.qe7.detect.Detect;
 import github.qe7.detect.event.impl.EventKey;
+import github.qe7.detect.font.CFont;
+import github.qe7.detect.font.CFontRenderer;
+import github.qe7.detect.ui.menu.main.GuiMenu;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.audio.MusicTicker;
@@ -49,7 +54,6 @@ import net.minecraft.client.gui.GuiControls;
 import net.minecraft.client.gui.GuiGameOver;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.GuiIngameMenu;
-import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiMemoryErrorScreen;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSleepMP;
@@ -232,11 +236,14 @@ public class Minecraft implements IThreadListener, IPlayerUsage
     private Entity renderViewEntity;
     public Entity pointedEntity;
     public EffectRenderer effectRenderer;
-    private final Session session;
+    public Session session;
     private boolean isGamePaused;
 
     /** The font renderer used for displaying and measuring text */
     public FontRenderer fontRendererObj;
+    public CFontRenderer font;
+    public CFontRenderer tenacity;
+    public CFontRenderer tenacityBold;
     public FontRenderer standardGalacticFontRenderer;
 
     /** The GuiScreen that's being displayed at the moment. */
@@ -501,6 +508,27 @@ public class Minecraft implements IThreadListener, IPlayerUsage
         this.mcMusicTicker = new MusicTicker(this);
         this.fontRendererObj = new FontRenderer(this.gameSettings, new ResourceLocation("textures/font/ascii.png"), this.renderEngine, false);
 
+        try {
+            this.font = new CFontRenderer(Font.createFont(Font.TRUETYPE_FONT, CFont.class.getResourceAsStream("font.ttf")).deriveFont(Font.PLAIN, 20), true, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            shutdown();
+        }
+
+        try {
+            this.tenacity = new CFontRenderer(Font.createFont(Font.TRUETYPE_FONT, CFont.class.getResourceAsStream("tenacity.ttf")).deriveFont(Font.PLAIN, 20), true, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            shutdown();
+        }
+
+        try {
+            this.tenacityBold = new CFontRenderer(Font.createFont(Font.TRUETYPE_FONT, CFont.class.getResourceAsStream("tenacitybold.ttf")).deriveFont(Font.PLAIN, 20), true, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            shutdown();
+        }
+
         if (this.gameSettings.language != null)
         {
             this.fontRendererObj.setUnicodeFlag(this.isUnicode());
@@ -568,11 +596,11 @@ public class Minecraft implements IThreadListener, IPlayerUsage
 
         if (this.serverName != null)
         {
-            this.displayGuiScreen(new GuiConnecting(new GuiMainMenu(), this, this.serverName, this.serverPort));
+            this.displayGuiScreen(new GuiConnecting(new GuiMenu(), this, this.serverName, this.serverPort));
         }
         else
         {
-            this.displayGuiScreen(new GuiMainMenu());
+            this.displayGuiScreen(new GuiMenu());
         }
 
         this.renderEngine.deleteTexture(this.mojangLogo);
@@ -976,14 +1004,14 @@ public class Minecraft implements IThreadListener, IPlayerUsage
 
         if (guiScreenIn == null && this.theWorld == null)
         {
-            guiScreenIn = new GuiMainMenu();
+            guiScreenIn = new GuiMenu();
         }
         else if (guiScreenIn == null && this.thePlayer.getHealth() <= 0.0F)
         {
             guiScreenIn = new GuiGameOver();
         }
 
-        if (guiScreenIn instanceof GuiMainMenu)
+        if (guiScreenIn instanceof GuiMenu)
         {
             this.gameSettings.showDebugInfo = false;
             this.ingameGUI.getChatGUI().clearChatMessages();

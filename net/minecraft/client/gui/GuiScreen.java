@@ -15,6 +15,8 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+
+import github.qe7.detect.ui.menu.other.GuiCustomButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.stream.GuiTwitchUserMode;
 import net.minecraft.client.renderer.GlStateManager;
@@ -64,6 +66,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
     /** The height of the screen object. */
     public int height;
     protected List<GuiButton> buttonList = Lists.<GuiButton>newArrayList();
+    protected List<GuiCustomButton> buttonCList = Lists.<GuiCustomButton>newArrayList();
     protected List<GuiLabel> labelList = Lists.<GuiLabel>newArrayList();
     public boolean allowUserInput;
 
@@ -71,6 +74,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
     protected FontRenderer fontRendererObj;
 
     /** The button that was just pressed. */
+    private GuiCustomButton selectedCButton;
     private GuiButton selectedButton;
     private int eventButton;
     private long lastMouseEvent;
@@ -90,6 +94,11 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
         for (int i = 0; i < this.buttonList.size(); ++i)
         {
             ((GuiButton)this.buttonList.get(i)).drawButton(this.mc, mouseX, mouseY);
+        }
+
+        for (int k = 0; k < this.buttonCList.size(); ++k)
+        {
+            ((GuiCustomButton)this.buttonCList.get(k)).drawCustomButton(this.mc, mouseX, mouseY);
         }
 
         for (int j = 0; j < this.labelList.size(); ++j)
@@ -491,7 +500,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
     /**
      * Called when the mouse is clicked. Args : mouseX, mouseY, clickedButton
      */
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
+    public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
         if (mouseButton == 0)
         {
@@ -507,6 +516,21 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
                 }
             }
         }
+
+        if (mouseButton == 0)
+        {
+            for (int i = 0; i < this.buttonCList.size(); ++i)
+            {
+                GuiCustomButton guiCbutton = (GuiCustomButton)this.buttonCList.get(i);
+
+                if (guiCbutton.mousePressed(this.mc, mouseX, mouseY))
+                {
+                    this.selectedCButton = guiCbutton;
+                    guiCbutton.playPressSound(this.mc.getSoundHandler());
+                    this.actionPerformed(guiCbutton);
+                }
+            }
+        }
     }
 
     /**
@@ -518,6 +542,12 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
         {
             this.selectedButton.mouseReleased(mouseX, mouseY);
             this.selectedButton = null;
+        }
+
+        if (this.selectedCButton != null && state == 0)
+        {
+            this.selectedCButton.mouseReleased(mouseX, mouseY);
+            this.selectedCButton = null;
         }
     }
 
@@ -536,6 +566,9 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
     {
     }
 
+    protected void actionPerformed(GuiCustomButton button) throws IOException
+    {
+    }
     /**
      * Causes the screen to lay out its subcomponents again. This is the equivalent of the Java call
      * Container.validate()
