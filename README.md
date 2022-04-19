@@ -9,3 +9,11 @@ Why did I recode :
 * why not
 * I make every recode better
 * I take this serious now
+
+---
+
+TODO :
+* Finish events
+* Add capes to local player
+* Add more Modules for example Killaura, Speed, Cheststealer, inventory manager and other modules.
+* Fortnite battlepass
