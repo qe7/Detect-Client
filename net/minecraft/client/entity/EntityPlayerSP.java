@@ -2,9 +2,9 @@ package net.minecraft.client.entity;
 
 import github.qe7.detect.Detect;
 import github.qe7.detect.event.EventType;
-import github.qe7.detect.event.impl.EventMotion;
-import github.qe7.detect.event.impl.EventSlowDown;
-import github.qe7.detect.event.impl.EventUpdate;
+import github.qe7.detect.event.listeners.EventMotion;
+import github.qe7.detect.event.listeners.EventSlowDown;
+import github.qe7.detect.event.listeners.EventUpdate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSoundMinecartRiding;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -250,24 +250,24 @@ public class EntityPlayerSP extends AbstractClientPlayer
             {
                 if (flag2 && flag3)
                 {
-                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(this.posX, this.getEntityBoundingBox().minY, this.posZ, this.rotationYaw, this.rotationPitch, this.onGround));
+                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(eventMotion.getX(), this.getEntityBoundingBox().minY, eventMotion.getZ(), eventMotion.getYaw(), eventMotion.getPitch(), eventMotion.onGround));
                 }
                 else if (flag2)
                 {
-                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(this.posX, this.getEntityBoundingBox().minY, this.posZ, this.onGround));
+                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(eventMotion.getX(), this.getEntityBoundingBox().minY, eventMotion.getZ(), eventMotion.onGround));
                 }
                 else if (flag3)
                 {
-                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C05PacketPlayerLook(this.rotationYaw, this.rotationPitch, this.onGround));
+                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C05PacketPlayerLook(eventMotion.getYaw(), eventMotion.getPitch(), eventMotion.onGround));
                 }
                 else
                 {
-                    this.sendQueue.addToSendQueue(new C03PacketPlayer(this.onGround));
+                    this.sendQueue.addToSendQueue(new C03PacketPlayer(eventMotion.onGround));
                 }
             }
             else
             {
-                this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(this.motionX, -999.0D, this.motionZ, this.rotationYaw, this.rotationPitch, this.onGround));
+                this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(this.motionX, -999.0D, this.motionZ, this.rotationYaw, this.rotationPitch, eventMotion.onGround));
                 flag2 = false;
             }
 
@@ -275,16 +275,16 @@ public class EntityPlayerSP extends AbstractClientPlayer
 
             if (flag2)
             {
-                this.lastReportedPosX = this.posX;
-                this.lastReportedPosY = this.getEntityBoundingBox().minY;
-                this.lastReportedPosZ = this.posZ;
+                this.lastReportedPosX = eventMotion.getX();
+                this.lastReportedPosY = eventMotion.getY();
+                this.lastReportedPosZ = eventMotion.getZ();
                 this.positionUpdateTicks = 0;
             }
 
             if (flag3)
             {
-                this.lastReportedYaw = this.rotationYaw;
-                this.lastReportedPitch = this.rotationPitch;
+                this.lastReportedYaw = eventMotion.getYaw();
+                this.lastReportedPitch = eventMotion.getPitch();
             }
         }
 
@@ -314,8 +314,6 @@ public class EntityPlayerSP extends AbstractClientPlayer
 
     /**
      * Sends a chat message from the player. Args: chatMessage
-     *  
-     * @param message used on EntityPlayerSP.sendChatMessage - as inbound message
      */
     public void sendChatMessage(String message)
     {
@@ -555,8 +553,6 @@ public class EntityPlayerSP extends AbstractClientPlayer
 
     /**
      * Send a chat message to the CommandSender
-     *  
-     * @param component The ChatComponent to send
      */
     public void addChatMessage(IChatComponent component)
     {
@@ -565,9 +561,6 @@ public class EntityPlayerSP extends AbstractClientPlayer
 
     /**
      * Returns {@code true} if the CommandSender is allowed to execute the command, {@code false} if not
-     *  
-     * @param permLevel The permission level required to execute the command
-     * @param commandName The name of the command
      */
     public boolean canCommandSenderUseCommand(int permLevel, String commandName)
     {
@@ -816,11 +809,10 @@ public class EntityPlayerSP extends AbstractClientPlayer
 
         if (this.isUsingItem() && !this.isRiding())
         {
-
             EventSlowDown eventSlowDown = new EventSlowDown();
             Detect.i.moduleManager.onEvent(eventSlowDown);
 
-            if(!eventSlowDown.isCancelled()) {
+            if (!eventSlowDown.isCancelled()) {
                 this.movementInput.moveStrafe *= 0.2F;
                 this.movementInput.moveForward *= 0.2F;
                 this.sprintToggleTimer = 0;
@@ -835,7 +827,7 @@ public class EntityPlayerSP extends AbstractClientPlayer
 
         if (this.onGround && !flag1 && !flag2 && this.movementInput.moveForward >= f && !this.isSprinting() && flag3 && !this.isUsingItem() && !this.isPotionActive(Potion.blindness))
         {
-            if (this.sprintToggleTimer <= 0 && !this.mc.gameSettings.keyBindSprint.isKeyDown())
+            if (this.sprintToggleTimer <= 0 && !this.mc.gameSettings.keyBindInventory.isKeyDown())
             {
                 this.sprintToggleTimer = 7;
             }
@@ -845,7 +837,7 @@ public class EntityPlayerSP extends AbstractClientPlayer
             }
         }
 
-        if (!this.isSprinting() && this.movementInput.moveForward >= f && flag3 && !this.isUsingItem() && !this.isPotionActive(Potion.blindness) && this.mc.gameSettings.keyBindSprint.isKeyDown())
+        if (!this.isSprinting() && this.movementInput.moveForward >= f && flag3 && !this.isUsingItem() && !this.isPotionActive(Potion.blindness) && this.mc.gameSettings.keyBindInventory.isKeyDown())
         {
             this.setSprinting(true);
         }
@@ -941,5 +933,41 @@ public class EntityPlayerSP extends AbstractClientPlayer
             this.capabilities.isFlying = false;
             this.sendPlayerAbilities();
         }
+    }
+
+    public float getSpeed() {
+        float vel = (float)Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
+        return vel;
+    }
+
+    public void setSpeed(float speed) {
+        this.motionX = (-(Math.sin(getDirection()) * speed));
+        this.motionZ = (Math.cos(getDirection()) * speed);
+    }
+
+    public void setSpeed(double speed) {
+        this.motionX = (-(Math.sin(getDirection()) * speed));
+        this.motionZ = (Math.cos(getDirection()) * speed);
+    }
+
+    public float getDirection() {
+        float var1 = this.rotationYaw;
+
+        if(this.moveForward < 0)
+            var1 += 180F;
+        float forward = 1F;
+        if(this.moveForward < 0)
+            forward = -.5F;
+        else if(moveForward > 0)
+            forward = .5F;
+        else
+            forward = 1F;
+
+        if(moveStrafing > 0)
+            var1 -= 90F * forward;
+        if(moveStrafing < 0)
+            var1 += 90F * forward;
+        var1 *= .017453292F;
+        return var1;
     }
 }

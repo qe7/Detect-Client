@@ -1,53 +1,62 @@
 package github.qe7.detect.module;
 
 import github.qe7.detect.event.Event;
-import github.qe7.detect.event.impl.EventKey;
+import github.qe7.detect.event.listeners.EventKey;
+import github.qe7.detect.module.impl.combat.AntiBot;
+import github.qe7.detect.module.impl.combat.Autoclicker;
+import github.qe7.detect.module.impl.combat.Killaura;
+import github.qe7.detect.module.impl.combat.Velocity;
+import github.qe7.detect.module.impl.movement.*;
+import github.qe7.detect.module.impl.player.AutoRespawn;
+import github.qe7.detect.module.impl.player.FastPlace;
+import github.qe7.detect.module.impl.player.InvWalk;
+import github.qe7.detect.module.impl.visual.Clickgui;
+import github.qe7.detect.module.impl.visual.Fullbright;
+import github.qe7.detect.module.impl.visual.Hud;
+import github.qe7.detect.module.impl.visual.TargetHud;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-/* Module imports */
-import github.qe7.detect.module.impl.client.*;
-import github.qe7.detect.module.impl.combat.AutoClicker;
-import github.qe7.detect.module.impl.combat.Velocity;
-import github.qe7.detect.module.impl.movement.*;
-import github.qe7.detect.module.impl.player.NoFall;
-import github.qe7.detect.module.impl.visuals.Fullbright;
 
 public class ModuleManager {
 
     public CopyOnWriteArrayList<Module> modules = new CopyOnWriteArrayList<>();
 
     public void init() {
-        /* client */
-        modules.add(new Arraylist());
-        modules.add(new Watermark());
-        modules.add(new Clickgui());
-
-        /* combat */
-        modules.add(new AutoClicker());
+        /* Combat */
+        modules.add(new Autoclicker());
+        modules.add(new AntiBot());
+        modules.add(new Killaura());
         modules.add(new Velocity());
 
-        /* exploit */
+        /* Exploit */
 
-        /* movement */
-        modules.add(new Sprint());
+        /* Movement */
+        modules.add(new Fly());
+        modules.add(new Scaffold());
         modules.add(new NoSlowDown());
+        modules.add(new Speed());
+        modules.add(new Sprint());
 
-        /* player */
-        modules.add(new NoFall());
+        /* Player */
+        modules.add(new AutoRespawn());
+        modules.add(new FastPlace());
+        modules.add(new InvWalk());
 
-        /* visuals */
+        /* Visual */
+        modules.add(new Clickgui());
         modules.add(new Fullbright());
+        modules.add(new Hud());
+        modules.add(new TargetHud());
 
-        sortModules();
+        sort();
     }
 
-    public void sortModules() {
+    public void sort() {
         Collections.sort(modules, new Comparator<Module>() {
-            public int compare(final Module object1, final Module object2) {
-                return object1.getName().compareTo(object2.getName());
+            public int compare(Module o1, Module o2) {
+                return o1.getName().compareTo(o2.getName());
             }
         });
     }

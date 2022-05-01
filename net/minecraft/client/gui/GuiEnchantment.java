@@ -82,7 +82,7 @@ public class GuiEnchantment extends GuiContainer
     /**
      * Called when the mouse is clicked. Args : mouseX, mouseY, clickedButton
      */
-    public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
         super.mouseClicked(mouseX, mouseY, mouseButton);
         int i = (this.width - this.xSize) / 2;
@@ -238,7 +238,7 @@ public class GuiEnchantment extends GuiContainer
         for (int j = 0; j < 3; ++j)
         {
             int k = this.container.enchantLevels[j];
-            int l = this.container.field_178151_h[j];
+            int l = this.container.enchantmentIds[j];
             int i1 = j + 1;
 
             if (this.isPointInRegion(60, 14 + 19 * j, 108, 17, mouseX, mouseY) && k > 0 && l >= 0)

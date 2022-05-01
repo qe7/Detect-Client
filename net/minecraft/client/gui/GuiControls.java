@@ -78,7 +78,7 @@ public class GuiControls extends GuiScreen
         }
         else if (button.id == 201)
         {
-            for (KeyBinding keybinding : this.mc.gameSettings.keyBindings)
+            for (KeyBinding keybinding : this.mc.gameSettings.mc)
             {
                 keybinding.setKeyCode(keybinding.getKeyCodeDefault());
             }
@@ -95,7 +95,7 @@ public class GuiControls extends GuiScreen
     /**
      * Called when the mouse is clicked. Args : mouseX, mouseY, clickedButton
      */
-    public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
         if (this.buttonId != null)
         {
@@ -161,7 +161,7 @@ public class GuiControls extends GuiScreen
         this.drawCenteredString(this.fontRendererObj, this.screenTitle, this.width / 2, 8, 16777215);
         boolean flag = true;
 
-        for (KeyBinding keybinding : this.options.keyBindings)
+        for (KeyBinding keybinding : this.options.mc)
         {
             if (keybinding.getKeyCode() != keybinding.getKeyCodeDefault())
             {

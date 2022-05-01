@@ -36,8 +36,6 @@ public class LongHashMap<V>
 
     /**
      * the hash function
-     *  
-     * @param integer Integer to make suitable for hashing
      */
     private static int hash(int integer)
     {

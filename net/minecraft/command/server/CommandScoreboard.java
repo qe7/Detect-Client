@@ -51,8 +51,6 @@ public class CommandScoreboard extends CommandBase
 
     /**
      * Gets the usage string for the command.
-     *  
-     * @param sender The {@link ICommandSender} who is requesting usage details.
      */
     public String getCommandUsage(ICommandSender sender)
     {
@@ -61,9 +59,6 @@ public class CommandScoreboard extends CommandBase
 
     /**
      * Callback when the command is invoked
-     *  
-     * @param sender The {@link ICommandSender sender} who executed the command
-     * @param args The arguments that were passed with the command
      */
     public void processCommand(ICommandSender sender, String[] args) throws CommandException
     {
@@ -649,7 +644,7 @@ public class CommandScoreboard extends CommandBase
 
         if (p_147190_1_ instanceof EntityPlayer && p_147190_3_ == p_147190_2_.length)
         {
-            String s4 = getCommandSenderAsPlayer(p_147190_1_).getCommandSenderName();
+            String s4 = getCommandSenderAsPlayer(p_147190_1_).getName();
 
             if (scoreboard.addPlayerToTeam(s4, s))
             {
@@ -718,7 +713,7 @@ public class CommandScoreboard extends CommandBase
 
         if (p_147199_1_ instanceof EntityPlayer && p_147199_3_ == p_147199_2_.length)
         {
-            String s3 = getCommandSenderAsPlayer(p_147199_1_).getCommandSenderName();
+            String s3 = getCommandSenderAsPlayer(p_147199_1_).getName();
 
             if (scoreboard.removePlayerFromTeams(s3))
             {
@@ -924,7 +919,7 @@ public class CommandScoreboard extends CommandBase
 
             if (p_147197_2_.length > p_147197_3_)
             {
-                Entity entity = func_175768_b(p_147197_1_, p_147197_2_[i]);
+                Entity entity = getEntity(p_147197_1_, p_147197_2_[i]);
 
                 try
                 {
@@ -1351,9 +1346,6 @@ public class CommandScoreboard extends CommandBase
 
     /**
      * Return whether the specified command parameter index is a username parameter.
-     *  
-     * @param args The arguments that were given
-     * @param index The argument index that we are checking
      */
     public boolean isUsernameIndex(String[] args, int index)
     {

@@ -70,12 +70,15 @@ import net.optifine.shaders.ShadersRender;
 public class RenderItem implements IResourceManagerReloadListener
 {
     private static final ResourceLocation RES_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
-    private boolean field_175058_l = true;
+
+    /** False when the renderer is rendering the item's effects into a GUI */
+    private boolean notRenderingEffectsInGUI = true;
 
     /** Defines the zLevel of rendering of item on GUI. */
     public float zLevel;
     private final ItemModelMesher itemModelMesher;
     private final TextureManager textureManager;
+    private ModelResourceLocation modelLocation = null;
     private boolean renderItemGui = false;
     public ModelManager modelManager = null;
     private boolean renderModelHasEmissive = false;
@@ -98,9 +101,14 @@ public class RenderItem implements IResourceManagerReloadListener
         this.registerItems();
     }
 
-    public void func_175039_a(boolean p_175039_1_)
+    /**
+     * False when the renderer is rendering the item's effects into a GUI
+     *  
+     * @param isNot If the renderer is not rendering the effects in a GUI
+     */
+    public void isNotRenderingEffectsInGUI(boolean isNot)
     {
-        this.field_175058_l = p_175039_1_;
+        this.notRenderingEffectsInGUI = isNot;
     }
 
     public ItemModelMesher getItemModelMesher()
@@ -150,7 +158,7 @@ public class RenderItem implements IResourceManagerReloadListener
             worldrenderer.setBlockLayer(EnumWorldBlockLayer.SOLID);
         }
 
-        worldrenderer.func_181668_a(7, DefaultVertexFormats.ITEM);
+        worldrenderer.begin(7, DefaultVertexFormats.ITEM);
 
         for (EnumFacing enumfacing : EnumFacing.VALUES)
         {
@@ -188,7 +196,7 @@ public class RenderItem implements IResourceManagerReloadListener
 
                 if (Config.isCustomItems())
                 {
-                    model = CustomItems.getCustomItemModel(stack, model, (ResourceLocation)null, false);
+                    model = CustomItems.getCustomItemModel(stack, model, this.modelLocation, false);
                 }
 
                 this.renderModelHasEmissive = false;
@@ -362,12 +370,12 @@ public class RenderItem implements IResourceManagerReloadListener
         }
     }
 
-    public void func_181564_a(ItemStack p_181564_1_, ItemCameraTransforms.TransformType p_181564_2_)
+    public void renderItem(ItemStack stack, ItemCameraTransforms.TransformType cameraTransformType)
     {
-        if (p_181564_1_ != null)
+        if (stack != null)
         {
-            IBakedModel ibakedmodel = this.itemModelMesher.getItemModel(p_181564_1_);
-            this.renderItemModelTransform(p_181564_1_, ibakedmodel, p_181564_2_);
+            IBakedModel ibakedmodel = this.itemModelMesher.getItemModel(stack);
+            this.renderItemModelTransform(stack, ibakedmodel, cameraTransformType);
         }
     }
 
@@ -412,15 +420,12 @@ public class RenderItem implements IResourceManagerReloadListener
                 if (modelresourcelocation != null)
                 {
                     ibakedmodel = this.itemModelMesher.getModelManager().getModel(modelresourcelocation);
-
-                    if (Config.isCustomItems())
-                    {
-                        ibakedmodel = CustomItems.getCustomItemModel(stack, ibakedmodel, modelresourcelocation, true);
-                    }
+                    this.modelLocation = modelresourcelocation;
                 }
             }
 
             this.renderItemModelTransform(stack, ibakedmodel, cameraTransformType);
+            this.modelLocation = null;
         }
     }
 
@@ -442,9 +447,9 @@ public class RenderItem implements IResourceManagerReloadListener
         else
         {
             ItemCameraTransforms itemcameratransforms = model.getItemCameraTransforms();
-            itemcameratransforms.func_181689_a(cameraTransformType);
+            itemcameratransforms.applyTransform(cameraTransformType);
 
-            if (this.func_183005_a(itemcameratransforms.func_181688_b(cameraTransformType)))
+            if (this.isThereOneNegativeScale(itemcameratransforms.getTransform(cameraTransformType)))
             {
                 GlStateManager.cullFace(1028);
             }
@@ -459,9 +464,14 @@ public class RenderItem implements IResourceManagerReloadListener
         this.textureManager.getTexture(TextureMap.locationBlocksTexture).restoreLastBlurMipmap();
     }
 
-    private boolean func_183005_a(ItemTransformVec3f p_183005_1_)
+    /**
+     * Return true if only one scale is negative
+     *  
+     * @param itemTranformVec The ItemTransformVec3f instance
+     */
+    private boolean isThereOneNegativeScale(ItemTransformVec3f itemTranformVec)
     {
-        return p_183005_1_.scale.x < 0.0F ^ p_183005_1_.scale.y < 0.0F ^ p_183005_1_.scale.z < 0.0F;
+        return itemTranformVec.scale.x < 0.0F ^ itemTranformVec.scale.y < 0.0F ^ itemTranformVec.scale.z < 0.0F;
     }
 
     public void renderItemIntoGUI(ItemStack stack, int x, int y)
@@ -485,7 +495,7 @@ public class RenderItem implements IResourceManagerReloadListener
         }
         else
         {
-            ibakedmodel.getItemCameraTransforms().func_181689_a(ItemCameraTransforms.TransformType.GUI);
+            ibakedmodel.getItemCameraTransforms().applyTransform(ItemCameraTransforms.TransformType.GUI);
         }
 
         this.renderItem(stack, ibakedmodel);
@@ -618,8 +628,8 @@ public class RenderItem implements IResourceManagerReloadListener
                 GlStateManager.disableBlend();
                 Tessellator tessellator = Tessellator.getInstance();
                 WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-                this.func_181565_a(worldrenderer, xPosition + 2, yPosition + 13, 13, 2, 0, 0, 0, 255);
-                this.func_181565_a(worldrenderer, xPosition + 2, yPosition + 13, 12, 1, (255 - i) / 4, 64, 0, 255);
+                this.draw(worldrenderer, xPosition + 2, yPosition + 13, 13, 2, 0, 0, 0, 255);
+                this.draw(worldrenderer, xPosition + 2, yPosition + 13, 12, 1, (255 - i) / 4, 64, 0, 255);
                 int j = 255 - i;
                 int k = i;
                 int l = 0;
@@ -636,7 +646,7 @@ public class RenderItem implements IResourceManagerReloadListener
                     }
                 }
 
-                this.func_181565_a(worldrenderer, xPosition + 2, yPosition + 13, j1, 1, j, k, l, 255);
+                this.draw(worldrenderer, xPosition + 2, yPosition + 13, j1, 1, j, k, l, 255);
                 GlStateManager.enableBlend();
                 GlStateManager.enableAlpha();
                 GlStateManager.enableTexture2D();
@@ -646,13 +656,26 @@ public class RenderItem implements IResourceManagerReloadListener
         }
     }
 
-    private void func_181565_a(WorldRenderer p_181565_1_, int p_181565_2_, int p_181565_3_, int p_181565_4_, int p_181565_5_, int p_181565_6_, int p_181565_7_, int p_181565_8_, int p_181565_9_)
+    /**
+     * Draw with the WorldRenderer
+     *  
+     * @param renderer The WorldRenderer's instance
+     * @param x X position where the render begin
+     * @param y Y position where the render begin
+     * @param width The width of the render
+     * @param height The height of the render
+     * @param red Red component of the color
+     * @param green Green component of the color
+     * @param blue Blue component of the color
+     * @param alpha Alpha component of the color
+     */
+    private void draw(WorldRenderer renderer, int x, int y, int width, int height, int red, int green, int blue, int alpha)
     {
-        p_181565_1_.func_181668_a(7, DefaultVertexFormats.field_181706_f);
-        p_181565_1_.func_181662_b((double)(p_181565_2_ + 0), (double)(p_181565_3_ + 0), 0.0D).func_181669_b(p_181565_6_, p_181565_7_, p_181565_8_, p_181565_9_).func_181675_d();
-        p_181565_1_.func_181662_b((double)(p_181565_2_ + 0), (double)(p_181565_3_ + p_181565_5_), 0.0D).func_181669_b(p_181565_6_, p_181565_7_, p_181565_8_, p_181565_9_).func_181675_d();
-        p_181565_1_.func_181662_b((double)(p_181565_2_ + p_181565_4_), (double)(p_181565_3_ + p_181565_5_), 0.0D).func_181669_b(p_181565_6_, p_181565_7_, p_181565_8_, p_181565_9_).func_181675_d();
-        p_181565_1_.func_181662_b((double)(p_181565_2_ + p_181565_4_), (double)(p_181565_3_ + 0), 0.0D).func_181669_b(p_181565_6_, p_181565_7_, p_181565_8_, p_181565_9_).func_181675_d();
+        renderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        renderer.pos((double)(x + 0), (double)(y + 0), 0.0D).color(red, green, blue, alpha).endVertex();
+        renderer.pos((double)(x + 0), (double)(y + height), 0.0D).color(red, green, blue, alpha).endVertex();
+        renderer.pos((double)(x + width), (double)(y + height), 0.0D).color(red, green, blue, alpha).endVertex();
+        renderer.pos((double)(x + width), (double)(y + 0), 0.0D).color(red, green, blue, alpha).endVertex();
         Tessellator.getInstance().draw();
     }
 

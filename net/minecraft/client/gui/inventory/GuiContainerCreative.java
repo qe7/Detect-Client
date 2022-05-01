@@ -307,7 +307,7 @@ public class GuiContainerCreative extends InventoryEffectRenderer
     {
         if (selectedTabIndex != CreativeTabs.tabAllSearch.getTabIndex())
         {
-            if (GameSettings.isKeyDown(this.mc.gameSettings.keyBindChat))
+            if (GameSettings.isKeyDown(this.mc.gameSettings.keyBindPlayerList))
             {
                 this.setCurrentCreativeTab(CreativeTabs.tabAllSearch);
             }
@@ -403,7 +403,7 @@ public class GuiContainerCreative extends InventoryEffectRenderer
     /**
      * Called when the mouse is clicked. Args : mouseX, mouseY, clickedButton
      */
-    public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
         if (mouseButton == 0)
         {
@@ -930,9 +930,9 @@ public class GuiContainerCreative extends InventoryEffectRenderer
             return null;
         }
 
-        public boolean canMergeSlot(ItemStack stack, Slot p_94530_2_)
+        public boolean canMergeSlot(ItemStack stack, Slot slotIn)
         {
-            return p_94530_2_.yDisplayPosition > 90;
+            return slotIn.yDisplayPosition > 90;
         }
 
         public boolean canDragIntoSlot(Slot p_94531_1_)

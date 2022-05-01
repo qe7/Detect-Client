@@ -1,35 +1,33 @@
 package github.qe7.detect.module.impl.combat;
 
 import github.qe7.detect.event.Event;
-import github.qe7.detect.event.impl.EventUpdate;
+import github.qe7.detect.event.listeners.EventUpdate;
 import github.qe7.detect.module.Category;
 import github.qe7.detect.module.Module;
-import github.qe7.detect.util.TimerUtil;
-import net.minecraft.client.settings.KeyBinding;
-import org.lwjgl.input.Keyboard;
+import github.qe7.detect.setting.impl.SettingNumber;
+import github.qe7.detect.util.Timer;
 import org.lwjgl.input.Mouse;
 
-public class AutoClicker extends Module {
+public class Autoclicker extends Module {
 
-    public TimerUtil timer = new TimerUtil();
+    public Timer timer = new Timer();
+    public SettingNumber cps;
 
-    public AutoClicker() {
-        super("AutoClicker", Keyboard.KEY_P, Category.COMBAT);
+    public Autoclicker() {
+        super("Autoclicker", 0, Category.COMBAT);
+        cps = new SettingNumber("", 10, "#.#", 8, 20);
+        addSettings(cps);
     }
 
-    public void onEvent(Event e) {
-        if (e instanceof EventUpdate) {
-            int key = mc.gameSettings.keyBindAttack.getKeyCode();
-            if (Mouse.isButtonDown(0)) {
-                if (timer.hasReached(1000 / ((12) + (Math.random() * 4)))) {
-                    KeyBinding.setKeyBindState(key, true);
-                    mc.thePlayer.setSprinting(false);
-                    KeyBinding.onTick(key);
+    public void onEvent(Event event) {
+        if (event instanceof EventUpdate) {
+            if (Mouse.isButtonDown(0) && mc.currentScreen == null && !mc.thePlayer.isBlocking()) {
+                if (timer.hasReached(1000 / (cps.getValue() + (Math.random() / 10)))) {
+                    mc.clickMouse();
                     timer.reset();
-                } else {
-                    KeyBinding.setKeyBindState(key, false);
                 }
             }
         }
     }
+
 }

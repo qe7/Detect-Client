@@ -1,8 +1,6 @@
 package net.minecraft.client.gui;
 
 import java.io.IOException;
-
-import github.qe7.detect.ui.menu.main.GuiMenu;
 import net.minecraft.client.resources.I18n;
 
 public class GuiMemoryErrorScreen extends GuiScreen
@@ -25,7 +23,7 @@ public class GuiMemoryErrorScreen extends GuiScreen
     {
         if (button.id == 0)
         {
-            this.mc.displayGuiScreen(new GuiMenu());
+            this.mc.displayGuiScreen(new GuiMainMenu());
         }
         else if (button.id == 1)
         {

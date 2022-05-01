@@ -428,9 +428,9 @@ public class ConnectedParser
 
     public static Comparable getPropertyValue(String value, Collection propertyValues)
     {
-        for (Object e : propertyValues)
+        for (Object comparable0 : propertyValues)
         {
-            Comparable comparable = (Comparable) e;
+            Comparable comparable = (Comparable) comparable0;
             if (getValueName(comparable).equals(value))
             {
                 return comparable;
@@ -455,7 +455,30 @@ public class ConnectedParser
 
     public static Comparable parseValue(String str, Class cls)
     {
-        return (Comparable)(cls == String.class ? str : (cls == Boolean.class ? Boolean.valueOf(str) : (cls == Float.class ? Float.valueOf(str) : (cls == Double.class ? Double.valueOf(str) : (cls == Integer.class ? Integer.valueOf(str) : (cls == Long.class ? Long.valueOf(str) : null))))));
+        if (cls == String.class)
+        {
+            return str;
+        }
+        else if (cls == Boolean.class)
+        {
+            return Boolean.valueOf(str);
+        }
+        else if (cls == Float.class)
+        {
+            return Float.valueOf(str);
+        }
+        else if (cls == Double.class)
+        {
+            return Double.valueOf(str);
+        }
+        else if (cls == Integer.class)
+        {
+            return Integer.valueOf(str);
+        }
+        else
+        {
+            return cls == Long.class ? Long.valueOf(str) : null;
+        }
     }
 
     public boolean matchState(IBlockState bs, Map<IProperty, List<Comparable>> mapPropValues)

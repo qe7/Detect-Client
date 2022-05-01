@@ -139,9 +139,9 @@ public class EntityHorse extends EntityAnimal implements IInvBasic
     }
 
     /**
-     * Gets the name of this command sender (usually username, but possibly "Rcon")
+     * Get the name of this object. For players this returns their username
      */
-    public String getCommandSenderName()
+    public String getName()
     {
         if (this.hasCustomName())
         {
@@ -455,11 +455,11 @@ public class EntityHorse extends EntityAnimal implements IInvBasic
     {
         AnimalChest animalchest = this.horseChest;
         this.horseChest = new AnimalChest("HorseChest", this.getChestSize());
-        this.horseChest.setCustomName(this.getCommandSenderName());
+        this.horseChest.setCustomName(this.getName());
 
         if (animalchest != null)
         {
-            animalchest.func_110132_b(this);
+            animalchest.removeInventoryChangeListener(this);
             int i = Math.min(animalchest.getSizeInventory(), this.horseChest.getSizeInventory());
 
             for (int j = 0; j < i; ++j)
@@ -473,7 +473,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic
             }
         }
 
-        this.horseChest.func_110134_a(this);
+        this.horseChest.addInventoryChangeListener(this);
         this.updateHorseSlots();
     }
 
@@ -785,7 +785,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic
     {
         if (!this.worldObj.isRemote && (this.riddenByEntity == null || this.riddenByEntity == playerEntity) && this.isTame())
         {
-            this.horseChest.setCustomName(this.getCommandSenderName());
+            this.horseChest.setCustomName(this.getName());
             playerEntity.displayGUIHorse(this, this.horseChest);
         }
     }
@@ -1736,7 +1736,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic
         }
     }
 
-    public void handleHealthUpdate(byte id)
+    public void handleStatusUpdate(byte id)
     {
         if (id == 7)
         {
@@ -1748,7 +1748,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic
         }
         else
         {
-            super.handleHealthUpdate(id);
+            super.handleStatusUpdate(id);
         }
     }
 

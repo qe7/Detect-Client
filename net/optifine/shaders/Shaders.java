@@ -45,6 +45,7 @@ import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.data.TextureMetadataSection;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -378,7 +379,7 @@ public class Shaders
     public static final Program[] ProgramsAll = programs.getPrograms();
     public static Program activeProgram = ProgramNone;
     public static int activeProgramID = 0;
-    private static ProgramStack programStackLeash = new ProgramStack();
+    private static ProgramStack programStack = new ProgramStack();
     private static boolean hasDeferredPrograms = false;
     static IntBuffer activeDrawBuffers = null;
     private static int activeCompositeMipmapSetting = 0;
@@ -1260,7 +1261,8 @@ public class Shaders
                 ByteBuffer bytebuffer = GLAllocation.createDirectByteBuffer(abyte.length);
                 bytebuffer.put(abyte);
                 bytebuffer.flip();
-                CustomTextureRaw customtextureraw = new CustomTextureRaw(type, internalFormat, width, height, depth, pixelFormat, pixelType, bytebuffer, textureUnit);
+                TextureMetadataSection texturemetadatasection = SimpleShaderTexture.loadTextureMetadataSection(s, new TextureMetadataSection(true, true, new ArrayList()));
+                CustomTextureRaw customtextureraw = new CustomTextureRaw(type, internalFormat, width, height, depth, pixelFormat, pixelType, bytebuffer, textureUnit, texturemetadatasection.getTextureBlur(), texturemetadatasection.getTextureClamp());
                 return customtextureraw;
             }
         }
@@ -2018,10 +2020,11 @@ public class Shaders
         SMCLog.info(stringbuilder.toString());
     }
 
-    public static void startup(Minecraft mcs)
+    public static void startup(Minecraft mcIn)
     {
         checkShadersModInstalled();
-        mc = mcs;
+        mc = mcIn;
+        mc = Minecraft.getMinecraft();
         capabilities = GLContext.getCapabilities();
         glVersionString = GL11.glGetString(GL11.GL_VERSION);
         glVendorString = GL11.glGetString(GL11.GL_VENDOR);
@@ -3475,8 +3478,8 @@ public class Shaders
                 setProgramUniform1i(uniform_isEyeInWater, isEyeInWater);
                 setProgramUniform1f(uniform_nightVision, nightVision);
                 setProgramUniform1f(uniform_blindness, blindness);
-                setProgramUniform1f(uniform_screenBrightness, mc.gameSettings.gammaSetting);
-                setProgramUniform1i(uniform_hideGUI, mc.gameSettings.hideGUI ? 1 : 0);
+                setProgramUniform1f(uniform_screenBrightness, mc.gameSettings.saturation);
+                setProgramUniform1i(uniform_hideGUI, mc.gameSettings.thirdPersonView ? 1 : 0);
                 setProgramUniform1f(uniform_centerDepthSmooth, centerDepthSmooth);
                 setProgramUniform2i(uniform_atlasSize, atlasSizeX, atlasSizeY);
 
@@ -4506,7 +4509,7 @@ public class Shaders
         setProgramUniformMatrix4ARB(uniform_shadowProjectionInverse, false, shadowProjectionInverse);
         setProgramUniformMatrix4ARB(uniform_shadowModelView, false, shadowModelView);
         setProgramUniformMatrix4ARB(uniform_shadowModelViewInverse, false, shadowModelViewInverse);
-        mc.gameSettings.thirdPersonView = 1;
+        mc.gameSettings.showDebugInfo = 1;
         checkGLError("setCamera");
     }
 
@@ -4928,39 +4931,43 @@ public class Shaders
         double d3 = -d0;
         double d4 = 16.0D;
         double d5 = -cameraPositionY;
-        worldrenderer.func_181668_a(7, DefaultVertexFormats.field_181705_e);
-        worldrenderer.func_181662_b(d2, d5, d3).func_181675_d();
-        worldrenderer.func_181662_b(d2, d4, d3).func_181675_d();
-        worldrenderer.func_181662_b(d3, d4, d2).func_181675_d();
-        worldrenderer.func_181662_b(d3, d5, d2).func_181675_d();
-        worldrenderer.func_181662_b(d3, d5, d2).func_181675_d();
-        worldrenderer.func_181662_b(d3, d4, d2).func_181675_d();
-        worldrenderer.func_181662_b(d3, d4, d1).func_181675_d();
-        worldrenderer.func_181662_b(d3, d5, d1).func_181675_d();
-        worldrenderer.func_181662_b(d3, d5, d1).func_181675_d();
-        worldrenderer.func_181662_b(d3, d4, d1).func_181675_d();
-        worldrenderer.func_181662_b(d2, d4, d0).func_181675_d();
-        worldrenderer.func_181662_b(d2, d5, d0).func_181675_d();
-        worldrenderer.func_181662_b(d2, d5, d0).func_181675_d();
-        worldrenderer.func_181662_b(d2, d4, d0).func_181675_d();
-        worldrenderer.func_181662_b(d1, d4, d0).func_181675_d();
-        worldrenderer.func_181662_b(d1, d5, d0).func_181675_d();
-        worldrenderer.func_181662_b(d1, d5, d0).func_181675_d();
-        worldrenderer.func_181662_b(d1, d4, d0).func_181675_d();
-        worldrenderer.func_181662_b(d0, d4, d1).func_181675_d();
-        worldrenderer.func_181662_b(d0, d5, d1).func_181675_d();
-        worldrenderer.func_181662_b(d0, d5, d1).func_181675_d();
-        worldrenderer.func_181662_b(d0, d4, d1).func_181675_d();
-        worldrenderer.func_181662_b(d0, d4, d2).func_181675_d();
-        worldrenderer.func_181662_b(d0, d5, d2).func_181675_d();
-        worldrenderer.func_181662_b(d0, d5, d2).func_181675_d();
-        worldrenderer.func_181662_b(d0, d4, d2).func_181675_d();
-        worldrenderer.func_181662_b(d1, d4, d3).func_181675_d();
-        worldrenderer.func_181662_b(d1, d5, d3).func_181675_d();
-        worldrenderer.func_181662_b(d1, d5, d3).func_181675_d();
-        worldrenderer.func_181662_b(d1, d4, d3).func_181675_d();
-        worldrenderer.func_181662_b(d2, d4, d3).func_181675_d();
-        worldrenderer.func_181662_b(d2, d5, d3).func_181675_d();
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION);
+        worldrenderer.pos(d2, d5, d3).endVertex();
+        worldrenderer.pos(d2, d4, d3).endVertex();
+        worldrenderer.pos(d3, d4, d2).endVertex();
+        worldrenderer.pos(d3, d5, d2).endVertex();
+        worldrenderer.pos(d3, d5, d2).endVertex();
+        worldrenderer.pos(d3, d4, d2).endVertex();
+        worldrenderer.pos(d3, d4, d1).endVertex();
+        worldrenderer.pos(d3, d5, d1).endVertex();
+        worldrenderer.pos(d3, d5, d1).endVertex();
+        worldrenderer.pos(d3, d4, d1).endVertex();
+        worldrenderer.pos(d2, d4, d0).endVertex();
+        worldrenderer.pos(d2, d5, d0).endVertex();
+        worldrenderer.pos(d2, d5, d0).endVertex();
+        worldrenderer.pos(d2, d4, d0).endVertex();
+        worldrenderer.pos(d1, d4, d0).endVertex();
+        worldrenderer.pos(d1, d5, d0).endVertex();
+        worldrenderer.pos(d1, d5, d0).endVertex();
+        worldrenderer.pos(d1, d4, d0).endVertex();
+        worldrenderer.pos(d0, d4, d1).endVertex();
+        worldrenderer.pos(d0, d5, d1).endVertex();
+        worldrenderer.pos(d0, d5, d1).endVertex();
+        worldrenderer.pos(d0, d4, d1).endVertex();
+        worldrenderer.pos(d0, d4, d2).endVertex();
+        worldrenderer.pos(d0, d5, d2).endVertex();
+        worldrenderer.pos(d0, d5, d2).endVertex();
+        worldrenderer.pos(d0, d4, d2).endVertex();
+        worldrenderer.pos(d1, d4, d3).endVertex();
+        worldrenderer.pos(d1, d5, d3).endVertex();
+        worldrenderer.pos(d1, d5, d3).endVertex();
+        worldrenderer.pos(d1, d4, d3).endVertex();
+        worldrenderer.pos(d2, d4, d3).endVertex();
+        worldrenderer.pos(d2, d5, d3).endVertex();
+        worldrenderer.pos(d3, d5, d3).endVertex();
+        worldrenderer.pos(d3, d5, d0).endVertex();
+        worldrenderer.pos(d0, d5, d0).endVertex();
+        worldrenderer.pos(d0, d5, d3).endVertex();
         Tessellator.getInstance().draw();
     }
 
@@ -5436,15 +5443,26 @@ public class Shaders
         }
     }
 
+    public static void pushProgram()
+    {
+        programStack.push(activeProgram);
+    }
+
+    public static void popProgram()
+    {
+        Program program = programStack.pop();
+        useProgram(program);
+    }
+
     public static void beginLeash()
     {
-        programStackLeash.push(activeProgram);
+        pushProgram();
         useProgram(ProgramBasic);
     }
 
     public static void endLeash()
     {
-        useProgram(programStackLeash.pop());
+        popProgram();
     }
 
     public static void enableFog()
@@ -5571,16 +5589,28 @@ public class Shaders
         return shaderPack == null ? null : shaderPack.getResourceAsStream(path);
     }
 
-    public static void nextAntialiasingLevel()
+    public static void nextAntialiasingLevel(boolean forward)
     {
-        configAntialiasingLevel += 2;
-        configAntialiasingLevel = configAntialiasingLevel / 2 * 2;
-
-        if (configAntialiasingLevel > 4)
+        if (forward)
         {
-            configAntialiasingLevel = 0;
+            configAntialiasingLevel += 2;
+
+            if (configAntialiasingLevel > 4)
+            {
+                configAntialiasingLevel = 0;
+            }
+        }
+        else
+        {
+            configAntialiasingLevel -= 2;
+
+            if (configAntialiasingLevel < 0)
+            {
+                configAntialiasingLevel = 4;
+            }
         }
 
+        configAntialiasingLevel = configAntialiasingLevel / 2 * 2;
         configAntialiasingLevel = Config.limit(configAntialiasingLevel, 0, 4);
     }
 
@@ -5622,9 +5652,9 @@ public class Shaders
             String s2 = ".lang";
             list.add(s + s1 + s2);
 
-            if (!Config.getGameSettings().language.equals(s1))
+            if (!Config.getGameSettings().forceUnicodeFont.equals(s1))
             {
-                list.add(s + Config.getGameSettings().language + s2);
+                list.add(s + Config.getGameSettings().forceUnicodeFont + s2);
             }
 
             try

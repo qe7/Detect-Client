@@ -43,12 +43,7 @@ public abstract class RenderLiving<T extends EntityLiving> extends RendererLivin
     }
 
     /**
-     * Actually renders the given argument. This is a synthetic bridge method, always casting down its argument and then
-     * handing it off to a worker function which does the actual work. In all probabilty, the class Render is generic
-     * (Render<T extends Entity>) and this method has signature public void doRender(T entity, double d, double d1,
-     * double d2, float f, float f1). But JAD is pre 1.5 so doe
-     *  
-     * @param entityYaw The yaw rotation of the passed entity
+     * Renders the desired {@code T} type Entity.
      */
     public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks)
     {
@@ -56,7 +51,7 @@ public abstract class RenderLiving<T extends EntityLiving> extends RendererLivin
         this.renderLeash(entity, x, y, z, entityYaw, partialTicks);
     }
 
-    public void func_177105_a(T entityLivingIn, float partialTicks)
+    public void setLightmap(T entityLivingIn, float partialTicks)
     {
         int i = entityLivingIn.getBrightnessForRender(partialTicks);
         int j = i % 65536;
@@ -122,7 +117,7 @@ public abstract class RenderLiving<T extends EntityLiving> extends RendererLivin
 
                 int i = 24;
                 double d16 = 0.025D;
-                worldrenderer.func_181668_a(5, DefaultVertexFormats.field_181706_f);
+                worldrenderer.begin(5, DefaultVertexFormats.POSITION_COLOR);
 
                 for (int j = 0; j <= 24; ++j)
                 {
@@ -138,12 +133,12 @@ public abstract class RenderLiving<T extends EntityLiving> extends RendererLivin
                     }
 
                     float f3 = (float)j / 24.0F;
-                    worldrenderer.func_181662_b(x + d13 * (double)f3 + 0.0D, y + d14 * (double)(f3 * f3 + f3) * 0.5D + (double)((24.0F - (float)j) / 18.0F + 0.125F), z + d15 * (double)f3).func_181666_a(f, f1, f2, 1.0F).func_181675_d();
-                    worldrenderer.func_181662_b(x + d13 * (double)f3 + 0.025D, y + d14 * (double)(f3 * f3 + f3) * 0.5D + (double)((24.0F - (float)j) / 18.0F + 0.125F) + 0.025D, z + d15 * (double)f3).func_181666_a(f, f1, f2, 1.0F).func_181675_d();
+                    worldrenderer.pos(x + d13 * (double)f3 + 0.0D, y + d14 * (double)(f3 * f3 + f3) * 0.5D + (double)((24.0F - (float)j) / 18.0F + 0.125F), z + d15 * (double)f3).color(f, f1, f2, 1.0F).endVertex();
+                    worldrenderer.pos(x + d13 * (double)f3 + 0.025D, y + d14 * (double)(f3 * f3 + f3) * 0.5D + (double)((24.0F - (float)j) / 18.0F + 0.125F) + 0.025D, z + d15 * (double)f3).color(f, f1, f2, 1.0F).endVertex();
                 }
 
                 tessellator.draw();
-                worldrenderer.func_181668_a(5, DefaultVertexFormats.field_181706_f);
+                worldrenderer.begin(5, DefaultVertexFormats.POSITION_COLOR);
 
                 for (int k = 0; k <= 24; ++k)
                 {
@@ -159,8 +154,8 @@ public abstract class RenderLiving<T extends EntityLiving> extends RendererLivin
                     }
 
                     float f7 = (float)k / 24.0F;
-                    worldrenderer.func_181662_b(x + d13 * (double)f7 + 0.0D, y + d14 * (double)(f7 * f7 + f7) * 0.5D + (double)((24.0F - (float)k) / 18.0F + 0.125F) + 0.025D, z + d15 * (double)f7).func_181666_a(f4, f5, f6, 1.0F).func_181675_d();
-                    worldrenderer.func_181662_b(x + d13 * (double)f7 + 0.025D, y + d14 * (double)(f7 * f7 + f7) * 0.5D + (double)((24.0F - (float)k) / 18.0F + 0.125F), z + d15 * (double)f7 + 0.025D).func_181666_a(f4, f5, f6, 1.0F).func_181675_d();
+                    worldrenderer.pos(x + d13 * (double)f7 + 0.0D, y + d14 * (double)(f7 * f7 + f7) * 0.5D + (double)((24.0F - (float)k) / 18.0F + 0.125F) + 0.025D, z + d15 * (double)f7).color(f4, f5, f6, 1.0F).endVertex();
+                    worldrenderer.pos(x + d13 * (double)f7 + 0.025D, y + d14 * (double)(f7 * f7 + f7) * 0.5D + (double)((24.0F - (float)k) / 18.0F + 0.125F), z + d15 * (double)f7 + 0.025D).color(f4, f5, f6, 1.0F).endVertex();
                 }
 
                 tessellator.draw();

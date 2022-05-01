@@ -2,7 +2,7 @@ package net.optifine.reflect;
 
 import java.lang.reflect.Field;
 
-public class ReflectorField
+public class ReflectorField implements IResolvable
 {
     private IFieldLocator fieldLocator;
     private boolean checked;
@@ -11,11 +11,6 @@ public class ReflectorField
     public ReflectorField(ReflectorClass reflectorClass, String targetFieldName)
     {
         this((IFieldLocator)(new FieldLocatorName(reflectorClass, targetFieldName)));
-    }
-
-    public ReflectorField(ReflectorClass reflectorClass, String targetFieldName, boolean lazyResolve)
-    {
-        this(new FieldLocatorName(reflectorClass, targetFieldName), lazyResolve);
     }
 
     public ReflectorField(ReflectorClass reflectorClass, Class targetFieldType)
@@ -35,20 +30,11 @@ public class ReflectorField
 
     public ReflectorField(IFieldLocator fieldLocator)
     {
-        this(fieldLocator, false);
-    }
-
-    public ReflectorField(IFieldLocator fieldLocator, boolean lazyResolve)
-    {
         this.fieldLocator = null;
         this.checked = false;
         this.targetField = null;
         this.fieldLocator = fieldLocator;
-
-        if (!lazyResolve)
-        {
-            this.getTargetField();
-        }
+        ReflectorResolver.register(this);
     }
 
     public Field getTargetField()
@@ -89,5 +75,10 @@ public class ReflectorField
     public boolean exists()
     {
         return this.getTargetField() != null;
+    }
+
+    public void resolve()
+    {
+        Field field = this.getTargetField();
     }
 }

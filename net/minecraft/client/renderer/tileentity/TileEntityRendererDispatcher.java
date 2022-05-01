@@ -33,7 +33,7 @@ import net.optifine.reflect.Reflector;
 
 public class TileEntityRendererDispatcher
 {
-    public Map<Class, TileEntitySpecialRenderer> mapSpecialRenderers = Maps.newHashMap();
+    public Map<Class, TileEntitySpecialRenderer>  mapSpecialRenderers = Maps.newHashMap();
     public static TileEntityRendererDispatcher instance = new TileEntityRendererDispatcher();
     public FontRenderer fontRenderer;
 
@@ -211,7 +211,7 @@ public class TileEntityRendererDispatcher
 
     public void preDrawBatch()
     {
-        this.batchBuffer.getWorldRenderer().func_181668_a(7, DefaultVertexFormats.BLOCK);
+        this.batchBuffer.getWorldRenderer().begin(7, DefaultVertexFormats.BLOCK);
         this.drawingBatch = true;
     }
 
@@ -234,7 +234,7 @@ public class TileEntityRendererDispatcher
 
         if (p_drawBatch_1_ > 0)
         {
-            this.batchBuffer.getWorldRenderer().func_181674_a((float)staticPlayerX, (float)staticPlayerY, (float)staticPlayerZ);
+            this.batchBuffer.getWorldRenderer().sortVertexData((float)staticPlayerX, (float)staticPlayerY, (float)staticPlayerZ);
         }
 
         this.batchBuffer.draw();

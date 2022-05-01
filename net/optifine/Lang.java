@@ -5,6 +5,7 @@ import com.google.common.collect.Iterables;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -29,9 +30,9 @@ public class Lang
         String s2 = ".lang";
         list.add(s + s1 + s2);
 
-        if (!Config.getGameSettings().language.equals(s1))
+        if (!Config.getGameSettings().forceUnicodeFont.equals(s1))
         {
-            list.add(s + Config.getGameSettings().language + s2);
+            list.add(s + Config.getGameSettings().forceUnicodeFont + s2);
         }
 
         String[] astring = (String[])((String[])list.toArray(new String[list.size()]));
@@ -73,8 +74,13 @@ public class Lang
 
     public static void loadLocaleData(InputStream is, Map localeProperties) throws IOException
     {
-        for (String s : IOUtils.readLines(is, Charsets.UTF_8))
+        Iterator iterator = IOUtils.readLines(is, Charsets.UTF_8).iterator();
+        is.close();
+
+        while (iterator.hasNext())
         {
+            String s = (String)iterator.next();
+
             if (!s.isEmpty() && s.charAt(0) != 35)
             {
                 String[] astring = (String[])((String[])Iterables.toArray(splitter.split(s), String.class));

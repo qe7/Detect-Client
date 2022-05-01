@@ -1,28 +1,27 @@
 package github.qe7.detect.module.impl.movement;
 
 import github.qe7.detect.event.Event;
-import github.qe7.detect.event.impl.EventUpdate;
+import github.qe7.detect.event.listeners.EventUpdate;
 import github.qe7.detect.module.Category;
 import github.qe7.detect.module.Module;
-import net.minecraft.potion.Potion;
-import org.lwjgl.input.Keyboard;
+import github.qe7.detect.util.player.Movement;
 
 public class Sprint extends Module {
 
     public Sprint() {
-        super("Sprint", Keyboard.KEY_G, Category.MOVEMENT);
+        super("Sprint", 0, Category.MOVEMENT);
         setToggled(true);
     }
 
-    public void onEvent(Event e) {
-        if (e instanceof EventUpdate) {
+    public void onEvent(Event event) {
+        setSuffix("Legit");
+        if (event instanceof EventUpdate) {
             mc.thePlayer.setSprinting(
-                    mc.thePlayer.moveForward > 0 &&
-                    //!mc.thePlayer.isBlocking() &&
+                    Movement.isMovingForward() &&
                     !mc.thePlayer.isSneaking() &&
                     !mc.thePlayer.isCollidedHorizontally &&
-                    !mc.thePlayer.isPotionActive(Potion.blindness) &&
-                    mc.thePlayer.getFoodStats().getFoodLevel() > 6.f
+                    !mc.thePlayer.isDead &&
+                    mc.thePlayer.getFoodStats().getFoodLevel() > 6f
             );
         }
     }

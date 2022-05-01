@@ -2,6 +2,7 @@ package github.qe7.detect.module;
 
 import github.qe7.detect.event.Event;
 import github.qe7.detect.setting.Setting;
+import github.qe7.detect.util.chat.AddChatMessage;
 import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
@@ -9,13 +10,13 @@ import java.util.Arrays;
 
 public class Module {
 
-    public Minecraft mc = Minecraft.getMinecraft();
+    public static Minecraft mc = Minecraft.getMinecraft();
+    public String name, suffix = "";
+    public Category category;
+    public boolean toggled;
+    public int key;
 
     private ArrayList<Setting> settings = new ArrayList<>();
-    private String name, suffix = "";
-    private Category category;
-    private boolean toggled;
-    private int key;
 
     public Module(String name, int key, Category category) {
         this.name = name;
@@ -39,12 +40,12 @@ public class Module {
         this.suffix = suffix;
     }
 
-    public Category getCategory() {
-        return category;
+    public int getKey() {
+        return key;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setKey(int key) {
+        this.key = key;
     }
 
     public boolean isToggled() {
@@ -55,12 +56,12 @@ public class Module {
         this.toggled = toggled;
     }
 
-    public int getKey() {
-        return key;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setKey(int key) {
-        this.key = key;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public ArrayList<Setting> getSettings() {
@@ -75,13 +76,24 @@ public class Module {
         toggled = !toggled;
         if (toggled) {
             onEnable();
+            AddChatMessage.addChatMessage("toggled " + getName() + " on.");
         } else {
             onDisable();
+            AddChatMessage.addChatMessage("toggled " + getName() + " off.");
         }
     }
 
-    public void onEnable() { /* This is a stub */ }
-    public void onDisable() { /* This is a stub */ }
-    public void onEvent(Event e) { /* This is a stub */ }
-    public void onSkipEvent(Event e) { /* This is a stub */ }
+    public void onEnable() {
+
+    }
+    public void onDisable() {
+
+    }
+    public void onEvent(Event e) {
+
+    }
+    public void onSkipEvent(Event e) {
+
+    }
+
 }

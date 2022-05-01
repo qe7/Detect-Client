@@ -98,7 +98,7 @@ public abstract class BlockLiquid extends Block
         return worldIn.getBlockState(pos).getBlock().getMaterial() == this.blockMaterial ? false : (side == EnumFacing.UP ? true : super.shouldSideBeRendered(worldIn, pos, side));
     }
 
-    public boolean func_176364_g(IBlockAccess blockAccess, BlockPos pos)
+    public boolean shouldRenderSides(IBlockAccess blockAccess, BlockPos pos)
     {
         for (int i = -1; i <= 1; ++i)
         {
@@ -133,8 +133,6 @@ public abstract class BlockLiquid extends Block
 
     /**
      * Get the Item that this Block should drop when harvested.
-     *  
-     * @param fortune the level of the Fortune enchantment on the player's tool
      */
     public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
@@ -290,7 +288,7 @@ public abstract class BlockLiquid extends Block
     public static double getFlowDirection(IBlockAccess worldIn, BlockPos pos, Material materialIn)
     {
         Vec3 vec3 = getFlowingBlock(materialIn).getFlowVector(worldIn, pos);
-        return vec3.xCoord == 0.0D && vec3.zCoord == 0.0D ? -1000.0D : MathHelper.func_181159_b(vec3.zCoord, vec3.xCoord) - (Math.PI / 2D);
+        return vec3.xCoord == 0.0D && vec3.zCoord == 0.0D ? -1000.0D : MathHelper.atan2(vec3.zCoord, vec3.xCoord) - (Math.PI / 2D);
     }
 
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)

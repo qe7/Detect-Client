@@ -267,13 +267,13 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
         return this.userMessage;
     }
 
-    protected void loadAllWorlds(String p_71247_1_, String p_71247_2_, long seed, WorldType type, String p_71247_6_)
+    protected void loadAllWorlds(String saveName, String worldNameIn, long seed, WorldType type, String worldNameIn2)
     {
-        this.convertMapIfNeeded(p_71247_1_);
+        this.convertMapIfNeeded(saveName);
         this.setUserMessage("menu.loadingLevel");
         this.worldServers = new WorldServer[3];
         this.timeOfLastDimensionTick = new long[this.worldServers.length][100];
-        ISaveHandler isavehandler = this.anvilConverterForAnvilFile.getSaveLoader(p_71247_1_, true);
+        ISaveHandler isavehandler = this.anvilConverterForAnvilFile.getSaveLoader(saveName, true);
         this.setResourcePackFromWorld(this.getFolderName(), isavehandler);
         WorldInfo worldinfo = isavehandler.loadWorldInfo();
         WorldSettings worldsettings;
@@ -287,7 +287,7 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
             else
             {
                 worldsettings = new WorldSettings(seed, this.getGameType(), this.canStructuresSpawn(), this.isHardcore(), type);
-                worldsettings.setWorldName(p_71247_6_);
+                worldsettings.setWorldName(worldNameIn2);
 
                 if (this.enableBonusChest)
                 {
@@ -295,11 +295,11 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
                 }
             }
 
-            worldinfo = new WorldInfo(worldsettings, p_71247_2_);
+            worldinfo = new WorldInfo(worldsettings, worldNameIn);
         }
         else
         {
-            worldinfo.setWorldName(p_71247_2_);
+            worldinfo.setWorldName(worldNameIn);
             worldsettings = new WorldSettings(worldinfo);
         }
 
@@ -408,9 +408,15 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
 
     public abstract int getOpPermissionLevel();
 
-    public abstract boolean func_181034_q();
+    /**
+     * Get if RCON command events should be broadcast to ops
+     */
+    public abstract boolean shouldBroadcastRconToOps();
 
-    public abstract boolean func_183002_r();
+    /**
+     * Get if console command events should be broadcast to ops
+     */
+    public abstract boolean shouldBroadcastConsoleToOps();
 
     /**
      * Used to display a percent remaining given text and the percentage.
@@ -693,7 +699,7 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
 
             for (int k = 0; k < agameprofile.length; ++k)
             {
-                agameprofile[k] = ((EntityPlayerMP)this.serverConfigManager.func_181057_v().get(j + k)).getGameProfile();
+                agameprofile[k] = ((EntityPlayerMP)this.serverConfigManager.getPlayerList().get(j + k)).getGameProfile();
             }
 
             Collections.shuffle(Arrays.asList(agameprofile));
@@ -735,7 +741,7 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
         {
             while (!this.futureTaskQueue.isEmpty())
             {
-                Util.func_181617_a((FutureTask)this.futureTaskQueue.poll(), logger);
+                Util.runTask((FutureTask)this.futureTaskQueue.poll(), logger);
             }
         }
 
@@ -753,7 +759,7 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
                 if (this.tickCounter % 20 == 0)
                 {
                     this.theProfiler.startSection("timeSync");
-                    this.serverConfigManager.sendPacketToAllPlayersInDimension(new S03PacketTimeUpdate(worldserver.getTotalWorldTime(), worldserver.getWorldTime(), worldserver.getGameRules().getGameRuleBooleanValue("doDaylightCycle")), worldserver.provider.getDimensionId());
+                    this.serverConfigManager.sendPacketToAllPlayersInDimension(new S03PacketTimeUpdate(worldserver.getTotalWorldTime(), worldserver.getWorldTime(), worldserver.getGameRules().getBoolean("doDaylightCycle")), worldserver.provider.getDimensionId());
                     this.theProfiler.endSection();
                 }
 
@@ -904,7 +910,7 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
             {
                 public String call()
                 {
-                    return MinecraftServer.this.serverConfigManager.getCurrentPlayerCount() + " / " + MinecraftServer.this.serverConfigManager.getMaxPlayers() + "; " + MinecraftServer.this.serverConfigManager.func_181057_v();
+                    return MinecraftServer.this.serverConfigManager.getCurrentPlayerCount() + " / " + MinecraftServer.this.serverConfigManager.getMaxPlayers() + "; " + MinecraftServer.this.serverConfigManager.getPlayerList();
                 }
             });
         }
@@ -970,17 +976,15 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
     }
 
     /**
-     * Gets the name of this command sender (usually username, but possibly "Rcon")
+     * Get the name of this object. For players this returns their username
      */
-    public String getCommandSenderName()
+    public String getName()
     {
         return "Server";
     }
 
     /**
      * Send a chat message to the CommandSender
-     *  
-     * @param component The ChatComponent to send
      */
     public void addChatMessage(IChatComponent component)
     {
@@ -989,9 +993,6 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
 
     /**
      * Returns {@code true} if the CommandSender is allowed to execute the command, {@code false} if not
-     *  
-     * @param permLevel The permission level required to execute the command
-     * @param commandName The name of the command
      */
     public boolean canCommandSenderUseCommand(int permLevel, String commandName)
     {
@@ -1239,7 +1240,11 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
         return this.canSpawnNPCs;
     }
 
-    public abstract boolean func_181035_ah();
+    /**
+     * Get if native transport should be used. Native transport means linux server performance improvements and
+     * optimized packet sending/receiving on linux
+     */
+    public abstract boolean shouldUseNativeTransport();
 
     public void setCanSpawnNPCs(boolean spawnNpcs)
     {
@@ -1291,7 +1296,7 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
         this.buildLimit = maxBuildHeight;
     }
 
-    public boolean func_71241_aa()
+    public boolean isServerStopped()
     {
         return this.serverStopped;
     }
@@ -1430,7 +1435,7 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
      */
     public IChatComponent getDisplayName()
     {
-        return new ChatComponentText(this.getCommandSenderName());
+        return new ChatComponentText(this.getName());
     }
 
     public boolean isAnnouncingPlayerAchievements()
@@ -1486,7 +1491,7 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
      */
     public boolean sendCommandFeedback()
     {
-        return getServer().worldServers[0].getGameRules().getGameRuleBooleanValue("sendCommandFeedback");
+        return getServer().worldServers[0].getGameRules().getBoolean("sendCommandFeedback");
     }
 
     public void setCommandStat(CommandResultStats.Type type, int amount)
@@ -1502,7 +1507,7 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
     {
         Validate.notNull(callable);
 
-        if (!this.isCallingFromMinecraftThread() && !this.func_71241_aa())
+        if (!this.isCallingFromMinecraftThread() && !this.isServerStopped())
         {
             ListenableFutureTask<V> listenablefuturetask = ListenableFutureTask.<V>create(callable);
 

@@ -465,7 +465,7 @@ public class ModelBakery
             {
                 if (this.isCustomRenderer(modelblock1))
                 {
-                    this.bakedRegistry.putObject(modelresourcelocation1, new BuiltInModel(modelblock1.func_181682_g()));
+                    this.bakedRegistry.putObject(modelresourcelocation1, new BuiltInModel(modelblock1.getAllTransforms()));
                 }
                 else
                 {

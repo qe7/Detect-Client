@@ -182,7 +182,7 @@ public abstract class EntityPlayer extends EntityLivingBase
         this.openContainer = this.inventoryContainer;
         BlockPos blockpos = worldIn.getSpawnPoint();
         this.setLocationAndAngles((double)blockpos.getX() + 0.5D, (double)(blockpos.getY() + 1), (double)blockpos.getZ() + 0.5D, 0.0F, 0.0F);
-        this.field_70741_aB = 180.0F;
+        this.unused180 = 180.0F;
         this.fireResistance = 20;
     }
 
@@ -504,7 +504,7 @@ public abstract class EntityPlayer extends EntityLivingBase
         }
     }
 
-    public void handleHealthUpdate(byte id)
+    public void handleStatusUpdate(byte id)
     {
         if (id == 9)
         {
@@ -520,7 +520,7 @@ public abstract class EntityPlayer extends EntityLivingBase
         }
         else
         {
-            super.handleHealthUpdate(id);
+            super.handleStatusUpdate(id);
         }
     }
 
@@ -588,6 +588,7 @@ public abstract class EntityPlayer extends EntityLivingBase
         super.updateEntityActionState();
         this.updateArmSwingProgress();
         this.rotationYawHead = this.rotationYaw;
+        this.rotationPitchHead = this.rotationPitch;
     }
 
     /**
@@ -601,7 +602,7 @@ public abstract class EntityPlayer extends EntityLivingBase
             --this.flyToggleTimer;
         }
 
-        if (this.worldObj.getDifficulty() == EnumDifficulty.PEACEFUL && this.worldObj.getGameRules().getGameRuleBooleanValue("naturalRegeneration"))
+        if (this.worldObj.getDifficulty() == EnumDifficulty.PEACEFUL && this.worldObj.getGameRules().getBoolean("naturalRegeneration"))
         {
             if (this.getHealth() < this.getMaxHealth() && this.ticksExisted % 20 == 0)
             {
@@ -717,12 +718,12 @@ public abstract class EntityPlayer extends EntityLivingBase
         this.setPosition(this.posX, this.posY, this.posZ);
         this.motionY = 0.10000000149011612D;
 
-        if (this.getCommandSenderName().equals("Notch"))
+        if (this.getName().equals("Notch"))
         {
             this.dropItem(new ItemStack(Items.apple, 1), true, false);
         }
 
-        if (!this.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory"))
+        if (!this.worldObj.getGameRules().getBoolean("keepInventory"))
         {
             this.inventory.dropAllItems();
         }
@@ -779,14 +780,14 @@ public abstract class EntityPlayer extends EntityLivingBase
 
         for (ScoreObjective scoreobjective : collection)
         {
-            Score score = this.getWorldScoreboard().getValueFromObjective(this.getCommandSenderName(), scoreobjective);
+            Score score = this.getWorldScoreboard().getValueFromObjective(this.getName(), scoreobjective);
             score.func_96648_a();
         }
     }
 
     private Collection<ScoreObjective> func_175137_e(Entity p_175137_1_)
     {
-        ScorePlayerTeam scoreplayerteam = this.getWorldScoreboard().getPlayersTeam(this.getCommandSenderName());
+        ScorePlayerTeam scoreplayerteam = this.getWorldScoreboard().getPlayersTeam(this.getName());
 
         if (scoreplayerteam != null)
         {
@@ -796,13 +797,13 @@ public abstract class EntityPlayer extends EntityLivingBase
             {
                 for (ScoreObjective scoreobjective : this.getWorldScoreboard().getObjectivesFromCriteria(IScoreObjectiveCriteria.field_178793_i[i]))
                 {
-                    Score score = this.getWorldScoreboard().getValueFromObjective(p_175137_1_.getCommandSenderName(), scoreobjective);
+                    Score score = this.getWorldScoreboard().getValueFromObjective(p_175137_1_.getName(), scoreobjective);
                     score.func_96648_a();
                 }
             }
         }
 
-        ScorePlayerTeam scoreplayerteam1 = this.getWorldScoreboard().getPlayersTeam(p_175137_1_.getCommandSenderName());
+        ScorePlayerTeam scoreplayerteam1 = this.getWorldScoreboard().getPlayersTeam(p_175137_1_.getName());
 
         if (scoreplayerteam1 != null)
         {
@@ -851,7 +852,7 @@ public abstract class EntityPlayer extends EntityLivingBase
 
             if (traceItem)
             {
-                entityitem.setThrower(this.getCommandSenderName());
+                entityitem.setThrower(this.getName());
             }
 
             if (dropAround)
@@ -1217,13 +1218,13 @@ public abstract class EntityPlayer extends EntityLivingBase
     {
     }
 
-    public boolean interactWith(Entity p_70998_1_)
+    public boolean interactWith(Entity targetEntity)
     {
         if (this.isSpectator())
         {
-            if (p_70998_1_ instanceof IInventory)
+            if (targetEntity instanceof IInventory)
             {
-                this.displayGUIChest((IInventory)p_70998_1_);
+                this.displayGUIChest((IInventory)targetEntity);
             }
 
             return false;
@@ -1233,16 +1234,16 @@ public abstract class EntityPlayer extends EntityLivingBase
             ItemStack itemstack = this.getCurrentEquippedItem();
             ItemStack itemstack1 = itemstack != null ? itemstack.copy() : null;
 
-            if (!p_70998_1_.interactFirst(this))
+            if (!targetEntity.interactFirst(this))
             {
-                if (itemstack != null && p_70998_1_ instanceof EntityLivingBase)
+                if (itemstack != null && targetEntity instanceof EntityLivingBase)
                 {
                     if (this.capabilities.isCreativeMode)
                     {
                         itemstack = itemstack1;
                     }
 
-                    if (itemstack.interactWithEntity(this, (EntityLivingBase)p_70998_1_))
+                    if (itemstack.interactWithEntity(this, (EntityLivingBase)targetEntity))
                     {
                         if (itemstack.stackSize <= 0 && !this.capabilities.isCreativeMode)
                         {
@@ -1314,11 +1315,11 @@ public abstract class EntityPlayer extends EntityLivingBase
 
                 if (targetEntity instanceof EntityLivingBase)
                 {
-                    f1 = EnchantmentHelper.func_152377_a(this.getHeldItem(), ((EntityLivingBase)targetEntity).getCreatureAttribute());
+                    f1 = EnchantmentHelper.getModifierForCreature(this.getHeldItem(), ((EntityLivingBase)targetEntity).getCreatureAttribute());
                 }
                 else
                 {
-                    f1 = EnchantmentHelper.func_152377_a(this.getHeldItem(), EnumCreatureAttribute.UNDEFINED);
+                    f1 = EnchantmentHelper.getModifierForCreature(this.getHeldItem(), EnumCreatureAttribute.UNDEFINED);
                 }
 
                 i = i + EnchantmentHelper.getKnockbackModifier(this);
@@ -1604,7 +1605,7 @@ public abstract class EntityPlayer extends EntityLivingBase
     /**
      * Wake up the player if they're sleeping.
      */
-    public void wakeUpPlayer(boolean p_70999_1_, boolean updateWorldFlag, boolean setSpawn)
+    public void wakeUpPlayer(boolean immediately, boolean updateWorldFlag, boolean setSpawn)
     {
         this.setSize(0.6F, 1.8F);
         IBlockState iblockstate = this.worldObj.getBlockState(this.playerLocation);
@@ -1629,7 +1630,7 @@ public abstract class EntityPlayer extends EntityLivingBase
             this.worldObj.updateAllPlayersSleepingFlag();
         }
 
-        this.sleepTimer = p_70999_1_ ? 0 : 100;
+        this.sleepTimer = immediately ? 0 : 100;
 
         if (setSpawn)
         {
@@ -1644,8 +1645,6 @@ public abstract class EntityPlayer extends EntityLivingBase
 
     /**
      * Return null if bed is invalid
-     *  
-     * @param forceSpawn Spawn at bed location even if bed is missing.
      */
     public static BlockPos getBedSpawnLocation(World worldIn, BlockPos bedLocation, boolean forceSpawn)
     {
@@ -1659,8 +1658,8 @@ public abstract class EntityPlayer extends EntityLivingBase
             }
             else
             {
-                boolean flag = block.func_181623_g();
-                boolean flag1 = worldIn.getBlockState(bedLocation.up()).getBlock().func_181623_g();
+                boolean flag = block.canSpawnInBlock();
+                boolean flag1 = worldIn.getBlockState(bedLocation.up()).getBlock().canSpawnInBlock();
                 return flag && flag1 ? bedLocation : null;
             }
         }
@@ -2143,7 +2142,7 @@ public abstract class EntityPlayer extends EntityLivingBase
      */
     protected int getExperiencePoints(EntityPlayer player)
     {
-        if (this.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory"))
+        if (this.worldObj.getGameRules().getBoolean("keepInventory"))
         {
             return 0;
         }
@@ -2182,11 +2181,11 @@ public abstract class EntityPlayer extends EntityLivingBase
             this.experienceTotal = oldPlayer.experienceTotal;
             this.experience = oldPlayer.experience;
             this.setScore(oldPlayer.getScore());
-            this.field_181016_an = oldPlayer.field_181016_an;
-            this.field_181017_ao = oldPlayer.field_181017_ao;
-            this.field_181018_ap = oldPlayer.field_181018_ap;
+            this.lastPortalPos = oldPlayer.lastPortalPos;
+            this.lastPortalVec = oldPlayer.lastPortalVec;
+            this.teleportDirection = oldPlayer.teleportDirection;
         }
-        else if (this.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory"))
+        else if (this.worldObj.getGameRules().getBoolean("keepInventory"))
         {
             this.inventory.copyInventory(oldPlayer.inventory);
             this.experienceLevel = oldPlayer.experienceLevel;
@@ -2224,9 +2223,9 @@ public abstract class EntityPlayer extends EntityLivingBase
     }
 
     /**
-     * Gets the name of this command sender (usually username, but possibly "Rcon")
+     * Get the name of this object. For players this returns their username
      */
-    public String getCommandSenderName()
+    public String getName()
     {
         return this.gameProfile.getName();
     }
@@ -2310,7 +2309,7 @@ public abstract class EntityPlayer extends EntityLivingBase
 
     public Team getTeam()
     {
-        return this.getWorldScoreboard().getPlayersTeam(this.getCommandSenderName());
+        return this.getWorldScoreboard().getPlayersTeam(this.getName());
     }
 
     /**
@@ -2318,10 +2317,10 @@ public abstract class EntityPlayer extends EntityLivingBase
      */
     public IChatComponent getDisplayName()
     {
-        IChatComponent ichatcomponent = new ChatComponentText(ScorePlayerTeam.formatPlayerName(this.getTeam(), this.getCommandSenderName()));
-        ichatcomponent.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + this.getCommandSenderName() + " "));
+        IChatComponent ichatcomponent = new ChatComponentText(ScorePlayerTeam.formatPlayerName(this.getTeam(), this.getName()));
+        ichatcomponent.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + this.getName() + " "));
         ichatcomponent.getChatStyle().setChatHoverEvent(this.getHoverEvent());
-        ichatcomponent.getChatStyle().setInsertion(this.getCommandSenderName());
+        ichatcomponent.getChatStyle().setInsertion(this.getName());
         return ichatcomponent;
     }
 
@@ -2403,7 +2402,7 @@ public abstract class EntityPlayer extends EntityLivingBase
      */
     public boolean sendCommandFeedback()
     {
-        return MinecraftServer.getServer().worldServers[0].getGameRules().getGameRuleBooleanValue("sendCommandFeedback");
+        return MinecraftServer.getServer().worldServers[0].getGameRules().getBoolean("sendCommandFeedback");
     }
 
     public boolean replaceItemInInventory(int inventorySlot, ItemStack itemStackIn)

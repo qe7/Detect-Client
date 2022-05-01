@@ -31,28 +31,28 @@ public class Event {
     }
 
     public boolean isPre() {
-        if(type == null)
+        if (type == null)
             return false;
 
         return type == EventType.PRE;
     }
 
     public boolean isPost() {
-        if(type == null)
+        if (type == null)
             return false;
 
         return type == EventType.POST;
     }
 
     public boolean isIncoming() {
-        if(direction == null)
+        if (direction == null)
             return false;
 
         return direction == EventDirection.INCOMING;
     }
 
     public boolean isOutgoing() {
-        if(direction == null)
+        if (direction == null)
             return false;
 
         return direction == EventDirection.OUTGOING;

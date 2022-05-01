@@ -19,7 +19,6 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraft.src.Config;
 import net.minecraft.util.ResourceLocation;
 import net.optifine.entity.model.anim.ModelResolver;
@@ -102,7 +101,7 @@ public class CustomEntityModels
         {
             if (originalEntityRenderMap == null)
             {
-                originalEntityRenderMap = new HashMap<>(map);
+                originalEntityRenderMap = new HashMap(map);
             }
 
             return map;
@@ -115,7 +114,7 @@ public class CustomEntityModels
 
         if (originalTileEntityRenderMap == null)
         {
-            originalTileEntityRenderMap = new HashMap<>(map);
+            originalTileEntityRenderMap = new HashMap(map);
         }
 
         return map;
@@ -125,7 +124,7 @@ public class CustomEntityModels
     {
         String s = "optifine/cem/";
         String s1 = ".jem";
-        List<ResourceLocation> list = new ArrayList<>();
+        List<ResourceLocation> list = new ArrayList();
         String[] astring = CustomModelRegistry.getModelNames();
 
         for (int i = 0; i < astring.length; ++i)

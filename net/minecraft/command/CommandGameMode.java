@@ -28,8 +28,6 @@ public class CommandGameMode extends CommandBase
 
     /**
      * Gets the usage string for the command.
-     *  
-     * @param sender The {@link ICommandSender} who is requesting usage details.
      */
     public String getCommandUsage(ICommandSender sender)
     {
@@ -38,9 +36,6 @@ public class CommandGameMode extends CommandBase
 
     /**
      * Callback when the command is invoked
-     *  
-     * @param sender The {@link ICommandSender sender} who executed the command
-     * @param args The arguments that were passed with the command
      */
     public void processCommand(ICommandSender sender, String[] args) throws CommandException
     {
@@ -55,7 +50,7 @@ public class CommandGameMode extends CommandBase
             entityplayer.setGameType(worldsettings$gametype);
             entityplayer.fallDistance = 0.0F;
 
-            if (sender.getEntityWorld().getGameRules().getGameRuleBooleanValue("sendCommandFeedback"))
+            if (sender.getEntityWorld().getGameRules().getBoolean("sendCommandFeedback"))
             {
                 entityplayer.addChatMessage(new ChatComponentTranslation("gameMode.changed", new Object[0]));
             }
@@ -64,7 +59,7 @@ public class CommandGameMode extends CommandBase
 
             if (entityplayer != sender)
             {
-                notifyOperators(sender, this, 1, "commands.gamemode.success.other", new Object[] {entityplayer.getCommandSenderName(), ichatcomponent});
+                notifyOperators(sender, this, 1, "commands.gamemode.success.other", new Object[] {entityplayer.getName(), ichatcomponent});
             }
             else
             {
@@ -96,9 +91,6 @@ public class CommandGameMode extends CommandBase
 
     /**
      * Return whether the specified command parameter index is a username parameter.
-     *  
-     * @param args The arguments that were given
-     * @param index The argument index that we are checking
      */
     public boolean isUsernameIndex(String[] args, int index)
     {

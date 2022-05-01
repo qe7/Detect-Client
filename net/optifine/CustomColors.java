@@ -541,6 +541,7 @@ public class CustomColors
                 {
                     Properties properties = new PropertiesOrdered();
                     properties.load(inputstream);
+                    inputstream.close();
                     CustomColormap customcolormap = new CustomColormap(properties, s, width, height, paletteFormatDefault);
 
                     if (customcolormap.isValid(s) && customcolormap.isValidMatchBlocks(s))
@@ -605,35 +606,35 @@ public class CustomColors
         }
     }
 
-    private static void addToList(CustomColormap cm, List lists, int id)
+    private static void addToList(CustomColormap cm, List list, int id)
     {
-        while (id >= lists.size())
+        while (id >= list.size())
         {
-            lists.add(null);
+            list.add(null);
         }
 
-        List list = (List)lists.get(id);
+        List list1 = (List)list.get(id);
 
-        if (list == null)
+        if (list1 == null)
         {
-            list = new ArrayList();
-            list.set(id, list);
+            list1 = new ArrayList();
+            list.set(id, list1);
         }
 
-        list.add(cm);
+        list1.add(cm);
     }
 
-    private static CustomColormap[][] blockListToArray(List lists)
+    private static CustomColormap[][] blockListToArray(List list)
     {
-        CustomColormap[][] acustomcolormap = new CustomColormap[lists.size()][];
+        CustomColormap[][] acustomcolormap = new CustomColormap[list.size()][];
 
-        for (int i = 0; i < lists.size(); ++i)
+        for (int i = 0; i < list.size(); ++i)
         {
-            List list = (List)lists.get(i);
+            List list1 = (List)list.get(i);
 
-            if (list != null)
+            if (list1 != null)
             {
-                CustomColormap[] acustomcolormap1 = (CustomColormap[])((CustomColormap[])list.toArray(new CustomColormap[list.size()]));
+                CustomColormap[] acustomcolormap1 = (CustomColormap[])((CustomColormap[])list1.toArray(new CustomColormap[list1.size()]));
                 acustomcolormap[i] = acustomcolormap1;
             }
         }

@@ -3,11 +3,10 @@ package github.qe7.detect.module;
 public enum Category {
 
     COMBAT("Combat"),
-    PLAYER("Player"),
     MOVEMENT("Movement"),
     VISUAL("Visuals"),
-    EXPLOIT("Exploit"),
-    CLIENT("Client");
+    PLAYER("Player"),
+    EXPLOIT("Exploit");
 
     public String name;
 

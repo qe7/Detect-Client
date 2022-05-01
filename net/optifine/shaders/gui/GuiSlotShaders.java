@@ -117,7 +117,7 @@ class GuiSlotShaders extends GuiSlot
                 else
                 {
                     s1 = s1.trim();
-                    String s2 = "L5";
+                    String s2 = "M5";
                     int i = Config.compareRelease(s2, s1);
 
                     if (i >= 0)

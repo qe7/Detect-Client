@@ -54,7 +54,7 @@ public class ScreenShotHelper
             File file1 = new File(gameDirectory, "screenshots");
             file1.mkdir();
             Minecraft minecraft = Minecraft.getMinecraft();
-            int i = Config.getGameSettings().guiScale;
+            int i = Config.getGameSettings().particleSetting;
             ScaledResolution scaledresolution = new ScaledResolution(minecraft);
             int j = scaledresolution.getScaleFactor();
             int k = Config.getScreenshotSize();
@@ -62,12 +62,12 @@ public class ScreenShotHelper
 
             if (flag)
             {
-                Config.getGameSettings().guiScale = j * k;
+                Config.getGameSettings().particleSetting = j * k;
                 resize(width * k, height * k);
                 GlStateManager.pushMatrix();
                 GlStateManager.clear(16640);
                 minecraft.getFramebuffer().bindFramebuffer(true);
-                minecraft.entityRenderer.func_181560_a(Config.renderPartialTicks, System.nanoTime());
+                minecraft.entityRenderer.updateCameraAndRender(Config.renderPartialTicks, System.nanoTime());
             }
 
             if (OpenGlHelper.isFramebufferEnabled())
@@ -125,7 +125,7 @@ public class ScreenShotHelper
             {
                 minecraft.getFramebuffer().unbindFramebuffer();
                 GlStateManager.popMatrix();
-                Config.getGameSettings().guiScale = i;
+                Config.getGameSettings().particleSetting = i;
                 resize(width, height);
             }
 

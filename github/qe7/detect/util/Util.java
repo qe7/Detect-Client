@@ -4,6 +4,6 @@ import net.minecraft.client.Minecraft;
 
 public class Util {
 
-    public Minecraft mc = Minecraft.getMinecraft();
+    public static Minecraft mc = Minecraft.getMinecraft();
 
 }

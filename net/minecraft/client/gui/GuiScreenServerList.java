@@ -38,7 +38,7 @@ public class GuiScreenServerList extends GuiScreen
         this.field_146302_g = new GuiTextField(2, this.fontRendererObj, this.width / 2 - 100, 116, 200, 20);
         this.field_146302_g.setMaxStringLength(128);
         this.field_146302_g.setFocused(true);
-        this.field_146302_g.setText(this.mc.gameSettings.lastServer);
+        this.field_146302_g.setText(this.mc.gameSettings.smoothCamera);
         ((GuiButton)this.buttonList.get(0)).enabled = this.field_146302_g.getText().length() > 0 && this.field_146302_g.getText().split(":").length > 0;
     }
 
@@ -48,7 +48,7 @@ public class GuiScreenServerList extends GuiScreen
     public void onGuiClosed()
     {
         Keyboard.enableRepeatEvents(false);
-        this.mc.gameSettings.lastServer = this.field_146302_g.getText();
+        this.mc.gameSettings.smoothCamera = this.field_146302_g.getText();
         this.mc.gameSettings.saveOptions();
     }
 
@@ -90,7 +90,7 @@ public class GuiScreenServerList extends GuiScreen
     /**
      * Called when the mouse is clicked. Args : mouseX, mouseY, clickedButton
      */
-    public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
         super.mouseClicked(mouseX, mouseY, mouseButton);
         this.field_146302_g.mouseClicked(mouseX, mouseY, mouseButton);

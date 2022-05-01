@@ -30,8 +30,6 @@ public class CommandExecuteAt extends CommandBase
 
     /**
      * Gets the usage string for the command.
-     *  
-     * @param sender The {@link ICommandSender} who is requesting usage details.
      */
     public String getCommandUsage(ICommandSender sender)
     {
@@ -40,9 +38,6 @@ public class CommandExecuteAt extends CommandBase
 
     /**
      * Callback when the command is invoked
-     *  
-     * @param sender The {@link ICommandSender sender} who executed the command
-     * @param args The arguments that were passed with the command
      */
     public void processCommand(final ICommandSender sender, String[] args) throws CommandException
     {
@@ -72,7 +67,7 @@ public class CommandExecuteAt extends CommandBase
 
                 if (iblockstate.getBlock() != block || k >= 0 && iblockstate.getBlock().getMetaFromState(iblockstate) != k)
                 {
-                    throw new CommandException("commands.execute.failed", new Object[] {"detect", entity.getCommandSenderName()});
+                    throw new CommandException("commands.execute.failed", new Object[] {"detect", entity.getName()});
                 }
 
                 i = 10;
@@ -81,9 +76,9 @@ public class CommandExecuteAt extends CommandBase
             String s = buildString(args, i);
             ICommandSender icommandsender = new ICommandSender()
             {
-                public String getCommandSenderName()
+                public String getName()
                 {
-                    return entity.getCommandSenderName();
+                    return entity.getName();
                 }
                 public IChatComponent getDisplayName()
                 {
@@ -116,7 +111,7 @@ public class CommandExecuteAt extends CommandBase
                 public boolean sendCommandFeedback()
                 {
                     MinecraftServer minecraftserver = MinecraftServer.getServer();
-                    return minecraftserver == null || minecraftserver.worldServers[0].getGameRules().getGameRuleBooleanValue("commandBlockOutput");
+                    return minecraftserver == null || minecraftserver.worldServers[0].getGameRules().getBoolean("commandBlockOutput");
                 }
                 public void setCommandStat(CommandResultStats.Type type, int amount)
                 {
@@ -136,7 +131,7 @@ public class CommandExecuteAt extends CommandBase
             }
             catch (Throwable var23)
             {
-                throw new CommandException("commands.execute.failed", new Object[] {s, entity.getCommandSenderName()});
+                throw new CommandException("commands.execute.failed", new Object[] {s, entity.getName()});
             }
         }
     }
@@ -148,9 +143,6 @@ public class CommandExecuteAt extends CommandBase
 
     /**
      * Return whether the specified command parameter index is a username parameter.
-     *  
-     * @param args The arguments that were given
-     * @param index The argument index that we are checking
      */
     public boolean isUsernameIndex(String[] args, int index)
     {

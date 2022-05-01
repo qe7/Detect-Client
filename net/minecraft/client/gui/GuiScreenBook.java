@@ -190,7 +190,7 @@ public class GuiScreenBook extends GuiScreen
                 if (publish)
                 {
                     s2 = "MC|BSign";
-                    this.bookObj.setTagInfo("author", new NBTTagString(this.editingPlayer.getCommandSenderName()));
+                    this.bookObj.setTagInfo("author", new NBTTagString(this.editingPlayer.getName()));
                     this.bookObj.setTagInfo("title", new NBTTagString(this.bookTitle.trim()));
 
                     for (int i = 0; i < this.bookPages.tagCount(); ++i)
@@ -297,9 +297,6 @@ public class GuiScreenBook extends GuiScreen
 
     /**
      * Processes keystrokes when editing the text of a book
-     *  
-     * @param typedChar The typed character
-     * @param keyCode The numerical key code
      */
     private void keyTypedInBook(char typedChar, int keyCode)
     {
@@ -438,7 +435,7 @@ public class GuiScreenBook extends GuiScreen
             this.fontRendererObj.drawString(s1, i + 36 + (116 - k) / 2, j + 16 + 16, 0);
             int l = this.fontRendererObj.getStringWidth(s);
             this.fontRendererObj.drawString(s, i + 36 + (116 - l) / 2, j + 48, 0);
-            String s2 = I18n.format("book.byAuthor", new Object[] {this.editingPlayer.getCommandSenderName()});
+            String s2 = I18n.format("book.byAuthor", new Object[] {this.editingPlayer.getName()});
             int i1 = this.fontRendererObj.getStringWidth(s2);
             this.fontRendererObj.drawString(EnumChatFormatting.DARK_GRAY + s2, i + 36 + (116 - i1) / 2, j + 48 + 10, 0);
             String s3 = I18n.format("book.finalizeWarning", new Object[0]);
@@ -476,7 +473,7 @@ public class GuiScreenBook extends GuiScreen
                     try
                     {
                         IChatComponent ichatcomponent = IChatComponent.Serializer.jsonToComponent(s5);
-                        this.field_175386_A = ichatcomponent != null ? GuiUtilRenderComponents.func_178908_a(ichatcomponent, 116, this.fontRendererObj, true, true) : null;
+                        this.field_175386_A = ichatcomponent != null ? GuiUtilRenderComponents.splitText(ichatcomponent, 116, this.fontRendererObj, true, true) : null;
                     }
                     catch (JsonParseException var13)
                     {
@@ -524,7 +521,7 @@ public class GuiScreenBook extends GuiScreen
     /**
      * Called when the mouse is clicked. Args : mouseX, mouseY, clickedButton
      */
-    public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
         if (mouseButton == 0)
         {
@@ -541,10 +538,12 @@ public class GuiScreenBook extends GuiScreen
 
     /**
      * Executes the click event specified by the given chat component
+     *  
+     * @param component The ChatComponent to check for click
      */
-    protected boolean handleComponentClick(IChatComponent p_175276_1_)
+    protected boolean handleComponentClick(IChatComponent component)
     {
-        ClickEvent clickevent = p_175276_1_ == null ? null : p_175276_1_.getChatStyle().getChatClickEvent();
+        ClickEvent clickevent = component == null ? null : component.getChatStyle().getChatClickEvent();
 
         if (clickevent == null)
         {
@@ -574,7 +573,7 @@ public class GuiScreenBook extends GuiScreen
         }
         else
         {
-            boolean flag = super.handleComponentClick(p_175276_1_);
+            boolean flag = super.handleComponentClick(component);
 
             if (flag && clickevent.getAction() == ClickEvent.Action.RUN_COMMAND)
             {

@@ -2254,6 +2254,7 @@ public class ConnectedTextures
                 {
                     Properties properties = new PropertiesOrdered();
                     properties.load(inputstream);
+                    inputstream.close();
                     ConnectedProperties connectedproperties = new ConnectedProperties(properties, s);
 
                     if (connectedproperties.isValid(s))
@@ -2350,16 +2351,22 @@ public class ConnectedTextures
         return !set1.isEmpty();
     }
 
-    private static ConnectedProperties[][] propertyListToArray(final List list) {
-        final ConnectedProperties[][] propArr = new ConnectedProperties[list.size()][];
-        for (int i = 0; i < list.size(); ++i) {
-            final List subList = (List) list.get(i);
-            if (subList != null) {
-                final ConnectedProperties[] subArr = (ConnectedProperties[]) subList.toArray(new ConnectedProperties[subList.size()]);
-                propArr[i] = subArr;
+    private static ConnectedProperties[][] propertyListToArray(List list)
+    {
+        ConnectedProperties[][] aconnectedproperties = new ConnectedProperties[list.size()][];
+
+        for (int i = 0; i < list.size(); ++i)
+        {
+            List list2 = (List)list.get(i);
+
+            if (list2 != null)
+            {
+                ConnectedProperties[] aconnectedproperties1 = (ConnectedProperties[])((ConnectedProperties[])list2.toArray(new ConnectedProperties[list2.size()]));
+                aconnectedproperties[i] = aconnectedproperties1;
             }
         }
-        return propArr;
+
+        return aconnectedproperties;
     }
 
     private static void addToTileList(ConnectedProperties cp, List tileList)
@@ -2418,15 +2425,15 @@ public class ConnectedTextures
             list.add(null);
         }
 
-        List l = (List)list.get(id);
+        List list1 = (List)list.get(id);
 
-        if (l == null)
+        if (list1 == null)
         {
-            l = new ArrayList();
-            list.set(id, l);
+            list1 = new ArrayList();
+            list.set(id, list1);
         }
 
-        l.add(cp);
+        list1.add(cp);
     }
 
     private static String[] getDefaultCtmPaths()

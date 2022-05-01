@@ -150,8 +150,6 @@ public class EntityList
 
     /**
      * create a new instance of an entity from NBT store
-     *  
-     * @param nbt The NBT compound
      */
     public static Entity createEntityFromNBT(NBTTagCompound nbt, World worldIn)
     {
