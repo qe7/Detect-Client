@@ -7,7 +7,7 @@ public class SettingMode extends Setting<String[]> {
 	private String currentValue;
 
 	public SettingMode(String name, String...values) {
-		super(name, values);
+		super(name,"Mode" , values);
 		currentValue = values[0];
 	}
 	

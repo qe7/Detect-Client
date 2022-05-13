@@ -6,6 +6,7 @@ import github.qe7.detect.event.listeners.EventRender2D;
 import github.qe7.detect.module.Category;
 import github.qe7.detect.module.Module;
 import github.qe7.detect.module.impl.combat.Killaura;
+import github.qe7.detect.setting.impl.SettingMode;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.GlStateManager;
@@ -15,11 +16,18 @@ import org.lwjgl.opengl.GL11;
 
 public class TargetHud extends Module {
 
+    public SettingMode mode;
+
     public TargetHud() {
         super("TargetHud", 0, Category.VISUAL);
+        mode = new SettingMode("Mode", "Astolfy");
+        addSettings(mode);
     }
 
     public void onEvent(Event event) {
+
+        setSuffix(mode.getCurrentValue());
+
         if (event instanceof EventRender2D) {
             if (Detect.i.moduleManager.getModuleByName("Killaura").isToggled()) {
                 renderTargetHud((EntityLivingBase) Killaura.currentTarget);
@@ -28,7 +36,6 @@ public class TargetHud extends Module {
     }
 
     private void renderTargetHud(EntityLivingBase currentTarget) {
-
         if (currentTarget instanceof EntityPlayer) {
             Gui.drawRect(0, 100 + 0, 150, 100 + 50, 0x80000000);
             if (mc.getNetHandler() != null && currentTarget.getUniqueID() != null) {
@@ -48,5 +55,4 @@ public class TargetHud extends Module {
             mc.fontRendererObj.drawString(""+Math.floor(currentTarget.getHealth()) /2 + "\2477HP", 50, 100 +25, -1);
         }
     }
-
 }

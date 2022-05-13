@@ -18,11 +18,12 @@ public class AntiBot extends Module {
 	private static CopyOnWriteArrayList<Entity> entities = new CopyOnWriteArrayList<Entity>();
 	
 	public void onEvent(Event event) {
+		setSuffix("Watchdog");
 		if(event instanceof EventUpdate) {
 			CopyOnWriteArrayList<Entity> entList = new CopyOnWriteArrayList<Entity>();
 			for(Entity ent : mc.theWorld.loadedEntityList) {
 					/* AntiBot (Hypixel) Removes Invisibles */
-					if(!ent.isInvisible() && ent != mc.thePlayer && ent instanceof EntityPlayer)
+					if(!ent.isInvisible() && ent != mc.thePlayer)
 						entList.add(ent);
 			}
 			entities = entList;

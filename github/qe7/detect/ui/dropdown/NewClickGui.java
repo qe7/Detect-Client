@@ -20,7 +20,7 @@ public class NewClickGui extends GuiScreen {
         int count = 0;
         Panel lastPanel = null;
         for(Category category : Category.values()) {
-            Panel panel = new Panel(lastPanel, 5 + (count * 103), category, this);
+            Panel panel = new Panel(lastPanel, (int) (5 + (count * (Panel.width + 4))), category, this);
             panels.add(panel);
             lastPanel = panel;
             count++;

@@ -18,7 +18,7 @@ public class NoSlowDown extends Module {
 
     public NoSlowDown() {
         super("NoSlowDown", 0, Category.MOVEMENT);
-        mode = new SettingMode("Mode", "Cancel", "Ncp");
+        mode = new SettingMode("Mode", "Cancel", "NCP");
         addSettings(mode);
     }
 
@@ -30,7 +30,7 @@ public class NoSlowDown extends Module {
                     e.setCancelled(true);
                 }
                 break;
-            case "Ncp" :
+            case "NCP" :
                 if (e instanceof EventSlowDown) {
                     e.setCancelled(true);
                 }

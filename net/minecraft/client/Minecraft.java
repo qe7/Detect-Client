@@ -14,6 +14,7 @@ import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +40,9 @@ import javax.imageio.ImageIO;
 
 import github.qe7.detect.Detect;
 import github.qe7.detect.event.listeners.EventKey;
+import github.qe7.detect.font.CFont;
+import github.qe7.detect.font.CFontRenderer;
+import github.qe7.detect.ui.mainMenu.GuiCustomMainMenu;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.audio.MusicTicker;
@@ -50,7 +54,6 @@ import net.minecraft.client.gui.GuiControls;
 import net.minecraft.client.gui.GuiGameOver;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.GuiIngameMenu;
-import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiMemoryErrorScreen;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSleepMP;
@@ -248,7 +251,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
     private Entity renderViewEntity;
     public Entity pointedEntity;
     public EffectRenderer effectRenderer;
-    private final Session session;
+    public Session session;
     private boolean isGamePaused;
 
     /**
@@ -256,6 +259,9 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
      */
     public FontRenderer fontRendererObj;
     public FontRenderer standardGalacticFontRenderer;
+    public CFontRenderer tenacity;
+    public CFontRenderer tenacitySmall;
+    public CFontRenderer tenacityBold;
 
     /**
      * The GuiScreen that's being displayed at the moment.
@@ -534,6 +540,27 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         this.mcMusicTicker = new MusicTicker(this);
         this.fontRendererObj = new FontRenderer(this.gameSettings, new ResourceLocation("textures/font/ascii.png"), this.renderEngine, false);
 
+        try {
+            this.tenacitySmall = new CFontRenderer(Font.createFont(Font.TRUETYPE_FONT, CFont.class.getResourceAsStream("tenacity.ttf")).deriveFont(Font.PLAIN, 14), true, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            shutdown();
+        }
+
+        try {
+            this.tenacity = new CFontRenderer(Font.createFont(Font.TRUETYPE_FONT, CFont.class.getResourceAsStream("tenacity.ttf")).deriveFont(Font.PLAIN, 20), true, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            shutdown();
+        }
+
+        try {
+            this.tenacityBold = new CFontRenderer(Font.createFont(Font.TRUETYPE_FONT, CFont.class.getResourceAsStream("tenacitybold.ttf")).deriveFont(Font.PLAIN, 20), true, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            shutdown();
+        }
+
         if (this.gameSettings.forceUnicodeFont != null) {
             this.fontRendererObj.setUnicodeFlag(this.isUnicode());
             this.fontRendererObj.setBidiFlag(this.mcLanguageManager.isCurrentLanguageBidirectional());
@@ -547,7 +574,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         AchievementList.openInventory.setStatStringFormatter(new IStatStringFormat() {
             public String formatString(String str) {
                 try {
-                    return String.format(str, new Object[]{GameSettings.getKeyDisplayString(Minecraft.this.gameSettings.keyBindUseItem.getKeyCode())});
+                    return String.format(str, new Object[]{GameSettings.getKeyDisplayString(Minecraft.this.gameSettings.keyBindInventory.getKeyCode())});
                 } catch (Exception exception) {
                     return "Error: " + exception.getLocalizedMessage();
                 }
@@ -593,9 +620,9 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         Detect.i.init();
 
         if (this.serverName != null) {
-            this.displayGuiScreen(new GuiConnecting(new GuiMainMenu(), this, this.serverName, this.serverPort));
+            this.displayGuiScreen(new GuiConnecting(new GuiCustomMainMenu(), this, this.serverName, this.serverPort));
         } else {
-            this.displayGuiScreen(new GuiMainMenu());
+            this.displayGuiScreen(new GuiCustomMainMenu());
         }
 
         this.renderEngine.deleteTexture(this.mojangLogo);
@@ -935,12 +962,12 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         }
 
         if (guiScreenIn == null && this.theWorld == null) {
-            guiScreenIn = new GuiMainMenu();
+            guiScreenIn = new GuiCustomMainMenu();
         } else if (guiScreenIn == null && this.thePlayer.getHealth() <= 0.0F) {
             guiScreenIn = new GuiGameOver();
         }
 
-        if (guiScreenIn instanceof GuiMainMenu) {
+        if (guiScreenIn instanceof GuiCustomMainMenu) {
             this.gameSettings.showDebugProfilerChart = false;
             this.ingameGUI.getChatGUI().clearChatMessages();
         }
@@ -1767,7 +1794,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                             this.gameSettings.lastServer = GuiScreen.isAltKeyDown();
                         }
 
-                        if (this.gameSettings.keyBindSmoothCamera.isPressed()) {
+                        if (this.gameSettings.keyBindTogglePerspective.isPressed()) {
                             ++this.gameSettings.showDebugInfo;
 
                             if (this.gameSettings.showDebugInfo > 2) {
@@ -1783,7 +1810,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                             this.renderGlobal.setDisplayListEntitiesDirty();
                         }
 
-                        if (this.gameSettings.keyBindFullscreen.isPressed()) {
+                        if (this.gameSettings.keyBindSmoothCamera.isPressed()) {
                             this.gameSettings.debugCamEnable = !this.gameSettings.debugCamEnable;
                         }
                     }
@@ -1814,7 +1841,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
 
             boolean flag = this.gameSettings.chatVisibility != EntityPlayer.EnumChatVisibility.HIDDEN;
 
-            while (this.gameSettings.keyBindUseItem.isPressed()) {
+            while (this.gameSettings.keyBindInventory.isPressed()) {
                 if (this.playerController.isRidingHorse()) {
                     this.thePlayer.sendHorseInventory();
                 } else {
@@ -1823,55 +1850,55 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 }
             }
 
-            while (this.gameSettings.keyBindAttack.isPressed()) {
+            while (this.gameSettings.keyBindDrop.isPressed()) {
                 if (!this.thePlayer.isSpectator()) {
                     this.thePlayer.dropOneItem(GuiScreen.isCtrlKeyDown());
                 }
             }
 
-            while (this.gameSettings.keyBindPlayerList.isPressed() && flag) {
+            while (this.gameSettings.keyBindChat.isPressed() && flag) {
                 this.displayGuiScreen(new GuiChat());
             }
 
-            if (this.currentScreen == null && this.gameSettings.keyBindScreenshot.isPressed() && flag) {
+            if (this.currentScreen == null && this.gameSettings.keyBindCommand.isPressed() && flag) {
                 this.displayGuiScreen(new GuiChat("/"));
             }
 
             if (this.thePlayer.isUsingItem()) {
-                if (!this.gameSettings.keyBindDrop.isKeyDown()) {
+                if (!this.gameSettings.keyBindUse.isKeyDown()) {
                     this.playerController.onStoppedUsingItem(this.thePlayer);
                 }
 
-                while (this.gameSettings.keyBindPickBlock.isPressed()) {
+                while (this.gameSettings.keyBindAttack.isPressed()) {
                     ;
                 }
 
-                while (this.gameSettings.keyBindDrop.isPressed()) {
+                while (this.gameSettings.keyBindUse.isPressed()) {
                     ;
                 }
 
-                while (this.gameSettings.keyBindChat.isPressed()) {
+                while (this.gameSettings.keyBindPickItem.isPressed()) {
                     ;
                 }
             } else {
-                while (this.gameSettings.keyBindPickBlock.isPressed()) {
+                while (this.gameSettings.keyBindAttack.isPressed()) {
                     this.clickMouse();
                 }
 
-                while (this.gameSettings.keyBindDrop.isPressed()) {
+                while (this.gameSettings.keyBindUse.isPressed()) {
                     this.rightClickMouse();
                 }
 
-                while (this.gameSettings.keyBindChat.isPressed()) {
+                while (this.gameSettings.keyBindPickItem.isPressed()) {
                     this.middleClickMouse();
                 }
             }
 
-            if (this.gameSettings.keyBindDrop.isKeyDown() && this.rightClickDelayTimer == 0 && !this.thePlayer.isUsingItem()) {
+            if (this.gameSettings.keyBindUse.isKeyDown() && this.rightClickDelayTimer == 0 && !this.thePlayer.isUsingItem()) {
                 this.rightClickMouse();
             }
 
-            this.sendClickBlockToController(this.currentScreen == null && this.gameSettings.keyBindPickBlock.isKeyDown() && this.inGameHasFocus);
+            this.sendClickBlockToController(this.currentScreen == null && this.gameSettings.keyBindAttack.isKeyDown() && this.inGameHasFocus);
         }
 
         if (this.theWorld != null) {
@@ -2672,7 +2699,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         if (i != 0 && !Keyboard.isRepeatEvent()) {
             if (!(this.currentScreen instanceof GuiControls) || ((GuiControls) this.currentScreen).time <= getSystemTime() - 20L) {
                 if (Keyboard.getEventKeyState()) {
-                    if (i == this.gameSettings.keyBindStreamPauseUnpause.getKeyCode()) {
+                    if (i == this.gameSettings.keyBindSmoothCamera.getKeyCode()) {
                         if (this.getTwitchStream().isBroadcasting()) {
                             this.getTwitchStream().stopBroadcasting();
                         } else if (this.getTwitchStream().isReadyToBroadcast()) {
@@ -2692,7 +2719,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                         } else {
                             GuiStreamUnavailable.func_152321_a(this.currentScreen);
                         }
-                    } else if (i == this.gameSettings.keyBindStreamCommercials.getKeyCode()) {
+                    } else if (i == this.gameSettings.keyBindSmoothCamera.getKeyCode()) {
                         if (this.getTwitchStream().isBroadcasting()) {
                             if (this.getTwitchStream().isPaused()) {
                                 this.getTwitchStream().unpause();
@@ -2700,19 +2727,17 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                                 this.getTwitchStream().pause();
                             }
                         }
-                    } else if (i == this.gameSettings.keyBindStreamToggleMic.getKeyCode()) {
+                    } else if (i == this.gameSettings.keyBindSmoothCamera.getKeyCode()) {
                         if (this.getTwitchStream().isBroadcasting()) {
                             this.getTwitchStream().requestCommercial();
                         }
-                    } else if (i == this.gameSettings.keyBindsHotbar.getKeyCode()) {
-                        this.stream.muteMicrophone(true);
-                    } else if (i == this.gameSettings.keyBindSpectatorOutlines.getKeyCode()) {
+                    } else if (i == this.gameSettings.keyBindSmoothCamera.getKeyCode()) {
                         this.toggleFullscreen();
-                    } else if (i == this.gameSettings.keyBindTogglePerspective.getKeyCode()) {
+                    } else if (i == this.gameSettings.keyBindScreenShot.getKeyCode()) {
                         this.ingameGUI.getChatGUI().printChatMessage(ScreenShotHelper.saveScreenshot(this.mcDataDir, this.displayWidth, this.displayHeight, this.framebufferMc));
+                    } else if (i == this.gameSettings.keyBindFullscreen.getKeyCode()) {
+                        this.toggleFullscreen();
                     }
-                } else if (i == this.gameSettings.keyBindsHotbar.getKeyCode()) {
-                    this.stream.muteMicrophone(false);
                 }
             }
         }

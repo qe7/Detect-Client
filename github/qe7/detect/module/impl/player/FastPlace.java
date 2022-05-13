@@ -17,6 +17,7 @@ public class FastPlace extends Module {
     }
 
     public void onEvent(Event event) {
+        setSuffix(speed.getValue().toString());
         if (event instanceof EventUpdate) {
             mc.rightClickDelayTimer = Math.min(mc.rightClickDelayTimer, 0);
         }

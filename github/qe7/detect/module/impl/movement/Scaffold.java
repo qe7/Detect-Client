@@ -5,8 +5,8 @@ import java.util.List;
 
 import github.qe7.detect.event.listeners.EventMotion;
 import github.qe7.detect.module.Category;
+import github.qe7.detect.module.impl.combat.Killaura;
 import github.qe7.detect.util.Timer;
-import github.qe7.detect.util.player.Movement;
 import org.lwjgl.input.Keyboard;
 
 import github.qe7.detect.event.Event;
@@ -100,7 +100,7 @@ public class Scaffold extends Module {
     public static boolean isPlaceTick = false;
     
 	public void onDisable() {
-		mc.gameSettings.keyBindSneak.pressed = Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode());
+		mc.gameSettings.keyBindJump.pressed = Keyboard.isKeyDown(mc.gameSettings.keyBindJump.getKeyCode());
 		mc.timer.timerSpeed = 1f;
 		this.isPlaceTick = false;
 	}
@@ -110,29 +110,35 @@ public class Scaffold extends Module {
 	}
 	
 	public void onEvent(Event evenmt) {
-			if (evenmt instanceof EventMotion) {
-				EventMotion event = (EventMotion) evenmt;
-				blockData = getBlockData();
 
-				if (this.blockData != null) {
-					event.setPitch(hyprots(this.blockData.getPosition())[1]);
-					event.setYaw(hyprots(this.blockData.getPosition())[0]);
-                    mc.thePlayer.renderYawOffset = hyprots(this.blockData.getPosition())[0];
-				}
-				
-				if (Movement.isMoving()) {
-					mc.thePlayer.setSpeed(0.14f);
-				}
-				mc.thePlayer.setSprinting(false);
-				
-				int slot = this.getSlot();
-				if (slot != -1 && this.blockData != null) {
-					final int currentSlot = mc.thePlayer.inventory.currentItem;
-					mc.thePlayer.inventory.currentItem = slot;
-					if (this.getPlaceBlock(this.blockData.getPosition(), this.blockData.getFacing())) {
-						mc.thePlayer.sendQueue.addToSendQueue(new C09PacketHeldItemChange(currentSlot));
+			setSuffix("Watchdog");
+
+			if (Killaura.hasTarget)
+				return;
+
+			mc.thePlayer.setSprinting(false);
+
+			if (evenmt instanceof EventMotion) {
+
+				if (evenmt.isPre()) {
+					EventMotion event = (EventMotion) evenmt;
+					blockData = getBlockData();
+
+					if (this.blockData != null) {
+						event.setPitch(hyprots(this.blockData.getPosition())[1]);
+						event.setYaw(hyprots(this.blockData.getPosition())[0]);
+						mc.thePlayer.renderYawOffset = hyprots(this.blockData.getPosition())[0];
 					}
-				mc.thePlayer.inventory.currentItem = currentSlot;
+
+					int slot = this.getSlot();
+					if (slot != -1 && this.blockData != null) {
+						final int currentSlot = mc.thePlayer.inventory.currentItem;
+						mc.thePlayer.inventory.currentItem = slot;
+						if (this.getPlaceBlock(this.blockData.getPosition(), this.blockData.getFacing())) {
+							mc.thePlayer.sendQueue.addToSendQueue(new C09PacketHeldItemChange(currentSlot));
+						}
+						mc.thePlayer.inventory.currentItem = currentSlot;
+					}
 			}
 		}
 	}

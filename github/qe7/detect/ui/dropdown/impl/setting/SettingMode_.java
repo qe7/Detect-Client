@@ -1,5 +1,6 @@
 package github.qe7.detect.ui.dropdown.impl.setting;
 
+import github.qe7.detect.module.impl.visual.Hud;
 import github.qe7.detect.setting.impl.SettingMode;
 import github.qe7.detect.ui.dropdown.impl.Button;
 import net.minecraft.client.Minecraft;
@@ -31,7 +32,7 @@ public class SettingMode_ extends SettingComponent{
         FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
 
         Gui.drawRect(this.x, this.y, this.x + this.parent.getWidth(), this.y + this.height, new Color(33, 33, 33, 255).getRGB());
-        Gui.drawRect(this.x, this.y, this.x + 1, this.y + this.height, new Color(255, 102, 102, 255).getRGB());
+        Gui.drawRect(this.x, this.y, this.x + 1, this.y + this.height, Hud.getColor().getRGB());
         String name = this.set.getName();
         font.drawString(this.set.getName() + " " + this.set.getCurrentValue(), this.x + 2, y + 1,-1);
 

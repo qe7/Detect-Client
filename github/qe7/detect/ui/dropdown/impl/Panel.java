@@ -25,7 +25,7 @@ public class Panel {
     public double x;
     public double y = 4;
 
-    public double width = 100;
+    public static double width = 114;
     public double height = 12;
     private double offsetX = 0;
     private double offsetY = 0;
@@ -61,6 +61,7 @@ public class Panel {
             y = mouseY - offsetY;
         }
 
+
         if (open) {
             for(Button b : buttons) {
                 if(count > 0) {
@@ -70,6 +71,11 @@ public class Panel {
                 tButHeight += b.drawScreen(mouseX, mouseY, partialTicks, lButHeight);
                 count++;
             }
+            // Need to make this a method.
+            Gui.drawRect(x - 1, y - 1, x, y + height + tButHeight + 13, new Color(47, 47, 47, 255).darker().getRGB()); // Right
+            Gui.drawRect(x + width + 1, y - 1,x + width, y + height + tButHeight + 13, new Color(47, 47, 47, 255).darker().getRGB()); // Left
+            Gui.drawRect(x, y - 1,x + width + 1, y, new Color(47, 47, 47, 255).darker().getRGB()); // Top
+            Gui.drawRect(x, y + height + tButHeight + 12,x + width + 1, y + height + tButHeight + 13, new Color(47, 47, 47, 255).darker().getRGB()); // Bottom
         }
 
 

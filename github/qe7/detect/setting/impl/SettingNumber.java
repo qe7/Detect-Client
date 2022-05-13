@@ -8,7 +8,7 @@ public class SettingNumber extends Setting<Double> {
 	private String increments;
 
 	public SettingNumber(String name, double value, String increments, double min, double max) {
-		super(name, value);
+		super(name,"Number", value);
 		this.increments = increments;
 		this.min = min;
 		this.max = max;

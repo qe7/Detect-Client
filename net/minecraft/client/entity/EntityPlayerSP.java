@@ -1,7 +1,9 @@
 package net.minecraft.client.entity;
 
 import github.qe7.detect.Detect;
+import github.qe7.detect.command.CommandManager;
 import github.qe7.detect.event.EventType;
+import github.qe7.detect.event.listeners.EventMessage;
 import github.qe7.detect.event.listeners.EventMotion;
 import github.qe7.detect.event.listeners.EventSlowDown;
 import github.qe7.detect.event.listeners.EventUpdate;
@@ -317,7 +319,11 @@ public class EntityPlayerSP extends AbstractClientPlayer
      */
     public void sendChatMessage(String message)
     {
-        this.sendQueue.addToSendQueue(new C01PacketChatMessage(message));
+        EventMessage eventMessage = new EventMessage(message);
+        Detect.i.moduleManager.onEvent(eventMessage);
+
+        if (!eventMessage.isCancelled())
+            this.sendQueue.addToSendQueue(new C01PacketChatMessage(eventMessage.getMessage()));
     }
 
     /**

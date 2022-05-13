@@ -19,32 +19,20 @@ public class Fly extends Module {
 	
 	public Fly() {
 		super("Fly", 0, Category.MOVEMENT);
-		mode = new SettingMode("Mode", "Vanilla", "VerusDMG", "Smooth");
+		mode = new SettingMode("Mode", "Vanilla");
 		addSettings(mode);
 	}
 
-	public Timer timer = new Timer();
-
 	public void onEnable() {
-		timer.reset();
-		switch(mode.getCurrentValue()) {
-		case "VerusDMG" :
-				damage();
-			break;
-		}
+
 	}
 	
 	public void onEvent(Event e) {
+		setSuffix(mode.getCurrentValue());
 		if (e instanceof EventMotion) {
 			switch(mode.getCurrentValue()) {
 			case "Vanilla" :
 				vanillaFly();
-				break;
-			case "VerusDMG" :
-				verusDMG();
-				break;
-			case "Smooth" :
-				smoothFly();
 				break;
 			}
 		}
@@ -56,7 +44,6 @@ public class Fly extends Module {
 	}
 	
 	public void vanillaFly() {
-		setSuffix("Vanilla");
 		mc.thePlayer.motionY = 0.f;
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
 			mc.thePlayer.motionY += 0.4f;
@@ -71,55 +58,10 @@ public class Fly extends Module {
 			mc.timer.timerSpeed = 1f;
 		}
 	}
-	
-	public void verusDMG() {
-		setSuffix("VerusDMG");
-		mc.timer.timerSpeed = 0.2f;
-		//if (mc.thePlayer.hurtTime > 2f) {
-			phase();
-			mc.thePlayer.motionY = 0.0005f;
-			if (Movement.isMoving()) {
-				mc.thePlayer.setSpeed(8f);
-				mc.timer.timerSpeed = 0.2f;
-			} else {
-				mc.thePlayer.setSpeed(0.f);
-				mc.timer.timerSpeed = 1f;
-			}
-		//} else {
-			//mc.thePlayer.setSpeed(0f);
-		//}
-	}
-	
-	public void smoothFly() {
-		setSuffix("Smooth");
-		mc.thePlayer.motionY = 0.f;
-		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			mc.thePlayer.motionY += 0.4f;
-		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			mc.thePlayer.motionY -= 0.4f;
-		}
-		if (Movement.isMoving()) {
-			mc.thePlayer.setSpeed(0.8f);
-		}
-	}
-	
+
 	public void damage() {
         mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 3.5f, mc.thePlayer.posZ, true));
         mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
 		AddChatMessage.addChatMessage("Damaged player");
-	}
-
-	public void jump() {
-		mc.thePlayer.jump();
-	}
-
-	public void phase() {
-
-		if (timer.hasReached(100L))
-			mc.thePlayer.noClip = false;
-		else if (!timer.hasReached(20L))
-			mc.thePlayer.noClip = true;
-			mc.thePlayer.motionY = 0.4f;
 	}
 }

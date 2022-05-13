@@ -1,5 +1,9 @@
 package net.minecraft.client.renderer;
 
+import com.sun.javafx.charts.Legend;
+import github.qe7.detect.Detect;
+import github.qe7.detect.module.impl.combat.Killaura;
+import github.qe7.detect.module.impl.visual.Animations;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -306,7 +310,11 @@ public class ItemRenderer
      */
     private void transformFirstPersonItem(float equipProgress, float swingProgress)
     {
-        GlStateManager.translate(0.56F, -0.52F, -0.71999997F);
+
+        if (Detect.i.moduleManager.getModuleByName("Animations").isToggled())
+            GlStateManager.translate(Animations.x.getValue(), Animations.y.getValue(), Animations.z.getValue());
+        else
+            GlStateManager.translate(0.52F, -0.52F, -0.72F);
         GlStateManager.translate(0.0F, equipProgress * -0.6F, 0.0F);
         GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
         float f = MathHelper.sin(swingProgress * swingProgress * (float)Math.PI);
@@ -314,7 +322,10 @@ public class ItemRenderer
         GlStateManager.rotate(f * -20.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(f1 * -20.0F, 0.0F, 0.0F, 1.0F);
         GlStateManager.rotate(f1 * -80.0F, 1.0F, 0.0F, 0.0F);
-        GlStateManager.scale(0.4F, 0.4F, 0.4F);
+        if (Detect.i.moduleManager.getModuleByName("Animations").isToggled())
+            GlStateManager.scale(Animations.scale.getValue(), Animations.scale.getValue(), Animations.scale.getValue());
+        else
+            GlStateManager.scale(0.4f, 0.4f, 0.4f);
     }
 
     /**
@@ -384,7 +395,7 @@ public class ItemRenderer
                 {
                     this.renderItemMap(abstractclientplayer, f2, f, f1);
                 }
-                else if (abstractclientplayer.getItemInUseCount() > 0)
+                else if (abstractclientplayer.getItemInUseCount() > 0 || (Detect.i.moduleManager.getModuleByName("Killaura").isToggled() && (Killaura.ab.getValue() && Killaura.abMode.getCurrentValue() == "Fake")) && Killaura.hasTarget)
                 {
                     EnumAction enumaction = this.itemToRender.getItemUseAction();
 
@@ -401,8 +412,37 @@ public class ItemRenderer
                             break;
 
                         case BLOCK:
-                            this.transformFirstPersonItem(f, 0.0F);
-                            this.doBlockTransformations();
+                            if (Detect.i.moduleManager.getModuleByName("Animations").isToggled()) {
+                                switch (Animations.mode.getCurrentValue()) {
+                                    case "Exhi" :
+                                        float f81 = MathHelper.sin((float) (MathHelper.sqrt_float(f1) * 3.1239143));
+                                        this.transformFirstPersonItem(f, 0.0f);
+                                        GlStateManager.translate(0.1F, 0.3F, -0.1F);
+                                        GlStateManager.rotate(-7, 1, 0.1f, -1);
+                                        GL11.glRotated(-f81 * 32.0F, f81 / 2, 0.0F, 9.0F);
+                                        GL11.glRotated(-f81 * 46.0F, 0.8F, f81 / 3, 0F);
+                                        this.doBlockTransformations();
+                                        break;
+                                    case "Remix" :
+                                        this.transformFirstPersonItem(f, 0);
+                                        this.doBlockTransformations();
+                                        final float var10 =
+                                                MathHelper.sin(MathHelper.sqrt_float(f1) * MathHelper.PI);
+                                        //GlStateManager.translate(1, -0.8, 1);
+                                        GlStateManager.rotate(-var10 * (float)
+                                                50.0 / 2.0f, -8.0f, 0.4f, 9.0f);
+                                        GlStateManager.rotate(-var10 * (float) 40,
+                                                1.5f, -0.4f, -0.0f);
+                                        break;
+                                    case "1.7" :
+                                        this.transformFirstPersonItem(f, f1);
+                                        this.doBlockTransformations();
+                                        break;
+                                }
+                            } else {
+                                this.transformFirstPersonItem(f, 0.0f);
+                                this.doBlockTransformations();
+                            }
                             break;
 
                         case BOW:

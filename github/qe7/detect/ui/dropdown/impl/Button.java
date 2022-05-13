@@ -1,6 +1,7 @@
 package github.qe7.detect.ui.dropdown.impl;
 
 import github.qe7.detect.module.Module;
+import github.qe7.detect.module.impl.visual.Hud;
 import github.qe7.detect.setting.Setting;
 import github.qe7.detect.setting.impl.SettingBoolean;
 import github.qe7.detect.setting.impl.SettingMode;
@@ -16,7 +17,6 @@ import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.io.IOException;
-import java.security.Key;
 import java.util.ArrayList;
 
 public class Button {
@@ -66,19 +66,19 @@ public class Button {
             }
         }
 
-        Gui.drawRect(panel.x,panel.y + y + plusplus, panel.x + panel.width, panel.y + y + height + plusplus, module.isToggled() ? new Color(255, 102, 102, 255).getRGB() : new Color(40, 40, 40, 255).getRGB());
+        Gui.drawRect(panel.x,panel.y + y + plusplus, panel.x + panel.width, panel.y + y + height + plusplus, module.isToggled() ? Hud.getColor().getRGB() : new Color(40, 40, 40, 255).getRGB());
         font.drawStringWithShadow(module.getName(), panel.x + 4, panel.y + y + ((height - mc.fontRendererObj.FONT_HEIGHT) / 2) + plusplus, -1);
-        if (binding || module.getKey() != 0)
-            font.drawStringWithShadow(binding ? "binding..." : "[" + Keyboard.getKeyName(module.getKey()) + "]", panel.x + panel.width - font.getStringWidth(binding ? "binding..." : "[" + Keyboard.getKeyName(module.getKey()) + "]") - 4, panel.y + y + ((height - mc.fontRendererObj.FONT_HEIGHT) / 2) + plusplus, -1);
+        if (binding || module.getBind() != 0)
+            font.drawStringWithShadow(binding ? "binding..." : "[" + Keyboard.getKeyName(module.getBind()) + "]", panel.x + panel.width - font.getStringWidth(binding ? "binding..." : "[" + Keyboard.getKeyName(module.getBind()) + "]") - 4, panel.y + y + ((height - mc.fontRendererObj.FONT_HEIGHT) / 2) + plusplus, -1);
         return setHeight;
     }
 
     public void keyTyped(char typedChat, int keyCode) {
         if (binding) {
             if (keyCode == Keyboard.KEY_BACK) {
-                module.setKey(Keyboard.KEY_NONE);
+                module.setBind(Keyboard.KEY_NONE);
             } else {
-                module.setKey(keyCode);
+                module.setBind(keyCode);
             }
             binding = false;
         }

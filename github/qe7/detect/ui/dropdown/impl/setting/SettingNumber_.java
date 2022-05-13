@@ -1,5 +1,6 @@
 package github.qe7.detect.ui.dropdown.impl.setting;
 
+import github.qe7.detect.module.impl.visual.Hud;
 import github.qe7.detect.setting.impl.SettingNumber;
 import github.qe7.detect.ui.dropdown.impl.Button;
 import net.minecraft.client.Minecraft;
@@ -45,8 +46,8 @@ public class SettingNumber_ extends SettingComponent {
 
         float distance = (float) ((this.set.getValue() - this.set.getMin()) / (this.set.getMax() - this.set.getMin()));
         Gui.drawRect(this.x, this.y, this.x + this.parent.getWidth(), this.y + this.height, new Color(33, 33, 33, 255).getRGB());
-        Gui.drawRect(this.x, this.y, this.x + 1, this.y + this.height, new Color(255, 102, 102, 255).getRGB());
-        Gui.drawRect(this.x + 1, this.y + font.FONT_HEIGHT - 9, (int) (this.x - 1+ (this.parent.getWidth() * distance)), this.y + this.height - 0, new Color(255, 102, 102, 155).brighter().getRGB());
+        Gui.drawRect(this.x, this.y, this.x + 1, this.y + this.height, Hud.getColor().getRGB());
+        Gui.drawRect(this.x + 1, this.y + font.FONT_HEIGHT - 9, (int) (this.x - 1+ (this.parent.getWidth() * distance)), this.y + this.height - 0, 0x77ffffff);
         String name = this.set.getName();
         font.drawString(this.set.getName() + " : " + this.set.getValue(), this.x + 2, y + 1,-1);
 

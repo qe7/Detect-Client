@@ -1,7 +1,9 @@
 package github.qe7.detect.module;
 
+import github.qe7.detect.Detect;
 import github.qe7.detect.event.Event;
 import github.qe7.detect.setting.Setting;
+import github.qe7.detect.setting.impl.SettingBoolean;
 import github.qe7.detect.util.chat.AddChatMessage;
 import net.minecraft.client.Minecraft;
 
@@ -11,17 +13,21 @@ import java.util.Arrays;
 public class Module {
 
     public static Minecraft mc = Minecraft.getMinecraft();
-    public String name, suffix = "";
+    public String name;
+    public String suffix = "";
     public Category category;
     public boolean toggled;
-    public int key;
+    public int bind;
+
+    public SettingBoolean drawn = new SettingBoolean("Drawn", true);
 
     private ArrayList<Setting> settings = new ArrayList<>();
 
-    public Module(String name, int key, Category category) {
+    public Module(String name, int bind, Category category) {
         this.name = name;
-        this.key = key;
+        this.bind = bind;
         this.category = category;
+        addSettings(drawn);
     }
 
     public String getName() {
@@ -40,12 +46,12 @@ public class Module {
         this.suffix = suffix;
     }
 
-    public int getKey() {
-        return key;
+    public int getBind() {
+        return bind;
     }
 
-    public void setKey(int key) {
-        this.key = key;
+    public void setBind(int bind) {
+        this.bind = bind;
     }
 
     public boolean isToggled() {
@@ -76,10 +82,12 @@ public class Module {
         toggled = !toggled;
         if (toggled) {
             onEnable();
-            AddChatMessage.addChatMessage("toggled " + getName() + " on.");
+            if (Detect.i.moduleManager.getModuleByName("ToggleMessages").isToggled())
+                AddChatMessage.addChatMessage("toggled " + getName() + " on.");
         } else {
             onDisable();
-            AddChatMessage.addChatMessage("toggled " + getName() + " off.");
+            if (Detect.i.moduleManager.getModuleByName("ToggleMessages").isToggled())
+                AddChatMessage.addChatMessage("toggled " + getName() + " off.");
         }
     }
 
