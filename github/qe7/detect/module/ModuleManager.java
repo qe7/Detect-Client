@@ -74,7 +74,6 @@ public class ModuleManager {
         modules.add(new ESP());
         modules.add(new ChatExtras());
 
-
         sort();
     }
 
