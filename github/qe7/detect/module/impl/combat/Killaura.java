@@ -82,7 +82,6 @@ public class Killaura extends Module {
                 if (Detect.i.friendManager.isFriend(target.getName()))
                     return;
 
-                float[] wat = watchDogRotations(target, event);
                 float[] jit = jitterRotations(target, event);
                 float[] sta = staticRotations(target, event);
 
@@ -92,11 +91,6 @@ public class Killaura extends Module {
 
                     if (rot.getValue()) {
                         switch (this.rotMode.getCurrentValue()) {
-                            case "Watchdog":
-                                mc.thePlayer.renderYawOffset = wat[0];
-                                event.yaw = wat[0];
-                                event.pitch = wat[1];
-                                break;
                             case "Jitter":
                                 mc.thePlayer.renderYawOffset = jit[0];
                                 event.yaw = jit[0];
@@ -138,10 +132,6 @@ public class Killaura extends Module {
                 if (this.isInFOV((EntityLivingBase) target) && target.getDistance(x, y, z) <= reach.getValue() && timer.hasReached(1000 / (cps.getValue() + (Math.random() * 5)))) {
                     if (rot.getValue()) {
                         switch (this.rotMode.getCurrentValue()) {
-                            case "Watchdog":
-                                event.yaw = wat[0];
-                                event.pitch = wat[1];
-                                break;
                             case "Jitter":
                                 event.yaw = jit[0];
                                 event.pitch = jit[1];
@@ -187,39 +177,6 @@ public class Killaura extends Module {
     private boolean isInFOV(final EntityLivingBase entity) {
         final int j = fov.getValue().intValue();
         return Math.abs(Rotation.getYawChange(entity.posX, entity.posZ)) <= j && Math.abs(Rotation.getPitchChange(entity, entity.posY)) <= j;
-    }
-
-    public static float[] watchDogRotations(Entity e, EventMotion p) {
-        double x = e.posX + (e.posX - e.lastTickPosX) - p.getX();
-        double y = (e.posY + e.getEyeHeight()) - (p.getY() + mc.thePlayer.getEyeHeight()) - 0.4;
-        double z = e.posZ + (e.posZ - e.lastTickPosZ) - p.getZ();
-        double dist = Math.sqrt(Math.pow(x, 2) + Math.pow(z, 2));
-        double py = mc.thePlayer.posY;
-
-        float yaw = (float) Math.toDegrees(-Math.atan(x / z));
-        float pitch = (float) -Math.toDegrees(Math.atan(y / dist));
-
-        if (x < 0 && z < 0) {
-            yaw = 90 + (float) Math.toDegrees(Math.atan(z / x));
-        } else if (x > 0 && z < 0) {
-            yaw = -90 + (float) Math.toDegrees(Math.atan(z / x));
-        }
-
-        if (y < 0) {
-            if (e.posY == py)
-                pitch *= 2.0694201337f;
-        }
-
-        if (pitch > 90)
-            pitch = 90;
-        if (pitch < -90)
-            pitch = -90;
-        if (yaw > 180)
-            yaw = 180;
-        if (yaw < -180)
-            yaw = -180;
-
-        return new float[]{yaw, pitch};
     }
 
 	public static float[] jitterRotations(Entity e, EventMotion p) {

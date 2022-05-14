@@ -95,25 +95,7 @@ public class Speed extends Module {
                         mc.thePlayer.setSpeed(0);
                     }
                 }
-<<<<<<< Updated upstream
-=======
-            }
-            break;
-        case "Verus" :
-            if (e instanceof EventMotion) {
-                mc.thePlayer.setSprinting(true);
-                if (mc.thePlayer.onGround && Movement.isMoving()) {
-                    mc.thePlayer.jump();
-                    mc.thePlayer.setSpeed(0.4);
-                }
-                else if (!mc.thePlayer.onGround && Movement.isMoving()) {
-                    mc.thePlayer.setSpeed(getBaseMoveSpeed());
-                }
-                else {
-                    mc.thePlayer.setSpeed(0);
-                }
-            }
->>>>>>> Stashed changes
+                break;
         }
     }
 
