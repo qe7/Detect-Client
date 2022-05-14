@@ -3,6 +3,7 @@ package github.qe7.detect.ui.mainMenu;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import github.qe7.detect.Detect;
+import github.qe7.detect.module.impl.visual.Hud;
 import github.qe7.detect.ui.altmenu.GuiAltManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
@@ -27,6 +28,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.Project;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URI;
@@ -128,11 +130,11 @@ public class GuiCustomMainMenu extends GuiScreen implements GuiYesNoCallback {
 
     private void addButtons(int p_73969_1_, int p_73969_2_)
     {
-        this.buttonList.add(new GuiButton(1, this.width / 2 - 100, p_73969_1_, "Singleplayer"));
-        this.buttonList.add(new GuiButton(2, this.width / 2 - 100, p_73969_1_ + p_73969_2_ * 1, "Multiplayer"));
-        this.buttonList.add(new GuiButton(3, this.width / 2 - 100, p_73969_1_ + p_73969_2_ * 2, "AltManager"));
-        this.buttonList.add(new GuiButton(0, this.width / 2 - 100, p_73969_1_ + p_73969_2_ * 3, 98, 20, "Options"));
-        this.buttonList.add(new GuiButton(4, this.width / 2 + 2, p_73969_1_ + p_73969_2_ * 3, 98, 20, "Quit"));
+        this.buttonList.add(new GuiButton(1, this.width / 2 - 100, height / 2-55 ,"Singleplayer"));
+        this.buttonList.add(new GuiButton(2, this.width / 2 - 100, height / 2-32, "Multiplayer"));
+        this.buttonList.add(new GuiButton(3, this.width / 2 - 100, height / 2-9, "AltManager"));
+        this.buttonList.add(new GuiButton(0, this.width / 2 - 100, height / 2+14, "Options"));
+        this.buttonList.add(new GuiButton(4, this.width- 21, 1, 20, 20, "X"));
     }
 
     protected void actionPerformed(GuiButton button) throws IOException
@@ -391,6 +393,15 @@ public class GuiCustomMainMenu extends GuiScreen implements GuiYesNoCallback {
             j1 = custompanoramaproperties.getOverlay2Top();
             k1 = custompanoramaproperties.getOverlay2Bottom();
         }
+
+        // Main Menu
+        Gui.drawRect(width /2-125, height /2+60, width /2+125, height /2-90, new Color(0x292929).getRGB());
+        Gui.drawRect(width /2-125, height /2+60, width /2-121, height /2-90, new Color(0x3F3F3F).getRGB());
+        Gui.drawRect(width /2+125, height /2+60, width /2+121, height /2-90, new Color(0x3F3F3F).getRGB());
+        Gui.drawRect(width /2-125, height /2-86, width /2+125, height /2-90, new Color(0x3F3F3F).getRGB());
+        Gui.drawRect(width /2-121, height /2-84, width /2+121, height /2-86, Hud.getColor().getRGB());
+        Gui.drawRect(width /2-125, height /2+60, width /2+125, height /2+64, new Color(0x3F3F3F).getRGB());
+        this.drawString(this.fontRendererObj, "D§fetect", width / 2-20, height /2 -75, Hud.getColor().getRGB());
 
         GlStateManager.pushMatrix();
         GlStateManager.translate((float)(this.width / 2 + 90), 70.0F, 0.0F);
