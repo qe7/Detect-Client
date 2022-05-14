@@ -45,10 +45,15 @@ public class NoSlowDown extends Module {
                 }
                 break;
             case "Spoof" :
-//                while (slot == mc.thePlayer.inventory.currentItem || slot == -1){
-//                    slot = 2;
-//                }
-//                mc.thePlayer.sendQueue.addToSendQueue(new C09PacketHeldItemChange(slot));
+                if (e instanceof EventSlowDown) {
+                    e.setCancelled(true);
+                }
+                if (e instanceof EventMotion) {
+                    while (slot == mc.thePlayer.inventory.currentItem || slot == -1){
+                        slot = 2;
+                    }
+                    mc.thePlayer.sendQueue.addToSendQueue(new C09PacketHeldItemChange(slot));
+                }
                 break;
         }
     }
