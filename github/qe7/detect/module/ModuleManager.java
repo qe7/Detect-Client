@@ -71,6 +71,7 @@ public class ModuleManager {
         modules.add(new Clickgui());
         modules.add(new Fullbright());
         modules.add(new Hud());
+        modules.add(new Cape());
         modules.add(new TargetHud());
         modules.add(new ESP());
         modules.add(new ChatExtras());

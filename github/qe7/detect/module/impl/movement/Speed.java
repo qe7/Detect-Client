@@ -9,7 +9,6 @@ import github.qe7.detect.setting.impl.SettingNumber;
 import github.qe7.detect.util.Timer;
 import github.qe7.detect.util.player.Movement;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.NetworkManager;
 import net.minecraft.potion.Potion;
 
 import java.math.BigDecimal;
@@ -75,10 +74,16 @@ public class Speed extends Module {
                         if (mc.thePlayer.onGround) {
                             mc.thePlayer.jump();
                             mc.thePlayer.setSpeed(0.66425f);
+                            mc.timer.timerSpeed = 1f;
                         } else {
                             mc.thePlayer.motionY -= 1;
+                            mc.timer.timerSpeed = 1f; // if you wanna make it faster (not infinite) (best is 1.2 timer)
                         }
                     }
+                }
+                else if (mc.thePlayer.isCollidedHorizontally) {
+                    mc.thePlayer.jump();
+                    mc.thePlayer.setSpeed(1);
                 }
                 break;
             case "Verus":

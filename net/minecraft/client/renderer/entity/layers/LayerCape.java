@@ -1,5 +1,7 @@
 package net.minecraft.client.renderer.entity.layers;
 
+import github.qe7.detect.Detect;
+import github.qe7.detect.module.impl.visual.Cape;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -19,9 +21,9 @@ public class LayerCape implements LayerRenderer<AbstractClientPlayer>
 
     public void doRenderLayer(AbstractClientPlayer entitylivingbaseIn, float p_177141_2_, float p_177141_3_, float partialTicks, float p_177141_5_, float p_177141_6_, float p_177141_7_, float scale)
     {
-        if (entitylivingbaseIn.getName().equalsIgnoreCase(Minecraft.getMinecraft().thePlayer.getName())) {
+        if (entitylivingbaseIn.getName().equalsIgnoreCase(Minecraft.getMinecraft().thePlayer.getName())&& Detect.i.moduleManager.getModuleByName("Cape").isToggled()) {
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            this.playerRenderer.bindTexture(new ResourceLocation("detect/cape.png"));
+            this.playerRenderer.bindTexture(new ResourceLocation("Cape/"+Cape.getCape()+".png"));
             GlStateManager.pushMatrix();
             GlStateManager.translate(0.0F, 0.0F, 0.125F);
             double d0 = entitylivingbaseIn.prevChasingPosX + (entitylivingbaseIn.chasingPosX - entitylivingbaseIn.prevChasingPosX) * (double)partialTicks - (entitylivingbaseIn.prevPosX + (entitylivingbaseIn.posX - entitylivingbaseIn.prevPosX) * (double)partialTicks);

@@ -54,7 +54,7 @@ public class GuiAltManager extends GuiScreen {
         this.drawDefaultBackground();
         this.username.drawTextBox();
         this.password.drawTextBox();
-        Gui.drawCenteredString(fontRendererObj, this.thread == null ? (Object)((Object)EnumChatFormatting.GRAY) + "Idle..." : this.thread.getStatus(), width / 2, 29, -1);
+        Gui.drawCenteredString(fontRendererObj, this.thread == null ? (Object)((Object)EnumChatFormatting.GRAY) + "Current User : " + username.getText() : this.thread.getStatus(), width / 2, 29, -1);
         if (this.username.getText().isEmpty()) {
         	Gui.drawCenteredString(fontRendererObj,"Username", width / 2 - 54 + 7, 66, -7829368);
         }

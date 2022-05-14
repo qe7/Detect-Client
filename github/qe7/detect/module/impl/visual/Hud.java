@@ -59,7 +59,12 @@ public class Hud extends Module {
     }
 
     public static Color getColor() {
-        return new Color(r.getValue().intValue(), g.getValue().intValue(), b.getValue().intValue(), 255);
+        if (Cape.getCape() == "mouseware" && Detect.i.moduleManager.getModuleByName("Cape").isToggled()) {
+            return new Color(0xfc99ff);
+        }
+        else {
+            return new Color(r.getValue().intValue(), g.getValue().intValue(), b.getValue().intValue(), 255);
+        }
     }
 
     public void onEvent(Event event) {
@@ -71,7 +76,12 @@ public class Hud extends Module {
             Collections.sort(modules, new sortDefaultFont());
 
             if (watermark.getValue()) {
-                font.drawStringWithShadow("D§fetect §7[§f" + timeStamp + "§7]", 4, 4, getColor().getRGB());
+                if (Cape.getCape() == "mouseware" && Detect.i.moduleManager.getModuleByName("Cape").isToggled()) {
+                    font.drawStringWithShadow("M§fouseware §7[§f" + timeStamp + "§7]", 4, 4, getColor().getRGB());
+                }
+                else {
+                    font.drawStringWithShadow("D§fetect §7[§f" + timeStamp + "§7]", 4, 4, getColor().getRGB());
+                }
             }
 
             if (welcome.getValue()) {
