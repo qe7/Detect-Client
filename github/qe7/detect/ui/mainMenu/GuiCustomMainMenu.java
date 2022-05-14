@@ -401,7 +401,7 @@ public class GuiCustomMainMenu extends GuiScreen implements GuiYesNoCallback {
         Gui.drawRect(width /2-125, height /2-86, width /2+125, height /2-90, new Color(0x2F2F2F).getRGB());
         Gui.drawRect(width /2-121, height /2-84, width /2+121, height /2-86, Hud.getColor().getRGB());
         Gui.drawRect(width /2-125, height /2+60, width /2+125, height /2+64, new Color(0x2F2F2F).getRGB());
-        this.drawString(this.fontRendererObj, "D§fetect", width / 2-20, height /2 -75, Hud.getColor().getRGB());
+        this.drawString(this.fontRendererObj, "D§fetect", width / 2-(mc.fontRendererObj.getStringWidth("Detect") / 2), height /2 -75, Hud.getColor().getRGB());
 
         GlStateManager.pushMatrix();
         GlStateManager.translate((float)(this.width / 2 + 90), 70.0F, 0.0F);

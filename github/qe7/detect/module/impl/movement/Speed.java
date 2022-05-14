@@ -1,9 +1,7 @@
 package github.qe7.detect.module.impl.movement;
 
 import github.qe7.detect.event.Event;
-import github.qe7.detect.event.listeners.EventMessage;
 import github.qe7.detect.event.listeners.EventMotion;
-import github.qe7.detect.event.listeners.EventUpdate;
 import github.qe7.detect.module.Category;
 import github.qe7.detect.module.Module;
 import github.qe7.detect.setting.impl.SettingMode;
@@ -12,7 +10,6 @@ import github.qe7.detect.util.Timer;
 import github.qe7.detect.util.player.Movement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.potion.Potion;
-import net.minecraft.util.MovementInput;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -48,54 +45,54 @@ public class Speed extends Module {
 
         setSuffix(mode.getCurrentValue());
 
-        switch(mode.getCurrentValue()) {
-        case "Vanilla" :
-            if (e instanceof EventMotion) {
-                if (Movement.isMoving()) {
-                    if (mc.thePlayer.onGround) {
-                        mc.thePlayer.jump();
+        switch (mode.getCurrentValue()) {
+            case "Vanilla":
+                if (e instanceof EventMotion) {
+                    if (Movement.isMoving()) {
+                        if (mc.thePlayer.onGround) {
+                            mc.thePlayer.jump();
+                        }
+                        mc.thePlayer.setSpeed(speed.getValue());
                     }
-                    mc.thePlayer.setSpeed(speed.getValue());
                 }
-            }
-            break;
-        case "NCPHop" :
-            if (e instanceof EventMotion) {
-                if (Movement.isMovingForward()) {
-                    if (mc.thePlayer.onGround) {
+                break;
+            case "NCPHop":
+                if (e instanceof EventMotion) {
+                    if (Movement.isMovingForward()) {
+                        if (mc.thePlayer.onGround) {
+                            mc.thePlayer.jump();
+                            mc.thePlayer.setSpeed(0.4);
+                        }
+                    } else {
+                        mc.thePlayer.setSpeed(0f);
+                    }
+                }
+                break;
+            case "NCPYPort":
+                if (e instanceof EventMotion) {
+                    if (Movement.isMoving()) {
+                        if (mc.thePlayer.onGround) {
+                            mc.thePlayer.jump();
+                            mc.thePlayer.setSpeed(0.66425f);
+                        } else {
+                            mc.thePlayer.motionY -= 1;
+                        }
+                    }
+                }
+                break;
+            case "Verus":
+                if (e instanceof EventMotion) {
+                    mc.thePlayer.setSprinting(true);
+                    if (mc.thePlayer.onGround && Movement.isMoving()) {
                         mc.thePlayer.jump();
                         mc.thePlayer.setSpeed(0.4);
-                    }
-                } else {
-                    mc.thePlayer.setSpeed(0f);
-                }
-            }
-            break;
-        case "NCPYPort" :
-            if (e instanceof EventMotion) {
-                if (Movement.isMovingForward()) {
-                    if (mc.thePlayer.onGround) {
-                        mc.thePlayer.jump();
-                        mc.thePlayer.setSpeed(0.649f);
+                    } else if (!mc.thePlayer.onGround && Movement.isMoving()) {
+                        mc.thePlayer.setSpeed(0.36);
+                        mc.thePlayer.speedInAir = 0.032f;
                     } else {
-                        mc.thePlayer.motionY -= 1;
+                        mc.thePlayer.speedInAir = 0.02f;
+                        mc.thePlayer.setSpeed(0);
                     }
-                }
-            }
-            break;
-            case "Verus" :
-                mc.thePlayer.setSprinting(true);
-                if (mc.thePlayer.onGround && Movement.isMoving()) {
-                    mc.thePlayer.jump();
-                    mc.thePlayer.setSpeed(0.5);
-                }
-                else if (!mc.thePlayer.onGround && Movement.isMoving()) {
-                    mc.thePlayer.setSpeed(0.4);
-                    mc.thePlayer.speedInAir = 0.3f;
-                }
-                else {
-                    mc.thePlayer.speedInAir = 0.02f;
-                    mc.thePlayer.setSpeed(0);
                 }
         }
     }

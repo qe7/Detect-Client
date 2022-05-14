@@ -24,5 +24,8 @@ public class Step extends Module {
             }
         }
     }
+    public void onDisable() {
+        mc.thePlayer.stepHeight = 0.5f;
+    }
 
 }
