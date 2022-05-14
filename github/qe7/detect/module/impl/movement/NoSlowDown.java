@@ -49,10 +49,14 @@ public class NoSlowDown extends Module {
                     e.setCancelled(true);
                 }
                 if (e instanceof EventMotion) {
-                    while (slot == mc.thePlayer.inventory.currentItem || slot == -1){
-                        slot = 2;
+                    if (e.isPre() && mc.thePlayer.isBlocking()) {
+                        while (slot == mc.thePlayer.inventory.currentItem || slot == -1){
+                            slot = 2;
+                        }
                     }
-                    mc.thePlayer.sendQueue.addToSendQueue(new C09PacketHeldItemChange(slot));
+                    if (e.isPost() && mc.thePlayer.isBlocking()) {
+                        mc.thePlayer.sendQueue.addToSendQueue(new C09PacketHeldItemChange(slot));;
+                    }
                 }
                 break;
         }

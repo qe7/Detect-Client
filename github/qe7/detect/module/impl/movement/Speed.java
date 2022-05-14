@@ -29,7 +29,7 @@ public class Speed extends Module {
 
     public Speed() {
         super("Speed", 0, Category.MOVEMENT);
-        mode = new SettingMode("Mode", "Vanilla", "NCPHop", "NCPYPort");
+        mode = new SettingMode("Mode", "Vanilla", "NCPHop", "NCPYPort", "GhostlyStrafe");
         speed = new SettingNumber("Speed", 0.4, "#.##", 0.1, 1);
         addSettings(mode, speed);
     }
@@ -80,6 +80,20 @@ public class Speed extends Module {
                     } else {
                         mc.thePlayer.motionY -= 1;
                     }
+                }
+            }
+            break;
+        case "GhostlyStrafe" :
+            if (e instanceof EventMotion) {
+                if (Movement.isMoving()) {
+                    if (mc.thePlayer.onGround) {
+                        mc.thePlayer.jump();
+                        mc.thePlayer.setSpeed(0.4);
+                    } else {
+                        mc.thePlayer.setSpeed(getBaseMoveSpeed());
+                    }
+                } else {
+                    mc.thePlayer.setSpeed(0f);
                 }
             }
             break;
