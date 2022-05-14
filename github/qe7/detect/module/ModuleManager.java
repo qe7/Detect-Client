@@ -27,6 +27,7 @@ import github.qe7.detect.module.impl.player.*;
 import github.qe7.detect.module.impl.visual.*;
 import github.qe7.detect.util.Util;
 import github.qe7.detect.util.client.DLogger;
+import javafx.event.EventDispatchChain;
 
 public class ModuleManager {
 
@@ -75,7 +76,6 @@ public class ModuleManager {
         modules.add(new TargetHud());
         modules.add(new ESP());
         modules.add(new ChatExtras());
-
 
         sort();
     }

@@ -6,16 +6,17 @@ import github.qe7.detect.module.Category;
 import github.qe7.detect.module.Module;
 import github.qe7.detect.setting.impl.SettingNumber;
 import github.qe7.detect.util.Timer;
+import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Mouse;
 
-public class AutoClicker extends Module {
+public class Autoclicker extends Module {
 
     public Timer timer = new Timer();
     public SettingNumber cps = new SettingNumber("Cps", 10, "#.#", 8, 20);
     public SettingNumber random = new SettingNumber("Randomization", 10, "#.", 4, 20);
 
-    public AutoClicker() {
-        super("AutoClicker", 0, Category.COMBAT);
+    public Autoclicker() {
+        super("Autoclicker", 0, Category.COMBAT);
         addSettings(cps, random);
     }
 

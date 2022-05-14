@@ -75,7 +75,7 @@ public class Hud extends Module {
             }
 
             if (welcome.getValue()) {
-                font.drawStringWithShadow("Welcome master §f" + Detect.i.authors + "§r!", e.getWidth() / 2 - (font.getStringWidth("Welcome master " + Detect.i.authors + "!") / 2), 4, getColor().getRGB());
+                font.drawStringWithShadow("Welcome master §f" + Detect.i.author + "§r!", e.getWidth() / 2 - (font.getStringWidth("Welcome master " + Detect.i.author + "!") / 2), 4, getColor().getRGB());
             }
 
             int j = cords.getValue() ? 2 : 1;
