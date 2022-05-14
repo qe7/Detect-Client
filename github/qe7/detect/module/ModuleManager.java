@@ -34,7 +34,7 @@ public class ModuleManager {
 
     public void init() {
         /* Combat */
-        modules.add(new Autoclicker());
+        modules.add(new AutoClicker());
         modules.add(new AutoPot());
         modules.add(new AntiBot());
         modules.add(new Killaura());

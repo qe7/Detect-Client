@@ -395,12 +395,12 @@ public class GuiCustomMainMenu extends GuiScreen implements GuiYesNoCallback {
         }
 
         // Main Menu
-        Gui.drawRect(width /2-125, height /2+60, width /2+125, height /2-90, new Color(0x292929).getRGB());
-        Gui.drawRect(width /2-125, height /2+60, width /2-121, height /2-90, new Color(0x3F3F3F).getRGB());
-        Gui.drawRect(width /2+125, height /2+60, width /2+121, height /2-90, new Color(0x3F3F3F).getRGB());
-        Gui.drawRect(width /2-125, height /2-86, width /2+125, height /2-90, new Color(0x3F3F3F).getRGB());
+        Gui.drawRect(width /2-125, height /2+60, width /2+125, height /2-90, new Color(0x1A1A1A).getRGB());
+        Gui.drawRect(width /2-125, height /2+60, width /2-121, height /2-90, new Color(0x2F2F2F).getRGB());
+        Gui.drawRect(width /2+125, height /2+60, width /2+121, height /2-90, new Color(0x2F2F2F).getRGB());
+        Gui.drawRect(width /2-125, height /2-86, width /2+125, height /2-90, new Color(0x2F2F2F).getRGB());
         Gui.drawRect(width /2-121, height /2-84, width /2+121, height /2-86, Hud.getColor().getRGB());
-        Gui.drawRect(width /2-125, height /2+60, width /2+125, height /2+64, new Color(0x3F3F3F).getRGB());
+        Gui.drawRect(width /2-125, height /2+60, width /2+125, height /2+64, new Color(0x2F2F2F).getRGB());
         this.drawString(this.fontRendererObj, "D§fetect", width / 2-20, height /2 -75, Hud.getColor().getRGB());
 
         GlStateManager.pushMatrix();
