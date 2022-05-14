@@ -154,7 +154,8 @@ public class Killaura extends Module {
                     }
 
                     mc.thePlayer.swingItem();
-                    mc.thePlayer.sendQueue.addToSendQueue(new C02PacketUseEntity(target, C02PacketUseEntity.Action.ATTACK));
+//                    mc.thePlayer.sendQueue.addToSendQueue(new C02PacketUseEntity(target, C02PacketUseEntity.Action.ATTACK));
+                    mc.playerController.attackEntity(mc.thePlayer, target);
                     timer.reset();
                 }
             } else {

@@ -27,7 +27,6 @@ import github.qe7.detect.module.impl.player.*;
 import github.qe7.detect.module.impl.visual.*;
 import github.qe7.detect.util.Util;
 import github.qe7.detect.util.client.DLogger;
-import javafx.event.EventDispatchChain;
 
 public class ModuleManager {
 
@@ -35,7 +34,6 @@ public class ModuleManager {
 
     public void init() {
         /* Combat */
-        modules.add(new AutoClicker());
         modules.add(new AutoPot());
         modules.add(new AntiBot());
         modules.add(new Killaura());

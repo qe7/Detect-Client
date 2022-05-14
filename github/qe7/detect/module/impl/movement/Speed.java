@@ -9,6 +9,7 @@ import github.qe7.detect.setting.impl.SettingNumber;
 import github.qe7.detect.util.Timer;
 import github.qe7.detect.util.player.Movement;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.potion.Potion;
 
 import java.math.BigDecimal;
@@ -94,6 +95,25 @@ public class Speed extends Module {
                         mc.thePlayer.setSpeed(0);
                     }
                 }
+<<<<<<< Updated upstream
+=======
+            }
+            break;
+        case "Verus" :
+            if (e instanceof EventMotion) {
+                mc.thePlayer.setSprinting(true);
+                if (mc.thePlayer.onGround && Movement.isMoving()) {
+                    mc.thePlayer.jump();
+                    mc.thePlayer.setSpeed(0.4);
+                }
+                else if (!mc.thePlayer.onGround && Movement.isMoving()) {
+                    mc.thePlayer.setSpeed(getBaseMoveSpeed());
+                }
+                else {
+                    mc.thePlayer.setSpeed(0);
+                }
+            }
+>>>>>>> Stashed changes
         }
     }
 
