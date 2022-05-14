@@ -5,7 +5,6 @@ import github.qe7.detect.command.CommandManager;
 import github.qe7.detect.friend.FriendManager;
 import github.qe7.detect.module.ModuleManager;
 import github.qe7.detect.setting.SettingManager;
-import github.qe7.detect.util.Util;
 import github.qe7.detect.util.client.DLogger;
 
 public class Detect {
@@ -13,9 +12,9 @@ public class Detect {
     public static Detect i = new Detect();
     public String
             name = "Detect",
-            version = "1.0",
+            version = "Beta 1.0", /* Still in dev cunt :) */
             prefix = "§7[§4D§7]§r",
-            author = "Shae";
+            authors = "Shae";
     public ModuleManager moduleManager = new ModuleManager();
     public SettingManager settingManager = new SettingManager();
     public FriendManager friendManager = new FriendManager();
