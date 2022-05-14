@@ -21,6 +21,7 @@ public class Animations extends Module {
         y = new SettingNumber("Y", -0.52, ".##", -1, 1);
         z = new SettingNumber("Z", -0.72, ".##", -1, 1);
         addSettings(mode, scale, x, y, z);
+        this.setToggled(true);
     }
 
     public void onEvent(Event event) {

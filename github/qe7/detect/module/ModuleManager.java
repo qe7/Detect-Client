@@ -19,6 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /* Category imports */
 import github.qe7.detect.event.listeners.EventMessage;
 import github.qe7.detect.module.impl.combat.*;
+import github.qe7.detect.module.impl.exploit.Disabler;
 import github.qe7.detect.module.impl.exploit.Timer;
 import github.qe7.detect.module.impl.misc.ToggleMessages;
 import github.qe7.detect.module.impl.movement.*;
@@ -42,6 +43,7 @@ public class ModuleManager {
 
         /* Exploit */
         modules.add(new Timer());
+        modules.add(new Disabler());
 
         /* Misc */
         modules.add(new ToggleMessages());
