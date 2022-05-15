@@ -122,11 +122,11 @@ public class Hud extends Module {
 
             if (bps.getValue()) {
                 String blockspersecond = String.format("%.2f", Math.hypot(mc.thePlayer.posX - mc.thePlayer.prevPosX, mc.thePlayer.posZ - mc.thePlayer.prevPosZ) * mc.timer.timerSpeed * 20.0D);
-                font.drawStringWithShadow("Bps§7: §f" + blockspersecond, 4, ((EventRender2D) e).getHeight() - 4 - (font.FONT_HEIGHT * i), getColor().getRGB());
+                font.drawStringWithShadow("BPS§7: §f" + blockspersecond, 4, ((EventRender2D) e).getHeight() - 4 - (font.FONT_HEIGHT * i), getColor().getRGB());
             }
 
             if (fps.getValue()) {
-                font.drawStringWithShadow("Fps§7: §f" + Minecraft.getDebugFPS(), 4, ((EventRender2D) e).getHeight() - 4 - (font.FONT_HEIGHT * j), getColor().getRGB());
+                font.drawStringWithShadow("FPS§7: §f" + Minecraft.getDebugFPS(), 4, ((EventRender2D) e).getHeight() - 4 - (font.FONT_HEIGHT * j), getColor().getRGB());
             }
 
             if (Cape.getCape() != "exhicape") {
