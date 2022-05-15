@@ -434,6 +434,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         this.proxy = gameConfig.userInfo.proxy == null ? Proxy.NO_PROXY : gameConfig.userInfo.proxy;
         this.sessionService = (new YggdrasilAuthenticationService(gameConfig.userInfo.proxy, UUID.randomUUID().toString())).createMinecraftSessionService();
         this.session = gameConfig.userInfo.session;
+        this.session = new Session("Epichacker", "12f9266c-ddeb-4820-bb8d-487324ad24b7", "eyJhbGciOiJIUzI1NiJ9.eyJ4dWlkIjoiMjUzNTQwNzU3MTUyODc5NCIsImFnZyI6IkFkdWx0Iiwic3ViIjoiZjljY2ExYWItYzkyMS00ZDgwLWIwZjktNzc3MzgwN2I4ZmZmIiwibmJmIjoxNjUyNTU4NTUyLCJhdXRoIjoiWEJPWCIsInJvbGVzIjpbXSwiaXNzIjoiYXV0aGVudGljYXRpb24iLCJleHAiOjE2NTI2NDQ5NTIsImlhdCI6MTY1MjU1ODU1MiwicGxhdGZvcm0iOiJQQ19MQVVOQ0hFUiIsInl1aWQiOiIzNWQ5Y2RmOWRiNjAzMDEzNDhkOGRiMzBjMDY0ZDhkOCJ9.Jod51cRrqxQ9afVB4mBL23cJynZVRXvz6bU6aDqtBms", "mojang");
         logger.info("Setting user: " + this.session.getUsername());
         logger.info("(Session ID is " + this.session.getSessionID() + ")");
         this.isDemo = false;

@@ -10,7 +10,9 @@ import github.qe7.detect.setting.impl.SettingMode;
 import github.qe7.detect.setting.impl.SettingNumber;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.multiplayer.ServerAddress;
 
+import javax.print.attribute.SetOfIntegerSyntax;
 import java.awt.*;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -21,7 +23,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Hud extends Module {
 
-    public SettingBoolean bps, fps, cords, build, potionhud, watermark, arraylist, welcome;
+    public SettingBoolean bps, fps, cords, build, potionhud, watermark, arraylist, welcome, server;
     public SettingMode arraylistMode;
     public static SettingMode arraylistBrackets;
     public static SettingNumber r;
@@ -38,12 +40,14 @@ public class Hud extends Module {
         cords = new SettingBoolean("Coords", true);
         fps = new SettingBoolean("fps", true);
         bps = new SettingBoolean("bps", true);
+        server = new SettingBoolean("Server IP", true);
         watermark = new SettingBoolean("Watermark", true);
+        welcome = new SettingBoolean("Welcomer", true);
         arraylist = new SettingBoolean("Arraylist", true);
         r = new SettingNumber("r", 50, "#.", 0, 255);
         g = new SettingNumber("g", 100, "#.", 0, 255);
         b = new SettingNumber("b", 255, "#.", 0, 255);
-        addSettings(watermark, arraylist, arraylistMode, potionhud, build, cords, fps, bps, r, g, b);
+        addSettings(watermark, welcome, arraylist, arraylistMode, potionhud, build, cords, fps, bps, r, g, b);
     }
 
     public static class sortDefaultFont implements Comparator<Module> {
@@ -78,9 +82,16 @@ public class Hud extends Module {
                 if (Cape.getCape() == "mouseware" && Detect.i.moduleManager.getModuleByName("Cape").isToggled()) {
                     font.drawStringWithShadow("M§fouseware §7[§f" + timeStamp + "§7]", 4, 4, getColor().getRGB());
                 }
-                else {
-                    font.drawStringWithShadow("D§fetect §7[§f" + timeStamp + "§7]", 4, 4, getColor().getRGB());
+                else if (Cape.getCape() == "exhicape" && Detect.i.moduleManager.getModuleByName("Cape").isToggled()){
+                    font.drawStringWithShadow("E§fxhibition §7[§f" + timeStamp + "§7]", 4, 4, getColor().getRGB());
                 }
+                else {
+                    font.drawStringWithShadow("D§fefect §7[§f" + timeStamp + "§7]", 4, 4, getColor().getRGB());
+                }
+            }
+
+            if (welcome.getValue()) {
+                font.drawStringWithShadow("User - §f" + Detect.i.author, e.getWidth() -2 - (font.getStringWidth("User - " + Detect.i.author)), e.getHeight() - 10, getColor().getRGB());
             }
 
             int j = cords.getValue() ? 2 : 1;
@@ -93,6 +104,18 @@ public class Hud extends Module {
 
             if (fps.getValue()) {
                 font.drawStringWithShadow("Fps§7: §f" + Minecraft.getDebugFPS(), 4, ((EventRender2D) e).getHeight() - 4 - (font.FONT_HEIGHT * j), getColor().getRGB());
+            }
+
+            String ip = "";
+
+            if (mc.isSingleplayer()) {
+                ip = "Singleplayer";
+            } else {
+                ip = mc.getCurrentServerData().serverIP;
+            }
+
+            if (server.getValue()) {
+                font.drawStringWithShadow("ServerIP - §f" + ip, e.getWidth() -2 - (font.getStringWidth("ServerIP - " + ip)), e.getHeight() - 20, getColor().getRGB());
             }
 
             if (cords.getValue()) {
