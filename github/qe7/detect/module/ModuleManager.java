@@ -127,7 +127,7 @@ public class ModuleManager {
 
     public void loadConfig(Gson gson) {
         for(Module m: this.modules) {
-            File file = new File(Util.mc.mcDataDir + File.separator + Detect.i.name + File.separator + "modules" + File.separator + m.getName() + ".json");
+            File file = new File(Util.mc.mcDataDir + File.separator + "detect" + File.separator + "modules" + File.separator + m.getName() + ".json");
             try (FileReader reader = new FileReader(file)) {
                 Map<String, Object> map = gson.fromJson(reader, new TypeToken<Map<String, Object>>() {}.getType());
                 m.setBind((int)Math.round((double)map.get("bind")));

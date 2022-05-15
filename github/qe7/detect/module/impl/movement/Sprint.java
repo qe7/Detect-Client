@@ -26,4 +26,8 @@ public class Sprint extends Module {
         }
     }
 
+    public void onDisable() {
+        mc.thePlayer.setSprinting(mc.gameSettings.keyBindSprint.isKeyDown());
+    }
+
 }
