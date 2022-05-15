@@ -405,8 +405,13 @@ public class GuiCustomMainMenu extends GuiScreen implements GuiYesNoCallback {
         if (Cape.getCape() == "mouseware" && Detect.i.moduleManager.getModuleByName("Cape").isToggled()) {
             this.drawString(this.fontRendererObj, "M§fouseware", width / 2 - (mc.fontRendererObj.getStringWidth("Mouseware") / 2), height /2 - 75, Hud.getColor().getRGB());
         }
+        else if (Cape.getCape() == "exhicape" && Detect.i.moduleManager.getModuleByName("Cape").isToggled()){
+            this.drawString(this.fontRendererObj, "E§fxhibition", width / 2 - (mc.fontRendererObj.getStringWidth("Exhibition") / 2), height /2 - 75, Hud.getColor().getRGB());
+
+        }
         else {
             this.drawString(this.fontRendererObj, "D§fetect", width / 2 - (mc.fontRendererObj.getStringWidth("Detect") / 2), height /2 - 75, Hud.getColor().getRGB());
+
         }
 
         GlStateManager.pushMatrix();

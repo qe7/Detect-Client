@@ -13,7 +13,8 @@ public class Detect {
     public String
             name = "Detect",
             version = "1.0",
-            prefix = "§7[§4D§7]§r";
+            prefix = "§7[§4D§7]§r",
+            author = "Famemouse";
     public ModuleManager moduleManager = new ModuleManager();
     public SettingManager settingManager = new SettingManager();
     public FriendManager friendManager = new FriendManager();
