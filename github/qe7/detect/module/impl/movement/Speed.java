@@ -30,7 +30,7 @@ public class Speed extends Module {
 
     public Speed() {
         super("Speed", 0, Category.MOVEMENT);
-        mode = new SettingMode("Mode", "Vanilla", "NCPHop", "NCPYPort", "FakeJump", "VerusHop", "VerusLow");
+        mode = new SettingMode("Mode", "Vanilla", "NCPHop", "NCPYPort", "FakeJump", "Verus");
         speed = new SettingNumber("Speed", 0.4, "#.##", 0.1, 1);
         addSettings(mode, speed);
     }
@@ -72,18 +72,43 @@ public class Speed extends Module {
                 case "NCPHop":
                     if (e instanceof EventMotion) {
                         if (Movement.isMoving()) {
-                            if (mc.thePlayer.onGround) {
-                                mc.thePlayer.motionY = 0.42;
-                                bhopspeed = 0.4f;
-                            } else {
-                                if (mc.thePlayer.fallDistance > 0.22) {
-                                    bhopspeed = 0.19f + mathutil.getRandomFloatBetween(-0.01f, 0.01f);
-                                    mc.thePlayer.jumpMovementFactor = 0.017f;
-                                } else {
-                                    bhopspeed = 0.35f + mathutil.getRandomFloatBetween(-0.03f, 0.01f);
-                                    mc.thePlayer.jumpMovementFactor = 0.035f;
+                            /*if(!reachedDelay) {
+                                if (timer.hasReached(100)) {
+                                    reachedDelay = true;
+                                    timer.reset();
+                                }
+                            }else{
+                                if (!timer.hasReached(30)) {
+                                    Movement.setFriction(2);
+                                }else{
+                                    reachedDelay = false;
+                                    timer.reset();
+                                }
+                            }*/
+                            if(mc.thePlayer.onGround){
+                                groundPos = mc.thePlayer.posY;
+                                mc.thePlayer.jump();
+                                bhopspeed = mathutil.getRandomFloatBetween(0.3f, 0.37f);
+                                Movement.setFriction(1.2f);
+                            }else{
+                                bhopspeed = 0.28f + mathutil.getRandomFloatBetween(-0.04f, 0.02f);
+                                mc.thePlayer.jumpMovementFactor = 0.025f;
+
+                                if(mc.thePlayer.fallDistance == 0){
+                                    bhopspeed = mathutil.getRandomFloatBetween(0.27f, 0.3f);
+                                    mc.thePlayer.jumpMovementFactor = mathutil.getRandomFloatBetween(0.023f, 0.026f);
+                                }
+
+                                if(mc.thePlayer.fallDistance > 0.3){
+                                    mc.thePlayer.motionY -= 0.04f;
+                                    bhopspeed = 0.27f + mathutil.getRandomFloatBetween(-0.02f, 0.02f);
+                                }
+                                if(mc.thePlayer.fallDistance > 0.7){
+                                    mc.thePlayer.motionY -= 0.08f;
+                                    bhopspeed = 0.23f;
                                 }
                             }
+                            mc.thePlayer.setSpeed(bhopspeed);
                         }
                     }
                     break;
@@ -93,6 +118,8 @@ public class Speed extends Module {
                             if (mc.thePlayer.onGround) {
                                 mc.thePlayer.jump();
                                 mc.thePlayer.setSpeed(0.664232f);
+                            }else{
+                             mc.thePlayer.motionY -= 1;
                             }
                         }
                     }

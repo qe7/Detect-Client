@@ -33,4 +33,11 @@ public class Movement {
         Util.mc.thePlayer.motionZ = Math.cos(yaw) * speed;
     }
 
+    public static void setFriction(float friction){
+        if(Util.mc.thePlayer.onGround) {
+            Util.mc.thePlayer.motionX *= friction;
+            Util.mc.thePlayer.motionZ *= friction;
+        }
+    }
+
 }

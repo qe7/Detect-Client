@@ -4,9 +4,10 @@ public enum Category {
 
     COMBAT("Combat"),
     MOVEMENT("Movement"),
-    VISUAL("Visuals"),
-    MISC("Misc"),
+
     PLAYER("Player"),
+    MISC("Misc"),
+    VISUAL("Visuals"),
     EXPLOIT("Exploit");
 
     public String name;
