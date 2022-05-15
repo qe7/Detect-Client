@@ -136,7 +136,7 @@ public class Hud extends Module {
             }
 
             if (cords.getValue()) {
-                font.drawStringWithShadow("Xyz§7: §f" + new DecimalFormat("#.#").format(mc.thePlayer.posX) + ", " + new DecimalFormat("#.#").format(mc.thePlayer.posY) + ", " + new DecimalFormat("#.#").format(mc.thePlayer.posZ), 4, ((EventRender2D) e).getHeight() - 4 - font.FONT_HEIGHT, getColor().getRGB());
+                font.drawStringWithShadow("XYZ§7: §f" + new DecimalFormat("#.#").format(mc.thePlayer.posX) + ", " + new DecimalFormat("#.#").format(mc.thePlayer.posY) + ", " + new DecimalFormat("#.#").format(mc.thePlayer.posZ), 4, ((EventRender2D) e).getHeight() - 4 - font.FONT_HEIGHT, getColor().getRGB());
             }
 
             int count = 0;
