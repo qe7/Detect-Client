@@ -3,8 +3,11 @@ package github.qe7.detect.module.impl.visual;
 import github.qe7.detect.Detect;
 import github.qe7.detect.event.Event;
 import github.qe7.detect.event.listeners.EventRender2D;
+import github.qe7.detect.font.CFont;
+import github.qe7.detect.font.CFontRenderer;
 import github.qe7.detect.module.Category;
 import github.qe7.detect.module.Module;
+import github.qe7.detect.module.ModuleManager;
 import github.qe7.detect.setting.impl.SettingBoolean;
 import github.qe7.detect.setting.impl.SettingMode;
 import github.qe7.detect.setting.impl.SettingNumber;
@@ -36,7 +39,7 @@ public class Hud extends Module {
         arraylistBrackets = new SettingMode("Suffix", "None", "[...]", "(...)", "{...}", "<...>", "|...");
         arraylistMode = new SettingMode("Array", "Static", "Rainbow", "Wave");
         potionhud = new SettingBoolean("Potion", true);
-        build = new SettingBoolean("Build", true);
+        build = new SettingBoolean("Build info", true);
         cords = new SettingBoolean("Coords", true);
         fps = new SettingBoolean("fps", true);
         bps = new SettingBoolean("bps", true);
@@ -78,21 +81,38 @@ public class Hud extends Module {
             FontRenderer font = mc.fontRendererObj;
             Collections.sort(modules, new sortDefaultFont());
 
+            String ip = "";
+
+            if (mc.isSingleplayer()) {
+                ip = "N/A";
+            } else {
+                ip = mc.getCurrentServerData().serverIP;
+            }
+
             if (watermark.getValue()) {
                 if (Cape.getCape() == "mouseware" && Detect.i.moduleManager.getModuleByName("Cape").isToggled()) {
                     font.drawStringWithShadow("M§fouseware §7[§f" + timeStamp + "§7]", 4, 4, getColor().getRGB());
                 }
                 else if (Cape.getCape() == "exhicape" && Detect.i.moduleManager.getModuleByName("Cape").isToggled()){
-                    font.drawStringWithShadow("E§fxhibition §7[§f" + timeStamp + "§7]", 4, 4, getColor().getRGB());
+                    font.drawStringWithShadow("E§fxhibition §7[§f" + "1.8.x" + "§7] " + "§7[§f" + ip + "§7]", 4, 4, getColor().getRGB());
                 }
                 else {
                     font.drawStringWithShadow("D§fefect §7[§f" + timeStamp + "§7]", 4, 4, getColor().getRGB());
                 }
             }
 
-            if (welcome.getValue()) {
-                font.drawStringWithShadow("User - §f" + Detect.i.author, e.getWidth() -2 - (font.getStringWidth("User - " + Detect.i.author)), e.getHeight() - 10, getColor().getRGB());
+            if (build.getValue()) {
+                if (Cape.getCape() != "exhicape") {
+                    if (welcome.getValue()) {
+                        font.drawStringWithShadow("User - §f" + Detect.i.author, e.getWidth() - 2 - (font.getStringWidth("User - " + Detect.i.author)), e.getHeight() - 10, getColor().getRGB());
+                    }
+                } else if (Cape.getCape() == "exhicape" && Detect.i.moduleManager.getModuleByName("Cape").isToggled()) {
+                    if (welcome.getValue()) {
+                        font.drawStringWithShadow("Build - §f" + "022021" + "§7 - " + Detect.i.author, e.getWidth() - 2 - (font.getStringWidth("Build - 022021 - " + Detect.i.author)), e.getHeight() - 10, new Color(0xAAAAAA).getRGB());
+                    }
+                }
             }
+
 
             int j = cords.getValue() ? 2 : 1;
             int i = cords.getValue() ? fps.getValue() ? 3 : 2 : fps.getValue() ? 2 : 1;
@@ -106,16 +126,10 @@ public class Hud extends Module {
                 font.drawStringWithShadow("Fps§7: §f" + Minecraft.getDebugFPS(), 4, ((EventRender2D) e).getHeight() - 4 - (font.FONT_HEIGHT * j), getColor().getRGB());
             }
 
-            String ip = "";
-
-            if (mc.isSingleplayer()) {
-                ip = "Singleplayer";
-            } else {
-                ip = mc.getCurrentServerData().serverIP;
-            }
-
-            if (server.getValue()) {
-                font.drawStringWithShadow("ServerIP - §f" + ip, e.getWidth() -2 - (font.getStringWidth("ServerIP - " + ip)), e.getHeight() - 20, getColor().getRGB());
+            if (Cape.getCape() != "exhicape") {
+                if (server.getValue()) {
+                    font.drawStringWithShadow("ServerIP - §f" + ip, e.getWidth() -2 - (font.getStringWidth("ServerIP - " + ip)), e.getHeight() - 20, getColor().getRGB());
+                }
             }
 
             if (cords.getValue()) {
