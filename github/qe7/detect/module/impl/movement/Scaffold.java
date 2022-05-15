@@ -28,12 +28,12 @@ import org.lwjgl.input.Mouse;
 
 public class Scaffold extends Module {
 
-	public SettingBoolean Tower;
+	public SettingBoolean tower;
 
 	public Scaffold() {
 		super("Scaffold", 0, Category.MOVEMENT);
-		Tower = new SettingBoolean("Tower", false);
-		addSettings(Tower);
+		tower = new SettingBoolean("Tower", false);
+		addSettings(tower);
 	}
 	
     private double startY;
@@ -115,7 +115,7 @@ public class Scaffold extends Module {
 		int slot = this.getSlot();
 	}
 	
-	public void onEvent(Event evenmt) {
+	public void onEvent(Event e) {
 
 			setSuffix("Watchdog");
 
@@ -124,10 +124,16 @@ public class Scaffold extends Module {
 
 			mc.thePlayer.setSprinting(false);
 
-			if (evenmt instanceof EventMotion) {
+			if (e instanceof EventMotion) {
+				if(tower.getValue()){
+					if(mc.gameSettings.keyBindJump.isKeyDown()) {
+						mc.thePlayer.jump();
+						mc.thePlayer.motionY = 0.4f;
+					}
+				}
 
-				if (evenmt.isPre()) {
-					EventMotion event = (EventMotion) evenmt;
+				if (e.isPre()) {
+					EventMotion event = (EventMotion) e;
 					blockData = getBlockData();
 
 					if (this.blockData != null) {
