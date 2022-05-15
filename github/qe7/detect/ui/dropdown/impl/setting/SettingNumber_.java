@@ -9,6 +9,8 @@ import net.minecraft.client.gui.Gui;
 
 import java.awt.*;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 import static github.qe7.detect.module.Module.mc;
 
@@ -41,7 +43,11 @@ public class SettingNumber_ extends SettingComponent {
                 toSet = 0;
             }
             this.set.setValue(((this.set.getMax() - this.set.getMin()) * toSet) + this.set.getMin());
-            this.set.setValue(Double.valueOf(new DecimalFormat(this.set.getIncrement()).format(this.set.getValue())));
+
+            DecimalFormat decimalFormat = new DecimalFormat(this.set.getIncrement());
+            decimalFormat.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ENGLISH)); //makes it format with dot instead of comma
+
+            this.set.setValue(Double.valueOf(decimalFormat.format(this.set.getValue())));
         }
 
         float distance = (float) ((this.set.getValue() - this.set.getMin()) / (this.set.getMax() - this.set.getMin()));

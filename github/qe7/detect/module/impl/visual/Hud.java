@@ -94,7 +94,10 @@ public class Hud extends Module {
                     font.drawStringWithShadow("M§fouseware §7[§f" + timeStamp + "§7]", 4, 4, getColor().getRGB());
                 }
                 else if (Cape.getCape() == "exhicape" && Detect.i.moduleManager.getModuleByName("Cape").isToggled()){
-                    font.drawStringWithShadow("E§fxhibition §7[§f" + "1.8.x" + "§7] " + "§7[§f" + ip + "§7]", 4, 4, getColor().getRGB());
+                    if (mc.isSingleplayer())
+                        font.drawStringWithShadow("E§fxhibition §7[§f" + "1.8.x" + "§7] " + "§7[§f" + "0" + "ms§7]", 4, 4, getColor().getRGB());
+                    else
+                        font.drawStringWithShadow("E§fxhibition §7[§f" + "1.8.x" + "§7] " + "§7[§f" + mc.getCurrentServerData().pingToServer + "ms§7]", 4, 4, getColor().getRGB());
                 }
                 else {
                     font.drawStringWithShadow("D§fefect §7[§f" + timeStamp + "§7]", 4, 4, getColor().getRGB());

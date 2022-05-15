@@ -19,7 +19,6 @@ public class InvWalk extends Module {
                 return;
             }
             if (mc.currentScreen != null) {
-
                 if (Keyboard.isKeyDown(200)) {
                     mc.thePlayer.rotationPitch -= 3.0f;
                 }
@@ -37,7 +36,6 @@ public class InvWalk extends Module {
                 mc.gameSettings.keyBindLeft.pressed = org.lwjgl.input.Keyboard.isKeyDown(mc.gameSettings.keyBindLeft.getKeyCode());
                 mc.gameSettings.keyBindBack.pressed = org.lwjgl.input.Keyboard.isKeyDown(mc.gameSettings.keyBindBack.getKeyCode());
                 mc.gameSettings.keyBindRight.pressed = org.lwjgl.input.Keyboard.isKeyDown(mc.gameSettings.keyBindRight.getKeyCode());
-                mc.gameSettings.keyBindJump.pressed = org.lwjgl.input.Keyboard.isKeyDown(mc.gameSettings.keyBindJump.getKeyCode());
                 mc.gameSettings.keyBindSprint.pressed = org.lwjgl.input.Keyboard.isKeyDown(mc.gameSettings.keyBindSprint.getKeyCode());
             }
         }
