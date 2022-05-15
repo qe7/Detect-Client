@@ -10,7 +10,9 @@ import github.qe7.detect.util.Mathutil;
 import github.qe7.detect.util.Timer;
 import github.qe7.detect.util.player.Movement;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.play.client.C16PacketClientStatus;
 import net.minecraft.potion.Potion;
+import net.minecraft.util.ChatComponentText;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -20,11 +22,14 @@ public class Speed extends Module {
     public SettingMode mode;
     public SettingNumber speed;
     public Timer timer = new Timer();
+    private Timer timer2 = new Timer();
     public int count = 0;
     public double moveSpeed;
     public int state;
+    private boolean reachedDelay = false;
     private double lastDist;
     private int cooldownHops;
+    private double groundPos = 0;
     private float bhopspeed;
     private Mathutil mathutil = new Mathutil();
 
@@ -73,7 +78,43 @@ public class Speed extends Module {
                 case "NCPHop": {
                     if (e instanceof EventMotion) {
                         if (Movement.isMoving()) {
-                            Movement.setFriction(2);
+                            /*if(!reachedDelay) {
+                                if (timer.hasReached(100)) {
+                                    reachedDelay = true;
+                                    timer.reset();
+                                }
+                            }else{
+                                if (!timer.hasReached(30)) {
+                                    Movement.setFriction(2);
+                                }else{
+                                    reachedDelay = false;
+                                    timer.reset();
+                                }
+                            }*/
+                            if(mc.thePlayer.onGround){
+                                groundPos = mc.thePlayer.posY;
+                                mc.thePlayer.jump();
+                                bhopspeed = mathutil.getRandomFloatBetween(0.3f, 0.37f);
+                                Movement.setFriction(1.2f);
+                            }else{
+                                bhopspeed = 0.28f + mathutil.getRandomFloatBetween(-0.04f, 0.02f);
+                                mc.thePlayer.jumpMovementFactor = 0.025f;
+
+                                if(mc.thePlayer.fallDistance == 0){
+                                    bhopspeed = mathutil.getRandomFloatBetween(0.27f, 0.3f);
+                                    mc.thePlayer.jumpMovementFactor = mathutil.getRandomFloatBetween(0.023f, 0.026f);
+                                }
+
+                                if(mc.thePlayer.fallDistance > 0.3){
+                                    mc.thePlayer.motionY -= 0.04f;
+                                    bhopspeed = 0.27f + mathutil.getRandomFloatBetween(-0.02f, 0.02f);
+                                }
+                                if(mc.thePlayer.fallDistance > 0.7){
+                                    mc.thePlayer.motionY -= 0.08f;
+                                    bhopspeed = 0.23f;
+                                }
+                            }
+                            mc.thePlayer.setSpeed(bhopspeed);
                         }
                     }
                     break;
