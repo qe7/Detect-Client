@@ -9,8 +9,13 @@ import github.qe7.detect.module.Module;
 import github.qe7.detect.setting.impl.SettingMode;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
+import net.minecraft.network.play.client.C09PacketHeldItemChange;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MathHelper;
+import org.apache.commons.lang3.RandomUtils;
+
+import java.util.Random;
 
 public class NoSlowDown extends Module {
 
@@ -18,19 +23,20 @@ public class NoSlowDown extends Module {
 
     public NoSlowDown() {
         super("NoSlowDown", 0, Category.MOVEMENT);
-        mode = new SettingMode("Mode", "Cancel", "NCP");
+        mode = new SettingMode("Mode", "Cancel", "NCP", "Watchdog", "AAC");
         addSettings(mode);
     }
 
     public void onEvent(Event e) {
         setSuffix(mode.getCurrentValue());
         switch(mode.getCurrentValue()) {
-            case "Cancel" :
+            case "Cancel" : {
                 if (e instanceof EventSlowDown) {
                     e.setCancelled(true);
                 }
                 break;
-            case "NCP" :
+            }
+            case "NCP" : {
                 if (e instanceof EventSlowDown) {
                     e.setCancelled(true);
                 }
@@ -43,6 +49,37 @@ public class NoSlowDown extends Module {
                     }
                 }
                 break;
+            }
+            case "Watchdog" : {
+                if (e instanceof EventSlowDown) {
+                    e.setCancelled(true);
+                }
+                if(e instanceof EventMotion) {
+                    if (mc.thePlayer.isBlocking()) {
+                        mc.thePlayer.sendQueue.addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.ABORT_DESTROY_BLOCK, BlockPos.ORIGIN, EnumFacing.UP));
+                    }
+                }
+                break;
+            }
+            case "AAC" : {
+                if (e instanceof EventSlowDown) {
+                    e.setCancelled(true);
+                }
+                if(e instanceof EventMotion) {
+                    if (mc.thePlayer.isBlocking()) {
+                        int slot = -1;
+                        Random random = new Random();
+
+                        while (slot == mc.thePlayer.inventory.currentItem || slot == -1) {
+                            slot = MathHelper.getRandomIntegerInRange(random, 0, 8);
+                        }
+                        mc.thePlayer.sendQueue.addToSendQueue(new C09PacketHeldItemChange(slot));
+                    }
+                    /*if(mc.thePlayer.getCurrentEquippedItem() != null)
+                        mc.thePlayer.sendChatMessage(String.valueOf(mc.thePlayer.getCurrentEquippedItem()));*/
+                }
+                break;
+            }
         }
     }
 
