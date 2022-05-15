@@ -6,6 +6,7 @@ import github.qe7.detect.module.Category;
 import github.qe7.detect.module.Module;
 import github.qe7.detect.setting.impl.SettingMode;
 import github.qe7.detect.setting.impl.SettingNumber;
+import github.qe7.detect.util.Mathutil;
 import github.qe7.detect.util.Timer;
 import github.qe7.detect.util.player.Movement;
 import net.minecraft.client.Minecraft;
@@ -25,6 +26,8 @@ public class Speed extends Module {
     public int state;
     private double lastDist;
     private int cooldownHops;
+    private float bhopspeed;
+    private Mathutil mathutil = new Mathutil();
 
     public Speed() {
         super("Speed", 0, Category.MOVEMENT);
@@ -41,6 +44,7 @@ public class Speed extends Module {
         Speed.mc.timer.timerSpeed = 1.0f;
         mc.thePlayer.speedInAir = 0.02f;
         mc.thePlayer.stepHeight = 0.6f;
+        mc.thePlayer.jumpMovementFactor = 0.02f;
     }
 
     public void onEvent(Event e) {
@@ -59,16 +63,29 @@ public class Speed extends Module {
                 }
                 break;
             case "NCPHop":
+
                 if (e instanceof EventMotion) {
                     if (Movement.isMoving()) {
                         if (mc.thePlayer.onGround) {
-                            mc.thePlayer.motionY = 0.4;
-                            mc.thePlayer.setSpeed(0.5);
+                            mc.thePlayer.motionY = 0.42;
+                            bhopspeed = 0.4f;
                         }
-                        mc.thePlayer.setSpeed(0.27);
+                        else {
+                            if (mc.thePlayer.fallDistance > 0.22) {
+                                bhopspeed = 0.19f + mathutil.getRandomFloatBetween(-0.01f,0.01f);
+                                mc.thePlayer.jumpMovementFactor = 0.017f;
+                            }
+                            else {
+                                bhopspeed = 0.35f + mathutil.getRandomFloatBetween(-0.03f,0.01f);
+                                mc.thePlayer.jumpMovementFactor = 0.035f;
+                            }
+
+                        }
                     } else {
-                        mc.thePlayer.setSpeed(0f);
+                        bhopspeed = 0f;
                     }
+                    bhopspeed *= mathutil.getRandomDoubleBetween(0.97,1.02);
+                    mc.thePlayer.setSpeed(bhopspeed);
                 }
                 break;
             case "NCPYPort":
@@ -76,16 +93,11 @@ public class Speed extends Module {
                     if (Movement.isMoving()) {
                         if (mc.thePlayer.onGround) {
                             mc.thePlayer.jump();
-                            mc.thePlayer.setSpeed(0.66425f);
-                            mc.timer.timerSpeed = 1f;
+                            mc.thePlayer.setSpeed(0.664232f);
                         } else {
                             mc.thePlayer.motionY -= 1;
-                            mc.timer.timerSpeed = 1f; // if you wanna make it faster (not infinite) (best is 1.2 timer)
                         }
                     }
-                } else if (mc.thePlayer.isCollidedHorizontally) {
-                    mc.thePlayer.jump();
-                    mc.thePlayer.setSpeed(1);
                 }
                 break;
             case "Verus":

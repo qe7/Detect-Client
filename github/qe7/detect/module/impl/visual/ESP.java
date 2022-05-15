@@ -1,5 +1,7 @@
 package github.qe7.detect.module.impl.visual;
 
+import github.qe7.detect.event.Event;
+import github.qe7.detect.event.listeners.EventMotion;
 import github.qe7.detect.module.Category;
 import github.qe7.detect.module.Module;
 
