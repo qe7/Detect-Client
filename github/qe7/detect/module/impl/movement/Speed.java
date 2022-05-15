@@ -19,6 +19,8 @@ public class Speed extends Module {
     public SettingMode mode;
     public SettingNumber speed;
     public Timer timer = new Timer();
+    public int Counter = 0;
+    public int Counter2 = 0;
     public double moveSpeed;
     public int state;
     private double lastDist;
@@ -58,11 +60,12 @@ public class Speed extends Module {
                 break;
             case "NCPHop":
                 if (e instanceof EventMotion) {
-                    if (Movement.isMovingForward()) {
+                    if (Movement.isMoving()) {
                         if (mc.thePlayer.onGround) {
-                            mc.thePlayer.jump();
-                            mc.thePlayer.setSpeed(0.4);
+                            mc.thePlayer.motionY = 0.4;
+                            mc.thePlayer.setSpeed(0.5);
                         }
+                        mc.thePlayer.setSpeed(0.27);
                     } else {
                         mc.thePlayer.setSpeed(0f);
                     }
@@ -80,8 +83,7 @@ public class Speed extends Module {
                             mc.timer.timerSpeed = 1f; // if you wanna make it faster (not infinite) (best is 1.2 timer)
                         }
                     }
-                }
-                else if (mc.thePlayer.isCollidedHorizontally) {
+                } else if (mc.thePlayer.isCollidedHorizontally) {
                     mc.thePlayer.jump();
                     mc.thePlayer.setSpeed(1);
                 }

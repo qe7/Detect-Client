@@ -6,6 +6,7 @@ import java.util.List;
 import github.qe7.detect.event.listeners.EventMotion;
 import github.qe7.detect.module.Category;
 import github.qe7.detect.module.impl.combat.Killaura;
+import github.qe7.detect.setting.impl.SettingBoolean;
 import github.qe7.detect.util.Timer;
 import org.lwjgl.input.Keyboard;
 
@@ -23,11 +24,16 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Vec3;
 import net.minecraft.util.Vec3i;
+import org.lwjgl.input.Mouse;
 
 public class Scaffold extends Module {
 
+	public SettingBoolean Tower;
+
 	public Scaffold() {
 		super("Scaffold", 0, Category.MOVEMENT);
+		Tower = new SettingBoolean("Tower", false);
+		addSettings(Tower);
 	}
 	
     private double startY;
@@ -140,6 +146,9 @@ public class Scaffold extends Module {
 						mc.thePlayer.inventory.currentItem = currentSlot;
 					}
 			}
+				if (Keyboard.isKeyDown(mc.gameSettings.keyBindJump.getKeyCode())) {
+					mc.thePlayer.motionY = 0.5;
+				}
 		}
 	}
 			

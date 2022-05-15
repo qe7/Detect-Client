@@ -21,7 +21,7 @@ public class Criticals extends Module {
 
     public Criticals() {
         super("Criticals", 0, Category.COMBAT);
-        mode = new SettingMode("Mode", "NCP", "Test", "Jump", "MiniJump");
+        mode = new SettingMode("Mode", "Packet1", "Packet2", "Jump", "MiniJump");
         delay = new SettingNumber("Delay", 500, "##.", 400, 1000);
         addSettings(mode, delay);
     }
@@ -41,14 +41,14 @@ public class Criticals extends Module {
                         return;
 
                     switch (mode.getCurrentValue()) {
-                        case "NCP":
+                        case "Packet1":
                             doCrits(0.05D, false);
                             doCrits(0.D, false);
                             doCrits(0.012511D, false);
                             doCrits(0.D, false);
                             break;
-                        case "Test":
-                            doCrits(0.05D, false);
+                        case "Packet2":
+                            doCrits(0.069d, false);
                             doCrits(0.D, false);
                             break;
                         case "Jump":

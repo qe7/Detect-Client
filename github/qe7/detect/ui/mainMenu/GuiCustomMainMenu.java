@@ -3,6 +3,7 @@ package github.qe7.detect.ui.mainMenu;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import github.qe7.detect.Detect;
+import github.qe7.detect.module.impl.visual.Cape;
 import github.qe7.detect.module.impl.visual.Hud;
 import github.qe7.detect.ui.altmenu.GuiAltManager;
 import net.minecraft.client.Minecraft;
@@ -401,7 +402,12 @@ public class GuiCustomMainMenu extends GuiScreen implements GuiYesNoCallback {
         Gui.drawRect(width /2-125, height /2-86, width /2+125, height /2-90, new Color(0x2F2F2F).getRGB());
         Gui.drawRect(width /2-121, height /2-84, width /2+121, height /2-86, Hud.getColor().getRGB());
         Gui.drawRect(width /2-125, height /2+60, width /2+125, height /2+64, new Color(0x2F2F2F).getRGB());
-        this.drawString(this.fontRendererObj, "D§fetect", width / 2 - (mc.fontRendererObj.getStringWidth("Detect") / 2), height /2 - 75, Hud.getColor().getRGB());
+        if (Cape.getCape() == "mouseware" && Detect.i.moduleManager.getModuleByName("Cape").isToggled()) {
+            this.drawString(this.fontRendererObj, "M§fouseware", width / 2 - (mc.fontRendererObj.getStringWidth("Mouseware") / 2), height /2 - 75, Hud.getColor().getRGB());
+        }
+        else {
+            this.drawString(this.fontRendererObj, "D§fetect", width / 2 - (mc.fontRendererObj.getStringWidth("Detect") / 2), height /2 - 75, Hud.getColor().getRGB());
+        }
 
         GlStateManager.pushMatrix();
         GlStateManager.translate((float)(this.width / 2 + 90), 70.0F, 0.0F);
