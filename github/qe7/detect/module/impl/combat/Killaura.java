@@ -22,9 +22,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.play.client.C02PacketUseEntity;
-import net.minecraft.util.MouseHelper;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 public class Killaura extends Module {
@@ -33,7 +30,7 @@ public class Killaura extends Module {
     public static SettingBoolean ab = new SettingBoolean("AutoBlock", true);
     public static SettingMode abMode = new SettingMode("Mode", "NCP", "Legit", "Fake");
     public SettingBoolean rot = new SettingBoolean("Rotations", true);
-    public SettingMode rotMode = new SettingMode("Mode", "Watchdog", "Static", "Jitter");
+    public SettingMode rotMode = new SettingMode("Mode", "Static", "Jitter");
     public static SettingNumber jitter = new SettingNumber("Jitter", 4, "#.", 2, 10);
     public SettingNumber fov = new SettingNumber("Fov", 180, "#.", 1, 180);
 	public SettingNumber cps = new SettingNumber("Attacks", 12, "#.#", 1, 20);
@@ -181,7 +178,7 @@ public class Killaura extends Module {
 
 	public static float[] jitterRotations(Entity e, EventMotion p) {
         double x = e.posX + (e.posX - e.lastTickPosX) - p.getX();
-        double y = (e.posY + e.getEyeHeight()) - (p.getY() + mc.thePlayer.getEyeHeight()) - 0.4;
+        double y = (e.posY + e.getEyeHeight()) - (p.getY() + mc.thePlayer.getEyeHeight()) - 0.8;
         double z = e.posZ + (e.posZ - e.lastTickPosZ) - p.getZ();
         double dist = Math.sqrt(Math.pow(x, 2) + Math.pow(z, 2));
 
@@ -211,7 +208,7 @@ public class Killaura extends Module {
 
     public static float[] staticRotations(Entity e, EventMotion p) {
         double x = e.posX + (e.posX - e.lastTickPosX) - p.getX();
-        double y = (e.posY + e.getEyeHeight()) - (p.getY() + mc.thePlayer.getEyeHeight()) - 0.4;
+        double y = (e.posY + e.getEyeHeight()) - (p.getY() + mc.thePlayer.getEyeHeight()) - 0.8;
         double z = e.posZ + (e.posZ - e.lastTickPosZ) - p.getZ();
         double dist = Math.sqrt(Math.pow(x, 2) + Math.pow(z, 2));
 

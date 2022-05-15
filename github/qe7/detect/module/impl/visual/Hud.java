@@ -39,12 +39,11 @@ public class Hud extends Module {
         fps = new SettingBoolean("fps", true);
         bps = new SettingBoolean("bps", true);
         watermark = new SettingBoolean("Watermark", true);
-        welcome = new SettingBoolean("Welcomer", true);
         arraylist = new SettingBoolean("Arraylist", true);
         r = new SettingNumber("r", 50, "#.", 0, 255);
         g = new SettingNumber("g", 100, "#.", 0, 255);
         b = new SettingNumber("b", 255, "#.", 0, 255);
-        addSettings(watermark, welcome, arraylist, arraylistMode, potionhud, build, cords, fps, bps, r, g, b);
+        addSettings(watermark, arraylist, arraylistMode, potionhud, build, cords, fps, bps, r, g, b);
     }
 
     public static class sortDefaultFont implements Comparator<Module> {
@@ -82,10 +81,6 @@ public class Hud extends Module {
                 else {
                     font.drawStringWithShadow("D§fetect §7[§f" + timeStamp + "§7]", 4, 4, getColor().getRGB());
                 }
-            }
-
-            if (welcome.getValue()) {
-                font.drawStringWithShadow("Welcome master §f" + Detect.i.author + "§r!", e.getWidth() / 2 - (font.getStringWidth("Welcome master " + Detect.i.author + "!") / 2), 4, getColor().getRGB());
             }
 
             int j = cords.getValue() ? 2 : 1;
