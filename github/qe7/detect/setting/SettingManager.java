@@ -27,7 +27,7 @@ public class SettingManager {
 
     public void loadConfig(Gson gson) {
         for(Setting s: this.settings) {
-            File file = new File(Util.mc.mcDataDir + File.separator + Detect.i.name + File.separator + "settings" + File.separator + s.getParentMod().getName() + File.separator + s.getName() + ".json");
+            File file = new File(Util.mc.mcDataDir + File.separator + "detect" + File.separator + "settings" + File.separator + s.getParentMod().getName() + File.separator + s.getName() + ".json");
             try (FileReader reader = new FileReader(file)) {
                 Map<String, Object> map = gson.fromJson(reader, new TypeToken<Map<String, Object>>() {}.getType());
                 if((boolean)map.get("isCheck")) {

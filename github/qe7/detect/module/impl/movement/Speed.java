@@ -19,79 +19,85 @@ public class Speed extends Module {
     public SettingMode mode;
     public SettingNumber speed;
     public Timer timer = new Timer();
-    public int Counter = 0;
-    public int Counter2 = 0;
+    public int count = 0;
     public double moveSpeed;
     public int state;
-    private double lastDist;
-    private int cooldownHops;
 
     public Speed() {
         super("Speed", 0, Category.MOVEMENT);
-        mode = new SettingMode("Mode", "Vanilla", "NCPHop", "NCPYPort", "Verus");
+        mode = new SettingMode("Mode", "Vanilla", "NCPHop", "NCPYPort", "FakeJump", "Verus");
         speed = new SettingNumber("Speed", 0.4, "#.##", 0.1, 1);
         addSettings(mode, speed);
     }
 
     public void onEnable() {
-
+        mc.thePlayer.speedInAir = 0.02f;
+        Speed.mc.timer.timerSpeed = 1.0f;
+        count = 0;
     }
 
     public void onDisable() {
-        Speed.mc.timer.timerSpeed = 1.0f;
         mc.thePlayer.speedInAir = 0.02f;
-        mc.thePlayer.stepHeight = 0.6f;
+        Speed.mc.timer.timerSpeed = 1.0f;
+        count = 0;
     }
 
     public void onEvent(Event e) {
 
         setSuffix(mode.getCurrentValue());
 
-        switch (mode.getCurrentValue()) {
-            case "Vanilla":
-                if (e instanceof EventMotion) {
+        if (e instanceof EventMotion) {
+            switch (mode.getCurrentValue()) {
+                case "Vanilla":
                     if (Movement.isMoving()) {
-                        if (mc.thePlayer.onGround) {
+                        if (mc.thePlayer.onGround && count == 0) {
                             mc.thePlayer.jump();
+                            count++;
                         }
+
+                        if (!mc.thePlayer.onGround) {
+                            count = 0;
+                        }
+
                         mc.thePlayer.setSpeed(speed.getValue());
                     }
-                }
-                break;
-            case "NCPHop":
-                if (e instanceof EventMotion) {
+                    break;
+                case "NCPHop":
                     if (Movement.isMoving()) {
                         if (mc.thePlayer.onGround) {
-                            mc.thePlayer.motionY = 0.4;
-                            mc.thePlayer.setSpeed(0.5);
+                            mc.thePlayer.motionY = 0.411d;
+                            mc.thePlayer.setSpeed(0.4);
                         }
-                        mc.thePlayer.setSpeed(0.27);
+                        mc.thePlayer.setSpeed(0.26);
                     } else {
                         mc.thePlayer.setSpeed(0f);
                     }
-                }
-                break;
-            case "NCPYPort":
-                if (e instanceof EventMotion) {
+                    break;
+                case "NCPYPort":
                     if (Movement.isMoving()) {
                         if (mc.thePlayer.onGround) {
-                            mc.thePlayer.jump();
+                            mc.thePlayer.motionY = 0.4d;
                             mc.thePlayer.setSpeed(0.66425f);
-                            mc.timer.timerSpeed = 1f;
                         } else {
                             mc.thePlayer.motionY -= 1;
-                            mc.timer.timerSpeed = 1f; // if you wanna make it faster (not infinite) (best is 1.2 timer)
                         }
                     }
-                } else if (mc.thePlayer.isCollidedHorizontally) {
-                    mc.thePlayer.jump();
-                    mc.thePlayer.setSpeed(1);
-                }
-                break;
-            case "Verus":
-                if (e instanceof EventMotion) {
+                    break;
+                case "FakeJump" :
+                    if (Movement.isMoving()) {
+                        if (mc.thePlayer.onGround) {
+                            mc.thePlayer.motionY = 0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001d;
+                            mc.thePlayer.setSpeed(0.199999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999d);
+                            count++;
+                        }
+                    } else {
+                        mc.thePlayer.setSpeed(0f);
+                    }
+                    break;
+                case "Verus":
                     mc.thePlayer.setSprinting(true);
                     if (mc.thePlayer.onGround && Movement.isMoving()) {
+//                        mc.thePlayer.motionY = 0.4d;
                         mc.thePlayer.jump();
                         mc.thePlayer.setSpeed(0.4);
                     } else if (!mc.thePlayer.onGround && Movement.isMoving()) {
@@ -101,8 +107,8 @@ public class Speed extends Module {
                         mc.thePlayer.speedInAir = 0.02f;
                         mc.thePlayer.setSpeed(0);
                     }
-                }
-                break;
+                    break;
+            }
         }
     }
 

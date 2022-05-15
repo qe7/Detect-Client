@@ -106,7 +106,7 @@ public class Scaffold extends Module {
     public static boolean isPlaceTick = false;
     
 	public void onDisable() {
-		mc.gameSettings.keyBindJump.pressed = Keyboard.isKeyDown(mc.gameSettings.keyBindJump.getKeyCode());
+//		mc.gameSettings.keyBindJump.pressed = Keyboard.isKeyDown(mc.gameSettings.keyBindJump.getKeyCode());
 		mc.timer.timerSpeed = 1f;
 		this.isPlaceTick = false;
 	}
@@ -146,9 +146,6 @@ public class Scaffold extends Module {
 						mc.thePlayer.inventory.currentItem = currentSlot;
 					}
 			}
-				if (Keyboard.isKeyDown(mc.gameSettings.keyBindJump.getKeyCode())) {
-					mc.thePlayer.motionY = 0.5;
-				}
 		}
 	}
 			

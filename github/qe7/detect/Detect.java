@@ -14,7 +14,7 @@ public class Detect {
             name = "Detect",
             version = "1.0",
             prefix = "§7[§4D§7]§r",
-            author = "Famemouse";
+            author = "Admin";
     public ModuleManager moduleManager = new ModuleManager();
     public SettingManager settingManager = new SettingManager();
     public FriendManager friendManager = new FriendManager();
