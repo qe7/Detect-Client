@@ -70,24 +70,14 @@ public class Speed extends Module {
                     }
                     break;
 
-                case "NCPHop":
+                case "NCPHop": {
                     if (e instanceof EventMotion) {
                         if (Movement.isMoving()) {
-                            if (mc.thePlayer.onGround) {
-                                mc.thePlayer.motionY = 0.42;
-                                bhopspeed = 0.4f;
-                            } else {
-                                if (mc.thePlayer.fallDistance > 0.22) {
-                                    bhopspeed = 0.19f + mathutil.getRandomFloatBetween(-0.01f, 0.01f);
-                                    mc.thePlayer.jumpMovementFactor = 0.017f;
-                                } else {
-                                    bhopspeed = 0.35f + mathutil.getRandomFloatBetween(-0.03f, 0.01f);
-                                    mc.thePlayer.jumpMovementFactor = 0.035f;
-                                }
-                            }
+                            Movement.setFriction(2);
                         }
                     }
                     break;
+                }
 
                 case "NCPYPort":
                     if (e instanceof EventMotion) {
