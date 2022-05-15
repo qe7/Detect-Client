@@ -70,9 +70,7 @@ public class Speed extends Module {
                     }
                     break;
 
-
                 case "NCPHop":
-
                     if (e instanceof EventMotion) {
                         if (Movement.isMoving()) {
                             if (mc.thePlayer.onGround) {
@@ -89,6 +87,7 @@ public class Speed extends Module {
                             }
                         }
                     }
+                    break;
 
                 case "NCPYPort":
                     if (e instanceof EventMotion) {
@@ -96,6 +95,8 @@ public class Speed extends Module {
                             if (mc.thePlayer.onGround) {
                                 mc.thePlayer.jump();
                                 mc.thePlayer.setSpeed(0.664232f);
+                            }else{
+                             mc.thePlayer.motionY -= 1;
                             }
                         }
                     }
