@@ -8,8 +8,9 @@ import github.qe7.detect.setting.impl.SettingMode;
 public class Cape extends Module {
 
     public SettingMode mode;
+    public static boolean hasOverlay;
     public static String whichCape = "detect";
-    public static String overLay = "detect";
+    public static String overlay = "detect";
 
     public Cape() {
         super("Cape", 0, Category.VISUAL);
@@ -22,13 +23,16 @@ public class Cape extends Module {
         switch (mode.getCurrentValue()) {
             case "Detect":
                 whichCape = "detect";
+                hasOverlay = false;
                 break;
             case "Exhibition":
                 whichCape = "exhicape";
-                overLay = "exhioverlay";
+                overlay = "exhioverlay";
+                hasOverlay = true;
                 break;
             case "Mouseware":
                 whichCape = "mouseware";
+                hasOverlay = false;
                 break;
 
         }
@@ -39,6 +43,6 @@ public class Cape extends Module {
     }
 
     public static String getOverlay() {
-        return overLay;
+        return overlay;
     }
 }

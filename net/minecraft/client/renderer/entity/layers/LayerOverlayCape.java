@@ -22,11 +22,9 @@ public class LayerOverlayCape implements LayerRenderer<AbstractClientPlayer>
         this.playerRenderer = playerRendererIn;
     }
 
-
-
     public void doRenderLayer(AbstractClientPlayer entitylivingbaseIn, float p_177141_2_, float p_177141_3_, float partialTicks, float p_177141_5_, float p_177141_6_, float p_177141_7_, float scale)
     {
-        if (entitylivingbaseIn.getName().equalsIgnoreCase(Minecraft.getMinecraft().thePlayer.getName())&& Detect.i.moduleManager.getModuleByName("Cape").isToggled() && Cape.getCape().equalsIgnoreCase("exhicape")) {
+        if (entitylivingbaseIn.getName().equalsIgnoreCase(Minecraft.getMinecraft().thePlayer.getName())&& Detect.i.moduleManager.getModuleByName("Cape").isToggled() && Cape.hasOverlay) {
 
             GlStateManager.color(Hud.r.getValue().floatValue() / 255, Hud.g.getValue().floatValue() / 255, Hud.b.getValue().floatValue() / 255, 1f);
 
