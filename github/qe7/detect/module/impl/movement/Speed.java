@@ -30,7 +30,7 @@ public class Speed extends Module {
 
     public Speed() {
         super("Speed", 0, Category.MOVEMENT);
-        mode = new SettingMode("Mode", "Vanilla", "NCPHop", "NCPYPort", "FakeJump", "Verus");
+        mode = new SettingMode("Mode", "Vanilla", "NCPHop", "NCPYPort", "FakeJump", "VerusHop", "VerusLow");
         speed = new SettingNumber("Speed", 0.4, "#.##", 0.1, 1);
         addSettings(mode, speed);
     }
@@ -69,10 +69,7 @@ public class Speed extends Module {
                         mc.thePlayer.setSpeed(speed.getValue());
                     }
                     break;
-
-
                 case "NCPHop":
-
                     if (e instanceof EventMotion) {
                         if (Movement.isMoving()) {
                             if (mc.thePlayer.onGround) {
@@ -89,7 +86,7 @@ public class Speed extends Module {
                             }
                         }
                     }
-
+                    break;
                 case "NCPYPort":
                     if (e instanceof EventMotion) {
                         if (Movement.isMoving()) {
@@ -100,7 +97,6 @@ public class Speed extends Module {
                         }
                     }
                     break;
-
                 case "FakeJump":
                     if (Movement.isMoving()) {
                         if (mc.thePlayer.onGround) {
@@ -112,19 +108,33 @@ public class Speed extends Module {
                         mc.thePlayer.setSpeed(0f);
                     }
                     break;
-                case "Verus":
+                case "VerusHop":
                     mc.thePlayer.setSprinting(true);
                     if (mc.thePlayer.onGround && Movement.isMoving()) {
                         mc.thePlayer.jump();
-                        mc.thePlayer.setSpeed(0.4);
+                        mc.thePlayer.setSpeed(0.41);
                     } else if (!mc.thePlayer.onGround && Movement.isMoving()) {
                         mc.thePlayer.setSpeed(0.36);
-                        mc.thePlayer.speedInAir = 0.032f;
+                        mc.thePlayer.speedInAir = 0.033f;
                     } else {
                         mc.thePlayer.speedInAir = 0.02f;
                         mc.thePlayer.setSpeed(0);
                     }
                     break;
+                case "VerusLow":
+//                    mc.thePlayer.setSprinting(true);
+//                    if (Movement.isMoving()) {
+//                        if (mc.thePlayer.onGround) {
+//                            mc.thePlayer.motionY = 0.3;
+//                            mc.thePlayer.setSpeed(0.2);
+//                        }
+//                        else {
+//                        }
+//                    } else {
+//                        mc.thePlayer.speedInAir = 0.02f;
+//                        mc.thePlayer.setSpeed(0);
+//                    }
+
             }
         }
     }

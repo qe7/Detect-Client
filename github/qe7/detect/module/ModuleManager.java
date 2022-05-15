@@ -59,6 +59,7 @@ public class ModuleManager {
         modules.add(new AutoRespawn());
         modules.add(new FastPlace());
         modules.add(new InvWalk());
+        modules.add(new Phase());
         modules.add(new NoRotate());
         modules.add(new NoFall());
         modules.add(new SpeedMine());

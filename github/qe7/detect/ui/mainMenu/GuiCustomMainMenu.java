@@ -135,7 +135,7 @@ public class GuiCustomMainMenu extends GuiScreen implements GuiYesNoCallback {
         this.buttonList.add(new GuiButton(2, this.width / 2 - 100, height / 2-32, "Multiplayer"));
         this.buttonList.add(new GuiButton(3, this.width / 2 - 100, height / 2-9, "AltManager"));
         this.buttonList.add(new GuiButton(0, this.width / 2 - 100, height / 2+14, "Options"));
-        this.buttonList.add(new GuiButton(4, this.width- 21, 1, 20, 20, "X"));
+        this.buttonList.add(new GuiButton(4, this.width- 25, 1, 24, 22, "X"));
     }
 
     protected void actionPerformed(GuiButton button) throws IOException

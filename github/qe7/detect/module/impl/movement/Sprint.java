@@ -12,9 +12,6 @@ public class Sprint extends Module {
         super("Sprint", 0, Category.MOVEMENT);
         setToggled(true);
     }
-    public void onDisable() {
-        mc.thePlayer.setSprinting(false);
-    }
 
     public void onEvent(Event event) {
         setSuffix("Legit");
