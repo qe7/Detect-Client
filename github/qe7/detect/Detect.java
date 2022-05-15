@@ -5,7 +5,6 @@ import github.qe7.detect.command.CommandManager;
 import github.qe7.detect.friend.FriendManager;
 import github.qe7.detect.module.ModuleManager;
 import github.qe7.detect.setting.SettingManager;
-import github.qe7.detect.util.Util;
 import github.qe7.detect.util.client.DLogger;
 
 public class Detect {
