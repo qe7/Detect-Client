@@ -19,9 +19,9 @@ I personally wouldnt recommend using this client as well its very out dated.
 I will more then likely recode this after a while and maybe once I have finished my tests 🤦‍♂️
 
 
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/qe7/Detect-Client.svg?style=for-the-badge
 [contributors-url]: https://github.com/qe7/Detect-Client/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/qe7/Detect-Client.svg?style=for-the-badge
 [forks-url]: https://github.com/qe7/Detect-Client/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/qe7/Detect-Client.svg?style=for-the-badge
 [stars-url]: https://github.com/qe7/Detect-Client/stargazers
