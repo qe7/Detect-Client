@@ -307,7 +307,7 @@ public class GuiContainerCreative extends InventoryEffectRenderer
     {
         if (selectedTabIndex != CreativeTabs.tabAllSearch.getTabIndex())
         {
-            if (GameSettings.isKeyDown(this.mc.gameSettings.keyBindChat))
+            if (GameSettings.isKeyDown(this.mc.gameSettings.keyBindPlayerList))
             {
                 this.setCurrentCreativeTab(CreativeTabs.tabAllSearch);
             }
@@ -403,7 +403,7 @@ public class GuiContainerCreative extends InventoryEffectRenderer
     /**
      * Called when the mouse is clicked. Args : mouseX, mouseY, clickedButton
      */
-    public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
         if (mouseButton == 0)
         {

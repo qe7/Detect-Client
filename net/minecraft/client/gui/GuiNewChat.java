@@ -1,13 +1,8 @@
 package net.minecraft.client.gui;
 
 import com.google.common.collect.Lists;
-
-import java.awt.*;
 import java.util.Iterator;
 import java.util.List;
-
-import github.qe7.detect.Detect;
-import github.qe7.detect.module.impl.visual.ChatExtras;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -52,10 +47,7 @@ public class GuiNewChat extends Gui
                 float f1 = this.getChatScale();
                 int l = MathHelper.ceiling_float_int((float)this.getChatWidth() / f1);
                 GlStateManager.pushMatrix();
-                if (Detect.i.moduleManager.getModuleByName("ChatExtras").isToggled())
-                    GlStateManager.translate(2.0F, ChatExtras.height.getValue() ? 8.0f : 20.0F, 0.0F);
-                else
-                    GlStateManager.translate(2.0F, 20.0F, 0.0F);
+                GlStateManager.translate(2.0F, 20.0F, 0.0F);
                 GlStateManager.scale(f1, f1, 1.0F);
 
                 for (int i1 = 0; i1 + this.scrollPos < this.drawnChatLines.size() && i1 < i; ++i1)
@@ -87,10 +79,7 @@ public class GuiNewChat extends Gui
                             {
                                 int i2 = 0;
                                 int j2 = -i1 * 9;
-                                if (Detect.i.moduleManager.getModuleByName("ChatExtras").isToggled())
-                                    drawRect(i2, j2 - 9, i2 + l + 4, j2, ChatExtras.transparencybool.getValue() ? new Color(14, 14, 14, ChatExtras.transparency.getValue().floatValue()).getRGB() : l1 / 2 << 24);
-                                else
-                                    drawRect(i2, j2 - 9, i2 + l + 4, j2,l1 / 2 << 24);
+                                drawRect(i2, j2 - 9, i2 + l + 4, j2, l1 / 2 << 24);
                                 String s = chatline.getChatComponent().getFormattedText();
                                 GlStateManager.enableBlend();
                                 this.mc.fontRendererObj.drawStringWithShadow(s, (float)i2, (float)(j2 - 8), 16777215 + (l1 << 24));
@@ -104,7 +93,7 @@ public class GuiNewChat extends Gui
                 if (flag)
                 {
                     int k2 = this.mc.fontRendererObj.FONT_HEIGHT;
-                    GlStateManager.translate(-3.0F, 2.0F, 0.0F);
+                    GlStateManager.translate(-3.0F, 0.0F, 0.0F);
                     int l2 = k * k2 + k;
                     int i3 = j * k2 + j;
                     int j3 = this.scrollPos * i3 / k;
@@ -117,7 +106,6 @@ public class GuiNewChat extends Gui
                         drawRect(0, -j3, 2, -j3 - k1, l3 + (k3 << 24));
                         drawRect(2, -j3, 1, -j3 - k1, 13421772 + (k3 << 24));
                     }
-
                 }
 
                 GlStateManager.popMatrix();

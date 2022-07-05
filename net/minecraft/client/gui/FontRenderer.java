@@ -374,7 +374,7 @@ public class FontRenderer implements IResourceManagerReloadListener
     /**
      * Draws the specified string with a shadow.
      */
-    public int drawStringWithShadow(String text, double x, double y, int color)
+    public int drawStringWithShadow(String text, float x, float y, int color)
     {
         return this.drawString(text, x, y, color, true);
     }
@@ -382,7 +382,7 @@ public class FontRenderer implements IResourceManagerReloadListener
     /**
      * Draws the specified string.
      */
-    public int drawString(String text, double x, double y, int color)
+    public int drawString(String text, int x, int y, int color)
     {
         return this.drawString(text, (float)x, (float)y, color, false);
     }
@@ -390,7 +390,7 @@ public class FontRenderer implements IResourceManagerReloadListener
     /**
      * Draws the specified string.
      */
-    public int drawString(String text, double x, double y, int color, boolean dropShadow)
+    public int drawString(String text, float x, float y, int color, boolean dropShadow)
     {
         this.enableAlpha();
 
@@ -406,12 +406,12 @@ public class FontRenderer implements IResourceManagerReloadListener
 
         if (dropShadow)
         {
-            i = this.renderString(text, (float) (x + 1.0F), (float) (y + 1.0F), color, true);
-            i = Math.max(i, this.renderString(text, (float) x,(float) y, color, false));
+            i = this.renderString(text, x + 1.0F, y + 1.0F, color, true);
+            i = Math.max(i, this.renderString(text, x, y, color, false));
         }
         else
         {
-            i = this.renderString(text,(float) x,(float) y, color, false);
+            i = this.renderString(text, x, y, color, false);
         }
 
         if (this.blend)

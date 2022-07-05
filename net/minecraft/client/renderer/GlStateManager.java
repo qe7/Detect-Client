@@ -1,6 +1,5 @@
 package net.minecraft.client.renderer;
 
-import java.awt.*;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;

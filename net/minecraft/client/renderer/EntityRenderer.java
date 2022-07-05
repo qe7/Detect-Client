@@ -10,9 +10,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
-
-import github.qe7.detect.Detect;
-import github.qe7.detect.event.listeners.EventRender3D;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.material.Material;
@@ -1900,9 +1897,6 @@ public class EntityRenderer implements IResourceManagerReloadListener
         }
 
         this.mc.mcProfiler.endStartSection("hand");
-
-        EventRender3D eventRender3D = new EventRender3D(partialTicks);
-        Detect.i.moduleManager.onEvent(eventRender3D);
 
         if (this.renderHand && !Shaders.isShadowPass)
         {

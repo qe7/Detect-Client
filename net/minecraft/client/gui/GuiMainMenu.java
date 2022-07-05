@@ -40,7 +40,7 @@ import org.lwjgl.util.glu.Project;
 public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
 {
     private static final AtomicInteger field_175373_f = new AtomicInteger(0);
-    public static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger();
     private static final Random RANDOM = new Random();
 
     /** Counts the number of screen updates. */
@@ -694,7 +694,7 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
     /**
      * Called when the mouse is clicked. Args : mouseX, mouseY, clickedButton
      */
-    public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
         super.mouseClicked(mouseX, mouseY, mouseButton);
 

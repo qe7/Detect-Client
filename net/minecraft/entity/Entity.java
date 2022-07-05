@@ -100,7 +100,7 @@ public abstract class Entity implements ICommandSender
     public float prevRotationPitch;
 
     /** Axis aligned bounding box. */
-    public AxisAlignedBB boundingBox;
+    private AxisAlignedBB boundingBox;
     public boolean onGround;
 
     /**

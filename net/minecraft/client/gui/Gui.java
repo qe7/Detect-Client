@@ -47,18 +47,18 @@ public class Gui
     /**
      * Draws a solid color rectangle with the specified coordinates and color (ARGB format). Args: x1, y1, x2, y2, color
      */
-    public static void drawRect(double left, double top, double right, double bottom, int color)
+    public static void drawRect(int left, int top, int right, int bottom, int color)
     {
         if (left < right)
         {
-            double i = left;
+            int i = left;
             left = right;
             right = i;
         }
 
         if (top < bottom)
         {
-            double j = top;
+            int j = top;
             top = bottom;
             bottom = j;
         }
@@ -119,7 +119,7 @@ public class Gui
     /**
      * Renders the specified text to the screen, center-aligned. Args : renderer, string, x, y, color
      */
-    public static void drawCenteredString(FontRenderer fontRendererIn, String text, int x, int y, int color)
+    public void drawCenteredString(FontRenderer fontRendererIn, String text, int x, int y, int color)
     {
         fontRendererIn.drawStringWithShadow(text, (float)(x - fontRendererIn.getStringWidth(text) / 2), (float)y, color);
     }
@@ -184,7 +184,7 @@ public class Gui
     /**
      * Draws a textured rectangle at z = 0. Args: x, y, u, v, width, height, textureWidth, textureHeight
      */
-    public static void drawModalRectWithCustomSizedTexture(double x, double y, float u, float v, int width, int height, float textureWidth, float textureHeight)
+    public static void drawModalRectWithCustomSizedTexture(int x, int y, float u, float v, int width, int height, float textureWidth, float textureHeight)
     {
         float f = 1.0F / textureWidth;
         float f1 = 1.0F / textureHeight;

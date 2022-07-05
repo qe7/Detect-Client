@@ -4,10 +4,6 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
-
-import github.qe7.detect.Detect;
-import github.qe7.detect.module.Module;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.ServerList;
@@ -102,7 +98,6 @@ public class GuiMultiplayer extends GuiScreen implements GuiYesNoCallback
         this.buttonList.add(new GuiButton(3, this.width / 2 + 4 + 50, this.height - 52, 100, 20, I18n.format("selectServer.add", new Object[0])));
         this.buttonList.add(new GuiButton(8, this.width / 2 + 4, this.height - 28, 70, 20, I18n.format("selectServer.refresh", new Object[0])));
         this.buttonList.add(new GuiButton(0, this.width / 2 + 4 + 76, this.height - 28, 75, 20, I18n.format("gui.cancel", new Object[0])));
-        this.buttonList.add(new GuiButton(9, 4, 4, 70, 20, I18n.format("Fix Null", new Object[0])));
         this.selectServer(this.serverListSelector.func_148193_k());
     }
 
@@ -192,14 +187,6 @@ public class GuiMultiplayer extends GuiScreen implements GuiYesNoCallback
             else if (button.id == 8)
             {
                 this.refreshServerList();
-            }
-            else if (button.id == 9)
-            {
-                for(Module m : Detect.i.moduleManager.getModules()){
-                    if(m.isToggled() && !Objects.equals(m.getName(), "Hud") && !Objects.equals(m.getName(), "Sprint")){
-                        m.toggle();
-                    }
-                }
             }
         }
     }
@@ -445,7 +432,7 @@ public class GuiMultiplayer extends GuiScreen implements GuiYesNoCallback
     /**
      * Called when the mouse is clicked. Args : mouseX, mouseY, clickedButton
      */
-    public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
         super.mouseClicked(mouseX, mouseY, mouseButton);
         this.serverListSelector.mouseClicked(mouseX, mouseY, mouseButton);
