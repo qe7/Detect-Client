@@ -22,10 +22,7 @@ public class SmartAnimations
 
     public static void spriteRendered(int animationIndex)
     {
-        if (animationIndex >= 0)
-        {
-            spritesRendered.set(animationIndex);
-        }
+        spritesRendered.set(animationIndex);
     }
 
     public static void spritesRendered(BitSet animationIndexes)
@@ -38,7 +35,7 @@ public class SmartAnimations
 
     public static boolean isSpriteRendered(int animationIndex)
     {
-        return animationIndex < 0 ? false : spritesRendered.get(animationIndex);
+        return spritesRendered.get(animationIndex);
     }
 
     public static void resetSpritesRendered()

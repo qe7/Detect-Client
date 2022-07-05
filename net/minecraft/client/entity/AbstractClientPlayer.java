@@ -133,6 +133,8 @@ public abstract class AbstractClientPlayer extends EntityPlayer
 
     /**
      * Returns true if the username has an associated skin.
+     *  
+     * @param username The username of the player being checked.
      */
     public static ResourceLocation getLocationSkin(String username)
     {

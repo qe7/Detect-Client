@@ -863,7 +863,8 @@ public class CustomItemProperties
                             this.mapBakedModelsTexture = new HashMap();
                         }
 
-                        this.mapBakedModelsTexture.put(s2, ibakedmodel);
+                        String s3 = "item/" + s2;
+                        this.mapBakedModelsTexture.put(s3, ibakedmodel);
                     }
                 }
             }
@@ -1181,7 +1182,8 @@ public class CustomItemProperties
                             this.mapBakedModelsFull = new HashMap();
                         }
 
-                        this.mapBakedModelsFull.put(s2, ibakedmodel1);
+                        String s3 = "item/" + s2;
+                        this.mapBakedModelsFull.put(s3, ibakedmodel1);
                     }
                 }
             }

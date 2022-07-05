@@ -150,7 +150,7 @@ public class BlockFire extends Block
 
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
-        if (worldIn.getGameRules().getBoolean("doFireTick"))
+        if (worldIn.getGameRules().getGameRuleBooleanValue("doFireTick"))
         {
             if (!this.canPlaceBlockAt(worldIn, pos))
             {
@@ -264,7 +264,7 @@ public class BlockFire extends Block
 
     protected boolean canDie(World worldIn, BlockPos pos)
     {
-        return worldIn.isRainingAt(pos) || worldIn.isRainingAt(pos.west()) || worldIn.isRainingAt(pos.east()) || worldIn.isRainingAt(pos.north()) || worldIn.isRainingAt(pos.south());
+        return worldIn.canLightningStrike(pos) || worldIn.canLightningStrike(pos.west()) || worldIn.canLightningStrike(pos.east()) || worldIn.canLightningStrike(pos.north()) || worldIn.canLightningStrike(pos.south());
     }
 
     public boolean requiresUpdates()
@@ -292,7 +292,7 @@ public class BlockFire extends Block
         {
             IBlockState iblockstate = worldIn.getBlockState(pos);
 
-            if (random.nextInt(age + 10) < 5 && !worldIn.isRainingAt(pos))
+            if (random.nextInt(age + 10) < 5 && !worldIn.canLightningStrike(pos))
             {
                 int j = age + random.nextInt(5) / 4;
 

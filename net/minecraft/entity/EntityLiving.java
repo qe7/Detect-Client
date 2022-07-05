@@ -267,7 +267,7 @@ public abstract class EntityLiving extends EntityLivingBase
         }
     }
 
-    public void handleStatusUpdate(byte id)
+    public void handleHealthUpdate(byte id)
     {
         if (id == 20)
         {
@@ -275,7 +275,7 @@ public abstract class EntityLiving extends EntityLivingBase
         }
         else
         {
-            super.handleStatusUpdate(id);
+            super.handleHealthUpdate(id);
         }
     }
 
@@ -299,7 +299,7 @@ public abstract class EntityLiving extends EntityLivingBase
         }
     }
 
-    protected float updateDistance(float p_110146_1_, float p_110146_2_)
+    protected float func_110146_f(float p_110146_1_, float p_110146_2_)
     {
         this.bodyHelper.updateRenderAngles();
         return p_110146_2_;
@@ -320,12 +320,8 @@ public abstract class EntityLiving extends EntityLivingBase
 
     /**
      * Drop 0-2 items of this living's type
-     *  
-     * @param wasRecentlyHit true if this this entity was recently hit by appropriate entity (generally only if player
-     * or tameable)
-     * @param lootingModifier level of enchanment to be applied to this drop
      */
-    protected void dropFewItems(boolean wasRecentlyHit, int lootingModifier)
+    protected void dropFewItems(boolean p_70628_1_, int p_70628_2_)
     {
         Item item = this.getDropItem();
 
@@ -333,9 +329,9 @@ public abstract class EntityLiving extends EntityLivingBase
         {
             int i = this.rand.nextInt(3);
 
-            if (lootingModifier > 0)
+            if (p_70628_2_ > 0)
             {
-                i += this.rand.nextInt(lootingModifier + 1);
+                i += this.rand.nextInt(p_70628_2_ + 1);
             }
 
             for (int j = 0; j < i; ++j)
@@ -471,7 +467,7 @@ public abstract class EntityLiving extends EntityLivingBase
         super.onLivingUpdate();
         this.worldObj.theProfiler.startSection("looting");
 
-        if (!this.worldObj.isRemote && this.canPickUpLoot() && !this.dead && this.worldObj.getGameRules().getBoolean("mobGriefing"))
+        if (!this.worldObj.isRemote && this.canPickUpLoot() && !this.dead && this.worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing"))
         {
             for (EntityItem entityitem : this.worldObj.getEntitiesWithinAABB(EntityItem.class, this.getEntityBoundingBox().expand(1.0D, 0.0D, 1.0D)))
             {
@@ -710,8 +706,8 @@ public abstract class EntityLiving extends EntityLivingBase
         }
 
         double d3 = (double)MathHelper.sqrt_double(d0 * d0 + d1 * d1);
-        float f = (float)(MathHelper.atan2(d1, d0) * 180.0D / Math.PI) - 90.0F;
-        float f1 = (float)(-(MathHelper.atan2(d2, d3) * 180.0D / Math.PI));
+        float f = (float)(MathHelper.func_181159_b(d1, d0) * 180.0D / Math.PI) - 90.0F;
+        float f1 = (float)(-(MathHelper.func_181159_b(d2, d3) * 180.0D / Math.PI));
         this.rotationPitch = this.updateRotation(this.rotationPitch, f1, p_70625_3_);
         this.rotationYaw = this.updateRotation(this.rotationYaw, f, p_70625_2_);
     }
@@ -830,19 +826,15 @@ public abstract class EntityLiving extends EntityLivingBase
 
     /**
      * Drop the equipment for this entity.
-     *  
-     * @param wasRecentlyHit true if this this entity was recently hit by appropriate entity (generally only if player
-     * or tameable)
-     * @param lootingModifier level of enchanment to be applied to this drop
      */
-    protected void dropEquipment(boolean wasRecentlyHit, int lootingModifier)
+    protected void dropEquipment(boolean p_82160_1_, int p_82160_2_)
     {
         for (int i = 0; i < this.getInventory().length; ++i)
         {
             ItemStack itemstack = this.getEquipmentInSlot(i);
             boolean flag = this.equipmentDropChances[i] > 1.0F;
 
-            if (itemstack != null && (wasRecentlyHit || flag) && this.rand.nextFloat() - (float)lootingModifier * 0.01F < this.equipmentDropChances[i])
+            if (itemstack != null && (p_82160_1_ || flag) && this.rand.nextFloat() - (float)p_82160_2_ * 0.01F < this.equipmentDropChances[i])
             {
                 if (!flag && itemstack.isItemStackDamageable())
                 {
@@ -1190,6 +1182,9 @@ public abstract class EntityLiving extends EntityLivingBase
 
     /**
      * Removes the leash from this entity
+     *  
+     * @param sendPacket set true to send a packet to surrounding players
+     * @param dropLead set true to drop a leash
      */
     public void clearLeashed(boolean sendPacket, boolean dropLead)
     {

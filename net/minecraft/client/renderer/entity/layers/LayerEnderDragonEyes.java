@@ -47,7 +47,7 @@ public class LayerEnderDragonEyes implements LayerRenderer<EntityDragon>
             Shaders.endSpiderEyes();
         }
 
-        this.dragonRenderer.setLightmap(entitylivingbaseIn, partialTicks);
+        this.dragonRenderer.func_177105_a(entitylivingbaseIn, partialTicks);
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
         GlStateManager.depthFunc(515);

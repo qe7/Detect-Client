@@ -26,6 +26,8 @@ public class TileEntityDispenser extends TileEntityLockable implements IInventor
 
     /**
      * Returns the stack in the given slot.
+     *  
+     * @param index The slot to retrieve from.
      */
     public ItemStack getStackInSlot(int index)
     {
@@ -34,6 +36,9 @@ public class TileEntityDispenser extends TileEntityLockable implements IInventor
 
     /**
      * Removes up to a specified number of items from an inventory slot and returns them in a new stack.
+     *  
+     * @param index The slot to remove from.
+     * @param count The maximum amount of items to remove.
      */
     public ItemStack decrStackSize(int index, int count)
     {
@@ -67,8 +72,10 @@ public class TileEntityDispenser extends TileEntityLockable implements IInventor
 
     /**
      * Removes a stack from the given slot and returns it.
+     *  
+     * @param index The slot to remove a stack from.
      */
-    public ItemStack removeStackFromSlot(int index)
+    public ItemStack getStackInSlotOnClosing(int index)
     {
         if (this.stacks[index] != null)
         {
@@ -132,9 +139,9 @@ public class TileEntityDispenser extends TileEntityLockable implements IInventor
     }
 
     /**
-     * Get the name of this object. For players this returns their username
+     * Gets the name of this command sender (usually username, but possibly "Rcon")
      */
-    public String getName()
+    public String getCommandSenderName()
     {
         return this.hasCustomName() ? this.customName : "container.dispenser";
     }

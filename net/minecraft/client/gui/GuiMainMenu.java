@@ -88,15 +88,15 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
 
     /** Minecraft Realms button. */
     private GuiButton realmsButton;
-    private boolean L;
-    private GuiScreen M;
+    private boolean field_183502_L;
+    private GuiScreen field_183503_M;
     private GuiButton modButton;
     private GuiScreen modUpdateNotification;
 
     public GuiMainMenu()
     {
         this.openGLWarning2 = field_96138_a;
-        this.L = false;
+        this.field_183502_L = false;
         this.splashText = "missingno";
         BufferedReader bufferedreader = null;
 
@@ -159,9 +159,9 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
         }
     }
 
-    private boolean a()
+    private boolean func_183501_a()
     {
-        return Minecraft.getMinecraft().gameSettings.getOptionOrdinalValue(GameSettings.Options.enumFloat) && this.M != null;
+        return Minecraft.getMinecraft().gameSettings.getOptionOrdinalValue(GameSettings.Options.REALMS_NOTIFICATIONS) && this.field_183503_M != null;
     }
 
     /**
@@ -171,9 +171,9 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
     {
         ++this.panoramaTimer;
 
-        if (this.a())
+        if (this.func_183501_a())
         {
-            this.M.updateScreen();
+            this.field_183503_M.updateScreen();
         }
     }
 
@@ -244,19 +244,19 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
             this.field_92019_w = this.field_92021_u + 24;
         }
 
-        this.mc.setConnectedToRealms(false);
+        this.mc.func_181537_a(false);
 
-        if (Minecraft.getMinecraft().gameSettings.getOptionOrdinalValue(GameSettings.Options.enumFloat) && !this.L)
+        if (Minecraft.getMinecraft().gameSettings.getOptionOrdinalValue(GameSettings.Options.REALMS_NOTIFICATIONS) && !this.field_183502_L)
         {
             RealmsBridge realmsbridge = new RealmsBridge();
-            this.M = realmsbridge.getNotificationScreen(this);
-            this.L = true;
+            this.field_183503_M = realmsbridge.getNotificationScreen(this);
+            this.field_183502_L = true;
         }
 
-        if (this.a())
+        if (this.func_183501_a())
         {
-            this.M.a(this.width, this.height);
-            this.M.initGui();
+            this.field_183503_M.func_183500_a(this.width, this.height);
+            this.field_183503_M.initGui();
         }
     }
 
@@ -322,7 +322,7 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
 
         if (button.id == 14 && this.realmsButton.visible)
         {
-            this.f();
+            this.switchToRealms();
         }
 
         if (button.id == 4)
@@ -347,13 +347,13 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
 
             if (worldinfo != null)
             {
-                GuiYesNo guiyesno = GuiSelectWorld.makeDeleteWorldYesNo(this, worldinfo.getWorldName(), 12);
+                GuiYesNo guiyesno = GuiSelectWorld.func_152129_a(this, worldinfo.getWorldName(), 12);
                 this.mc.displayGuiScreen(guiyesno);
             }
         }
     }
 
-    private void f()
+    private void switchToRealms()
     {
         RealmsBridge realmsbridge = new RealmsBridge();
         realmsbridge.switchToRealms(this);
@@ -466,13 +466,13 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
                 }
 
                 this.mc.getTextureManager().bindTexture(aresourcelocation[l]);
-                worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+                worldrenderer.func_181668_a(7, DefaultVertexFormats.field_181709_i);
                 int i1 = 255 / (k + 1);
                 float f3 = 0.0F;
-                worldrenderer.pos(-1.0D, -1.0D, 1.0D).tex(0.0D, 0.0D).color(255, 255, 255, i1).endVertex();
-                worldrenderer.pos(1.0D, -1.0D, 1.0D).tex(1.0D, 0.0D).color(255, 255, 255, i1).endVertex();
-                worldrenderer.pos(1.0D, 1.0D, 1.0D).tex(1.0D, 1.0D).color(255, 255, 255, i1).endVertex();
-                worldrenderer.pos(-1.0D, 1.0D, 1.0D).tex(0.0D, 1.0D).color(255, 255, 255, i1).endVertex();
+                worldrenderer.func_181662_b(-1.0D, -1.0D, 1.0D).func_181673_a(0.0D, 0.0D).func_181669_b(255, 255, 255, i1).func_181675_d();
+                worldrenderer.func_181662_b(1.0D, -1.0D, 1.0D).func_181673_a(1.0D, 0.0D).func_181669_b(255, 255, 255, i1).func_181675_d();
+                worldrenderer.func_181662_b(1.0D, 1.0D, 1.0D).func_181673_a(1.0D, 1.0D).func_181669_b(255, 255, 255, i1).func_181675_d();
+                worldrenderer.func_181662_b(-1.0D, 1.0D, 1.0D).func_181673_a(0.0D, 1.0D).func_181669_b(255, 255, 255, i1).func_181675_d();
                 tessellator.draw();
                 GlStateManager.popMatrix();
             }
@@ -506,7 +506,7 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
         GlStateManager.colorMask(true, true, true, false);
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+        worldrenderer.func_181668_a(7, DefaultVertexFormats.field_181709_i);
         GlStateManager.disableAlpha();
         int i = 3;
         int j = 3;
@@ -523,10 +523,10 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
             int l = this.width;
             int i1 = this.height;
             float f1 = (float)(k - i / 2) / 256.0F;
-            worldrenderer.pos((double)l, (double)i1, (double)this.zLevel).tex((double)(0.0F + f1), 1.0D).color(1.0F, 1.0F, 1.0F, f).endVertex();
-            worldrenderer.pos((double)l, 0.0D, (double)this.zLevel).tex((double)(1.0F + f1), 1.0D).color(1.0F, 1.0F, 1.0F, f).endVertex();
-            worldrenderer.pos(0.0D, 0.0D, (double)this.zLevel).tex((double)(1.0F + f1), 0.0D).color(1.0F, 1.0F, 1.0F, f).endVertex();
-            worldrenderer.pos(0.0D, (double)i1, (double)this.zLevel).tex((double)(0.0F + f1), 0.0D).color(1.0F, 1.0F, 1.0F, f).endVertex();
+            worldrenderer.func_181662_b((double)l, (double)i1, (double)this.zLevel).func_181673_a((double)(0.0F + f1), 1.0D).func_181666_a(1.0F, 1.0F, 1.0F, f).func_181675_d();
+            worldrenderer.func_181662_b((double)l, 0.0D, (double)this.zLevel).func_181673_a((double)(1.0F + f1), 1.0D).func_181666_a(1.0F, 1.0F, 1.0F, f).func_181675_d();
+            worldrenderer.func_181662_b(0.0D, 0.0D, (double)this.zLevel).func_181673_a((double)(1.0F + f1), 0.0D).func_181666_a(1.0F, 1.0F, 1.0F, f).func_181675_d();
+            worldrenderer.func_181662_b(0.0D, (double)i1, (double)this.zLevel).func_181673_a((double)(0.0F + f1), 0.0D).func_181666_a(1.0F, 1.0F, 1.0F, f).func_181675_d();
         }
 
         tessellator.draw();
@@ -566,11 +566,11 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
         int l = this.height;
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-        worldrenderer.pos(0.0D, (double)l, (double)this.zLevel).tex((double)(0.5F - f), (double)(0.5F + f1)).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
-        worldrenderer.pos((double)k, (double)l, (double)this.zLevel).tex((double)(0.5F - f), (double)(0.5F - f1)).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
-        worldrenderer.pos((double)k, 0.0D, (double)this.zLevel).tex((double)(0.5F + f), (double)(0.5F - f1)).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
-        worldrenderer.pos(0.0D, 0.0D, (double)this.zLevel).tex((double)(0.5F + f), (double)(0.5F + f1)).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
+        worldrenderer.func_181668_a(7, DefaultVertexFormats.field_181709_i);
+        worldrenderer.func_181662_b(0.0D, (double)l, (double)this.zLevel).func_181673_a((double)(0.5F - f), (double)(0.5F + f1)).func_181666_a(1.0F, 1.0F, 1.0F, 1.0F).func_181675_d();
+        worldrenderer.func_181662_b((double)k, (double)l, (double)this.zLevel).func_181673_a((double)(0.5F - f), (double)(0.5F - f1)).func_181666_a(1.0F, 1.0F, 1.0F, 1.0F).func_181675_d();
+        worldrenderer.func_181662_b((double)k, 0.0D, (double)this.zLevel).func_181673_a((double)(0.5F + f), (double)(0.5F - f1)).func_181666_a(1.0F, 1.0F, 1.0F, 1.0F).func_181675_d();
+        worldrenderer.func_181662_b(0.0D, 0.0D, (double)this.zLevel).func_181673_a((double)(0.5F + f), (double)(0.5F + f1)).func_181666_a(1.0F, 1.0F, 1.0F, 1.0F).func_181675_d();
         tessellator.draw();
     }
 
@@ -680,9 +680,9 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        if (this.a())
+        if (this.func_183501_a())
         {
-            this.M.drawScreen(mouseX, mouseY, partialTicks);
+            this.field_183503_M.drawScreen(mouseX, mouseY, partialTicks);
         }
 
         if (this.modUpdateNotification != null)
@@ -708,9 +708,9 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
             }
         }
 
-        if (this.a())
+        if (this.func_183501_a())
         {
-            this.M.mouseClicked(mouseX, mouseY, mouseButton);
+            this.field_183503_M.mouseClicked(mouseX, mouseY, mouseButton);
         }
     }
 
@@ -719,9 +719,9 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback
      */
     public void onGuiClosed()
     {
-        if (this.M != null)
+        if (this.field_183503_M != null)
         {
-            this.M.onGuiClosed();
+            this.field_183503_M.onGuiClosed();
         }
     }
 }

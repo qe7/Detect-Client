@@ -24,37 +24,37 @@ public class ItemCameraTransforms
     public final ItemTransformVec3f firstPerson;
     public final ItemTransformVec3f head;
     public final ItemTransformVec3f gui;
-    public final ItemTransformVec3f ground;
-    public final ItemTransformVec3f fixed;
+    public final ItemTransformVec3f field_181699_o;
+    public final ItemTransformVec3f field_181700_p;
 
     private ItemCameraTransforms()
     {
         this(ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT);
     }
 
-    public ItemCameraTransforms(ItemCameraTransforms transforms)
+    public ItemCameraTransforms(ItemCameraTransforms p_i46443_1_)
     {
-        this.thirdPerson = transforms.thirdPerson;
-        this.firstPerson = transforms.firstPerson;
-        this.head = transforms.head;
-        this.gui = transforms.gui;
-        this.ground = transforms.ground;
-        this.fixed = transforms.fixed;
+        this.thirdPerson = p_i46443_1_.thirdPerson;
+        this.firstPerson = p_i46443_1_.firstPerson;
+        this.head = p_i46443_1_.head;
+        this.gui = p_i46443_1_.gui;
+        this.field_181699_o = p_i46443_1_.field_181699_o;
+        this.field_181700_p = p_i46443_1_.field_181700_p;
     }
 
-    public ItemCameraTransforms(ItemTransformVec3f thirdPersonIn, ItemTransformVec3f firstPersonIn, ItemTransformVec3f headIn, ItemTransformVec3f guiIn, ItemTransformVec3f groundIn, ItemTransformVec3f fixedIn)
+    public ItemCameraTransforms(ItemTransformVec3f p_i46444_1_, ItemTransformVec3f p_i46444_2_, ItemTransformVec3f p_i46444_3_, ItemTransformVec3f p_i46444_4_, ItemTransformVec3f p_i46444_5_, ItemTransformVec3f p_i46444_6_)
     {
-        this.thirdPerson = thirdPersonIn;
-        this.firstPerson = firstPersonIn;
-        this.head = headIn;
-        this.gui = guiIn;
-        this.ground = groundIn;
-        this.fixed = fixedIn;
+        this.thirdPerson = p_i46444_1_;
+        this.firstPerson = p_i46444_2_;
+        this.head = p_i46444_3_;
+        this.gui = p_i46444_4_;
+        this.field_181699_o = p_i46444_5_;
+        this.field_181700_p = p_i46444_6_;
     }
 
-    public void applyTransform(ItemCameraTransforms.TransformType type)
+    public void func_181689_a(ItemCameraTransforms.TransformType p_181689_1_)
     {
-        ItemTransformVec3f itemtransformvec3f = this.getTransform(type);
+        ItemTransformVec3f itemtransformvec3f = this.func_181688_b(p_181689_1_);
 
         if (itemtransformvec3f != ItemTransformVec3f.DEFAULT)
         {
@@ -66,9 +66,9 @@ public class ItemCameraTransforms
         }
     }
 
-    public ItemTransformVec3f getTransform(ItemCameraTransforms.TransformType type)
+    public ItemTransformVec3f func_181688_b(ItemCameraTransforms.TransformType p_181688_1_)
     {
-        switch (type)
+        switch (p_181688_1_)
         {
             case THIRD_PERSON:
                 return this.thirdPerson;
@@ -83,19 +83,19 @@ public class ItemCameraTransforms
                 return this.gui;
 
             case GROUND:
-                return this.ground;
+                return this.field_181699_o;
 
             case FIXED:
-                return this.fixed;
+                return this.field_181700_p;
 
             default:
                 return ItemTransformVec3f.DEFAULT;
         }
     }
 
-    public boolean func_181687_c(ItemCameraTransforms.TransformType type)
+    public boolean func_181687_c(ItemCameraTransforms.TransformType p_181687_1_)
     {
-        return !this.getTransform(type).equals(ItemTransformVec3f.DEFAULT);
+        return !this.func_181688_b(p_181687_1_).equals(ItemTransformVec3f.DEFAULT);
     }
 
     static class Deserializer implements JsonDeserializer<ItemCameraTransforms>

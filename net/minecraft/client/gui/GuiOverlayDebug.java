@@ -28,7 +28,6 @@ import net.minecraft.world.chunk.Chunk;
 import net.optifine.SmartAnimations;
 import net.optifine.TextureAnimations;
 import net.optifine.reflect.Reflector;
-import net.optifine.util.MemoryMonitor;
 import net.optifine.util.NativeMemory;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -38,10 +37,6 @@ public class GuiOverlayDebug extends Gui
     private final Minecraft mc;
     private final FontRenderer fontRenderer;
     private String debugOF = null;
-    private List<String> debugInfoLeft = null;
-    private List<String> debugInfoRight = null;
-    private long updateInfoLeftTimeMs = 0L;
-    private long updateInfoRightTimeMs = 0L;
 
     public GuiOverlayDebug(Minecraft mc)
     {
@@ -57,9 +52,9 @@ public class GuiOverlayDebug extends Gui
         this.renderDebugInfoRight(scaledResolutionIn);
         GlStateManager.popMatrix();
 
-        if (this.mc.gameSettings.lastServer)
+        if (this.mc.gameSettings.field_181657_aC)
         {
-            this.renderLagometer();
+            this.func_181554_e();
         }
 
         this.mc.mcProfiler.endSection();
@@ -72,14 +67,7 @@ public class GuiOverlayDebug extends Gui
 
     protected void renderDebugInfoLeft()
     {
-        List<String> list = this.debugInfoLeft;
-
-        if (list == null || System.currentTimeMillis() > this.updateInfoLeftTimeMs)
-        {
-            list = this.call();
-            this.debugInfoLeft = list;
-            this.updateInfoLeftTimeMs = System.currentTimeMillis() + 100L;
-        }
+        List<String> list = this.call();
 
         for (int i = 0; i < list.size(); ++i)
         {
@@ -97,16 +85,9 @@ public class GuiOverlayDebug extends Gui
         }
     }
 
-    protected void renderDebugInfoRight(ScaledResolution scaledRes)
+    protected void renderDebugInfoRight(ScaledResolution p_175239_1_)
     {
-        List<String> list = this.debugInfoRight;
-
-        if (list == null || System.currentTimeMillis() > this.updateInfoRightTimeMs)
-        {
-            list = this.getDebugInfoRight();
-            this.debugInfoRight = list;
-            this.updateInfoRightTimeMs = System.currentTimeMillis() + 100L;
-        }
+        List<String> list = this.getDebugInfoRight();
 
         for (int i = 0; i < list.size(); ++i)
         {
@@ -116,7 +97,7 @@ public class GuiOverlayDebug extends Gui
             {
                 int j = this.fontRenderer.FONT_HEIGHT;
                 int k = this.fontRenderer.getStringWidth(s);
-                int l = scaledRes.getScaledWidth() - 2 - k;
+                int l = p_175239_1_.getScaledWidth() - 2 - k;
                 int i1 = 2 + j * i;
                 drawRect(l - 1, i1 - 1, l + k + 1, i1 + j - 1, -1873784752);
                 this.fontRenderer.drawString(s, l, i1, 14737632);
@@ -263,12 +244,11 @@ public class GuiOverlayDebug extends Gui
         long j = Runtime.getRuntime().totalMemory();
         long k = Runtime.getRuntime().freeMemory();
         long l = j - k;
-        List<String> list = Lists.newArrayList(new String[] {String.format("Java: %s %dbit", new Object[]{System.getProperty("java.version"), Integer.valueOf(this.mc.isJava64bit() ? 64 : 32)}), String.format("Mem: % 2d%% %03d/%03dMB", new Object[]{Long.valueOf(l * 100L / i), Long.valueOf(bytesToMb(l)), Long.valueOf(bytesToMb(i))}), String.format("Allocated: % 2d%% %03dMB", new Object[]{Long.valueOf(j * 100L / i), Long.valueOf(bytesToMb(j))}), "", String.format("CPU: %s", new Object[]{OpenGlHelper.getCpu()}), "", String.format("Display: %dx%d (%s)", new Object[]{Integer.valueOf(Display.getWidth()), Integer.valueOf(Display.getHeight()), GL11.glGetString(GL11.GL_VENDOR)}), GL11.glGetString(GL11.GL_RENDERER), GL11.glGetString(GL11.GL_VERSION)});
+        List<String> list = Lists.newArrayList(new String[] {String.format("Java: %s %dbit", new Object[]{System.getProperty("java.version"), Integer.valueOf(this.mc.isJava64bit() ? 64 : 32)}), String.format("Mem: % 2d%% %03d/%03dMB", new Object[]{Long.valueOf(l * 100L / i), Long.valueOf(bytesToMb(l)), Long.valueOf(bytesToMb(i))}), String.format("Allocated: % 2d%% %03dMB", new Object[]{Long.valueOf(j * 100L / i), Long.valueOf(bytesToMb(j))}), "", String.format("CPU: %s", new Object[]{OpenGlHelper.func_183029_j()}), "", String.format("Display: %dx%d (%s)", new Object[]{Integer.valueOf(Display.getWidth()), Integer.valueOf(Display.getHeight()), GL11.glGetString(GL11.GL_VENDOR)}), GL11.glGetString(GL11.GL_RENDERER), GL11.glGetString(GL11.GL_VERSION)});
         long i1 = NativeMemory.getBufferAllocated();
         long j1 = NativeMemory.getBufferMaximum();
         String s = "Native: " + bytesToMb(i1) + "/" + bytesToMb(j1) + "MB";
         list.add(4, s);
-        list.set(5, "GC: " + MemoryMonitor.getAllocationRateMb() + "MB/s");
 
         if (Reflector.FMLCommonHandler_getBrandings.exists())
         {
@@ -317,16 +297,16 @@ public class GuiOverlayDebug extends Gui
         }
     }
 
-    private void renderLagometer()
+    private void func_181554_e()
     {
     }
 
-    private int getFrameColor(int p_181552_1_, int p_181552_2_, int p_181552_3_, int p_181552_4_)
+    private int func_181552_c(int p_181552_1_, int p_181552_2_, int p_181552_3_, int p_181552_4_)
     {
-        return p_181552_1_ < p_181552_3_ ? this.blendColors(-16711936, -256, (float)p_181552_1_ / (float)p_181552_3_) : this.blendColors(-256, -65536, (float)(p_181552_1_ - p_181552_3_) / (float)(p_181552_4_ - p_181552_3_));
+        return p_181552_1_ < p_181552_3_ ? this.func_181553_a(-16711936, -256, (float)p_181552_1_ / (float)p_181552_3_) : this.func_181553_a(-256, -65536, (float)(p_181552_1_ - p_181552_3_) / (float)(p_181552_4_ - p_181552_3_));
     }
 
-    private int blendColors(int p_181553_1_, int p_181553_2_, float p_181553_3_)
+    private int func_181553_a(int p_181553_1_, int p_181553_2_, float p_181553_3_)
     {
         int i = p_181553_1_ >> 24 & 255;
         int j = p_181553_1_ >> 16 & 255;

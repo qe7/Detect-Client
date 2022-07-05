@@ -42,6 +42,7 @@ import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.ResourcePackRepository;
+import net.minecraft.client.resources.ResourcePackRepository.Entry;
 import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.BlockPos;
@@ -80,8 +81,8 @@ public class Config
     public static final String OF_NAME = "OptiFine";
     public static final String MC_VERSION = "1.8.9";
     public static final String OF_EDITION = "HD_U";
-    public static final String OF_RELEASE = "M5";
-    public static final String VERSION = "OptiFine_1.8.9_HD_U_M5";
+    public static final String OF_RELEASE = "L5";
+    public static final String VERSION = "OptiFine_1.8.9_HD_U_L5";
     private static String build = null;
     private static String newRelease = null;
     private static boolean notify64BitJava = false;
@@ -103,7 +104,6 @@ public class Config
     private static int antialiasingLevel = 0;
     private static int availableProcessors = 0;
     public static boolean zoomMode = false;
-    public static boolean zoomSmoothCamera = false;
     private static int texturePackClouds = 0;
     public static boolean waterOpacityChanged = false;
     private static boolean fullscreenModeChecked = false;
@@ -118,7 +118,7 @@ public class Config
 
     public static String getVersion()
     {
-        return "OptiFine_1.8.9_HD_U_M5";
+        return "OptiFine_1.8.9_HD_U_L5";
     }
 
     public static String getVersionDebug()
@@ -132,7 +132,7 @@ public class Config
             stringbuffer.append(", ");
         }
 
-        stringbuffer.append("OptiFine_1.8.9_HD_U_M5");
+        stringbuffer.append("OptiFine_1.8.9_HD_U_L5");
         String s = Shaders.getShaderPackName();
 
         if (s != null)
@@ -984,9 +984,9 @@ public class Config
         List list = resourcepackrepository.getRepositoryEntries();
         List list1 = new ArrayList();
 
-        for (Object resourcepackrepository$entry0 : list)
+        for (Object e: list)
         {
-            ResourcePackRepository.Entry resourcepackrepository$entry = (ResourcePackRepository.Entry) resourcepackrepository$entry0;
+            ResourcePackRepository.Entry resourcepackrepository$entry = (Entry) e;
             list1.add(resourcepackrepository$entry.getResourcePack());
         }
 
@@ -2166,10 +2166,10 @@ public class Config
         else
         {
             mcDebugLast = minecraft.debug;
-            FrameTimer frametimer = minecraft.getFrameTimer();
-            long[] along = frametimer.getFrames();
-            int i = frametimer.getIndex();
-            int j = frametimer.getLastIndex();
+            FrameTimer frametimer = minecraft.func_181539_aj();
+            long[] along = frametimer.func_181746_c();
+            int i = frametimer.func_181750_b();
+            int j = frametimer.func_181749_a();
 
             if (i == j)
             {
@@ -2505,13 +2505,5 @@ public class Config
     public static boolean isQuadsToTriangles()
     {
         return !isShaders() ? false : !Shaders.canRenderQuads();
-    }
-
-    public static void checkNull(Object p_checkNull_0_, String p_checkNull_1_) throws NullPointerException
-    {
-        if (p_checkNull_0_ == null)
-        {
-            throw new NullPointerException(p_checkNull_1_);
-        }
     }
 }

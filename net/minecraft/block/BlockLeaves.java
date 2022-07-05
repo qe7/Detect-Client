@@ -108,7 +108,7 @@ public abstract class BlockLeaves extends BlockLeavesBase
                         {
                             for (int k2 = -i; k2 <= i; ++k2)
                             {
-                                Block block = worldIn.getBlockState(blockpos$mutableblockpos.set(k + i2, l + j2, i1 + k2)).getBlock();
+                                Block block = worldIn.getBlockState(blockpos$mutableblockpos.func_181079_c(k + i2, l + j2, i1 + k2)).getBlock();
 
                                 if (block != Blocks.log && block != Blocks.log2)
                                 {
@@ -191,7 +191,7 @@ public abstract class BlockLeaves extends BlockLeavesBase
 
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
-        if (worldIn.isRainingAt(pos.up()) && !World.doesBlockHaveSolidTopSurface(worldIn, pos.down()) && rand.nextInt(15) == 1)
+        if (worldIn.canLightningStrike(pos.up()) && !World.doesBlockHaveSolidTopSurface(worldIn, pos.down()) && rand.nextInt(15) == 1)
         {
             double d0 = (double)((float)pos.getX() + rand.nextFloat());
             double d1 = (double)pos.getY() - 0.05D;
@@ -216,6 +216,8 @@ public abstract class BlockLeaves extends BlockLeavesBase
 
     /**
      * Get the Item that this Block should drop when harvested.
+     *  
+     * @param fortune the level of the Fortune enchantment on the player's tool
      */
     public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
@@ -224,6 +226,9 @@ public abstract class BlockLeaves extends BlockLeavesBase
 
     /**
      * Spawns this Block's drops into the World as EntityItems.
+     *  
+     * @param chance The chance that each Item is actually spawned (1.0 = always, 0.0 = never)
+     * @param fortune The player's fortune level
      */
     public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune)
     {

@@ -35,7 +35,6 @@ public class FontUtils
 
                 Config.log("Loading " + s2);
                 properties.load(inputstream);
-                inputstream.close();
             }
             catch (FileNotFoundException var7)
             {
@@ -52,9 +51,9 @@ public class FontUtils
 
     public static void readCustomCharWidths(Properties props, float[] charWidth)
     {
-        for (Object s0 : props.keySet())
+        for (Object e : props.keySet())
         {
-            String s = (String) s0;
+            String s = (String) e;
             String s1 = "width.";
 
             if (s.startsWith(s1))

@@ -102,7 +102,7 @@ public class GuiVideoSettings extends GuiScreenOF
     {
         if (p_actionPerformed_1_.enabled)
         {
-            int i = this.guiGameSettings.particleSetting;
+            int i = this.guiGameSettings.guiScale;
 
             if (p_actionPerformed_1_.id < 200 && p_actionPerformed_1_ instanceof GuiOptionButton)
             {
@@ -116,7 +116,7 @@ public class GuiVideoSettings extends GuiScreenOF
                 this.mc.displayGuiScreen(this.parentGuiScreen);
             }
 
-            if (this.guiGameSettings.particleSetting != i)
+            if (this.guiGameSettings.guiScale != i)
             {
                 ScaledResolution scaledresolution = new ScaledResolution(this.mc);
                 int j = scaledresolution.getScaledWidth();
@@ -204,17 +204,17 @@ public class GuiVideoSettings extends GuiScreenOF
 
         if (s1.equals("HD"))
         {
-            s = "OptiFine HD M5";
+            s = "OptiFine HD L5";
         }
 
         if (s1.equals("HD_U"))
         {
-            s = "OptiFine HD M5 Ultra";
+            s = "OptiFine HD L5 Ultra";
         }
 
         if (s1.equals("L"))
         {
-            s = "OptiFine M5 Light";
+            s = "OptiFine L5 Light";
         }
 
         this.drawString(this.fontRendererObj, s, 2, this.height - 10, 8421504);

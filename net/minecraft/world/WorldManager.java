@@ -17,13 +17,13 @@ public class WorldManager implements IWorldAccess
     /** The WorldServer object. */
     private WorldServer theWorldServer;
 
-    public WorldManager(MinecraftServer mcServerIn, WorldServer worldServerIn)
+    public WorldManager(MinecraftServer p_i1517_1_, WorldServer p_i1517_2_)
     {
-        this.mcServer = mcServerIn;
-        this.theWorldServer = worldServerIn;
+        this.mcServer = p_i1517_1_;
+        this.theWorldServer = p_i1517_2_;
     }
 
-    public void spawnParticle(int particleID, boolean ignoreRange, double xCoord, double yCoord, double zCoord, double xOffset, double yOffset, double zOffset, int... parameters)
+    public void spawnParticle(int particleID, boolean ignoreRange, double xCoord, double yCoord, double zCoord, double xOffset, double yOffset, double zOffset, int... p_180442_15_)
     {
     }
 
@@ -83,19 +83,19 @@ public class WorldManager implements IWorldAccess
     {
     }
 
-    public void playAuxSFX(EntityPlayer player, int sfxType, BlockPos blockPosIn, int data)
+    public void playAuxSFX(EntityPlayer player, int sfxType, BlockPos blockPosIn, int p_180439_4_)
     {
-        this.mcServer.getConfigurationManager().sendToAllNearExcept(player, (double)blockPosIn.getX(), (double)blockPosIn.getY(), (double)blockPosIn.getZ(), 64.0D, this.theWorldServer.provider.getDimensionId(), new S28PacketEffect(sfxType, blockPosIn, data, false));
+        this.mcServer.getConfigurationManager().sendToAllNearExcept(player, (double)blockPosIn.getX(), (double)blockPosIn.getY(), (double)blockPosIn.getZ(), 64.0D, this.theWorldServer.provider.getDimensionId(), new S28PacketEffect(sfxType, blockPosIn, p_180439_4_, false));
     }
 
-    public void broadcastSound(int soundID, BlockPos pos, int data)
+    public void broadcastSound(int p_180440_1_, BlockPos p_180440_2_, int p_180440_3_)
     {
-        this.mcServer.getConfigurationManager().sendPacketToAllPlayers(new S28PacketEffect(soundID, pos, data, true));
+        this.mcServer.getConfigurationManager().sendPacketToAllPlayers(new S28PacketEffect(p_180440_1_, p_180440_2_, p_180440_3_, true));
     }
 
     public void sendBlockBreakProgress(int breakerId, BlockPos pos, int progress)
     {
-        for (EntityPlayerMP entityplayermp : this.mcServer.getConfigurationManager().getPlayerList())
+        for (EntityPlayerMP entityplayermp : this.mcServer.getConfigurationManager().func_181057_v())
         {
             if (entityplayermp != null && entityplayermp.worldObj == this.theWorldServer && entityplayermp.getEntityId() != breakerId)
             {

@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 public class WorldVertexBufferUploader
 {
     @SuppressWarnings("incomplete-switch")
-    public void draw(WorldRenderer p_181679_1_)
+    public void func_181679_a(WorldRenderer p_181679_1_)
     {
         if (p_181679_1_.getVertexCount() > 0)
         {
@@ -41,7 +41,7 @@ public class WorldVertexBufferUploader
                 {
                     int k = vertexformatelement.getType().getGlConstant();
                     int l = vertexformatelement.getIndex();
-                    bytebuffer.position(vertexformat.getOffset(j));
+                    bytebuffer.position(vertexformat.func_181720_d(j));
 
                     switch (vertexformatelement$enumusage)
                     {

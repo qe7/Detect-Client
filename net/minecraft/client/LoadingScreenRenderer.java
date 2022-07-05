@@ -28,9 +28,7 @@ public class LoadingScreenRenderer implements IProgressUpdate
 
     /** The system's time represented in milliseconds. */
     private long systemTime = Minecraft.getSystemTime();
-
-    /** True if the loading ended with a success */
-    private boolean loadingSuccess;
+    private boolean field_73724_e;
     private ScaledResolution scaledResolution;
     private Framebuffer framebuffer;
 
@@ -48,7 +46,7 @@ public class LoadingScreenRenderer implements IProgressUpdate
      */
     public void resetProgressAndMessage(String message)
     {
-        this.loadingSuccess = false;
+        this.field_73724_e = false;
         this.displayString(message);
     }
 
@@ -57,7 +55,7 @@ public class LoadingScreenRenderer implements IProgressUpdate
      */
     public void displaySavingString(String message)
     {
-        this.loadingSuccess = true;
+        this.field_73724_e = true;
         this.displayString(message);
     }
 
@@ -67,7 +65,7 @@ public class LoadingScreenRenderer implements IProgressUpdate
 
         if (!this.mc.running)
         {
-            if (!this.loadingSuccess)
+            if (!this.field_73724_e)
             {
                 throw new MinecraftError();
             }
@@ -102,7 +100,7 @@ public class LoadingScreenRenderer implements IProgressUpdate
     {
         if (!this.mc.running)
         {
-            if (!this.loadingSuccess)
+            if (!this.field_73724_e)
             {
                 throw new MinecraftError();
             }
@@ -123,7 +121,7 @@ public class LoadingScreenRenderer implements IProgressUpdate
     {
         if (!this.mc.running)
         {
-            if (!this.loadingSuccess)
+            if (!this.field_73724_e)
             {
                 throw new MinecraftError();
             }
@@ -188,11 +186,11 @@ public class LoadingScreenRenderer implements IProgressUpdate
                     {
                         this.mc.getTextureManager().bindTexture(Gui.optionsBackground);
                         float f = 32.0F;
-                        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-                        worldrenderer.pos(0.0D, (double)l, 0.0D).tex(0.0D, (double)((float)l / f)).color(64, 64, 64, 255).endVertex();
-                        worldrenderer.pos((double)k, (double)l, 0.0D).tex((double)((float)k / f), (double)((float)l / f)).color(64, 64, 64, 255).endVertex();
-                        worldrenderer.pos((double)k, 0.0D, 0.0D).tex((double)((float)k / f), 0.0D).color(64, 64, 64, 255).endVertex();
-                        worldrenderer.pos(0.0D, 0.0D, 0.0D).tex(0.0D, 0.0D).color(64, 64, 64, 255).endVertex();
+                        worldrenderer.func_181668_a(7, DefaultVertexFormats.field_181709_i);
+                        worldrenderer.func_181662_b(0.0D, (double)l, 0.0D).func_181673_a(0.0D, (double)((float)l / f)).func_181669_b(64, 64, 64, 255).func_181675_d();
+                        worldrenderer.func_181662_b((double)k, (double)l, 0.0D).func_181673_a((double)((float)k / f), (double)((float)l / f)).func_181669_b(64, 64, 64, 255).func_181675_d();
+                        worldrenderer.func_181662_b((double)k, 0.0D, 0.0D).func_181673_a((double)((float)k / f), 0.0D).func_181669_b(64, 64, 64, 255).func_181675_d();
+                        worldrenderer.func_181662_b(0.0D, 0.0D, 0.0D).func_181673_a(0.0D, 0.0D).func_181669_b(64, 64, 64, 255).func_181675_d();
                         tessellator.draw();
                     }
 
@@ -203,15 +201,15 @@ public class LoadingScreenRenderer implements IProgressUpdate
                         int j1 = k / 2 - l1 / 2;
                         int k1 = l / 2 + 16;
                         GlStateManager.disableTexture2D();
-                        worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-                        worldrenderer.pos((double)j1, (double)k1, 0.0D).color(128, 128, 128, 255).endVertex();
-                        worldrenderer.pos((double)j1, (double)(k1 + i1), 0.0D).color(128, 128, 128, 255).endVertex();
-                        worldrenderer.pos((double)(j1 + l1), (double)(k1 + i1), 0.0D).color(128, 128, 128, 255).endVertex();
-                        worldrenderer.pos((double)(j1 + l1), (double)k1, 0.0D).color(128, 128, 128, 255).endVertex();
-                        worldrenderer.pos((double)j1, (double)k1, 0.0D).color(128, 255, 128, 255).endVertex();
-                        worldrenderer.pos((double)j1, (double)(k1 + i1), 0.0D).color(128, 255, 128, 255).endVertex();
-                        worldrenderer.pos((double)(j1 + progress), (double)(k1 + i1), 0.0D).color(128, 255, 128, 255).endVertex();
-                        worldrenderer.pos((double)(j1 + progress), (double)k1, 0.0D).color(128, 255, 128, 255).endVertex();
+                        worldrenderer.func_181668_a(7, DefaultVertexFormats.field_181706_f);
+                        worldrenderer.func_181662_b((double)j1, (double)k1, 0.0D).func_181669_b(128, 128, 128, 255).func_181675_d();
+                        worldrenderer.func_181662_b((double)j1, (double)(k1 + i1), 0.0D).func_181669_b(128, 128, 128, 255).func_181675_d();
+                        worldrenderer.func_181662_b((double)(j1 + l1), (double)(k1 + i1), 0.0D).func_181669_b(128, 128, 128, 255).func_181675_d();
+                        worldrenderer.func_181662_b((double)(j1 + l1), (double)k1, 0.0D).func_181669_b(128, 128, 128, 255).func_181675_d();
+                        worldrenderer.func_181662_b((double)j1, (double)k1, 0.0D).func_181669_b(128, 255, 128, 255).func_181675_d();
+                        worldrenderer.func_181662_b((double)j1, (double)(k1 + i1), 0.0D).func_181669_b(128, 255, 128, 255).func_181675_d();
+                        worldrenderer.func_181662_b((double)(j1 + progress), (double)(k1 + i1), 0.0D).func_181669_b(128, 255, 128, 255).func_181675_d();
+                        worldrenderer.func_181662_b((double)(j1 + progress), (double)k1, 0.0D).func_181669_b(128, 255, 128, 255).func_181675_d();
                         tessellator.draw();
                         GlStateManager.enableTexture2D();
                     }

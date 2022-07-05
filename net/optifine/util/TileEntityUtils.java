@@ -32,7 +32,7 @@ public class TileEntityUtils
         {
             IWorldNameable iworldnameable = (IWorldNameable)te;
             updateTileEntityName(te);
-            return !iworldnameable.hasCustomName() ? null : iworldnameable.getName();
+            return !iworldnameable.hasCustomName() ? null : iworldnameable.getCommandSenderName();
         }
     }
 
@@ -81,7 +81,7 @@ public class TileEntityUtils
 
                 if (iworldnameable.hasCustomName())
                 {
-                    return iworldnameable.getName();
+                    return iworldnameable.getCommandSenderName();
                 }
             }
 

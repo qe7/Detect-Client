@@ -118,7 +118,6 @@ public class TextureAnimations
                     InputStream inputstream = rp.getInputStream(resourcelocation);
                     Properties properties = new PropertiesOrdered();
                     properties.load(inputstream);
-                    inputstream.close();
                     TextureAnimation textureanimation = makeTextureAnimation(properties, resourcelocation);
 
                     if (textureanimation != null)

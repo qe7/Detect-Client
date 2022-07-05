@@ -77,6 +77,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.Item;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.src.Config;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBeacon;
 import net.minecraft.tileentity.TileEntityBrewingStand;
@@ -94,14 +95,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.property.IUnlistedProperty;
-import net.optifine.Log;
-import net.optifine.util.ArrayUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class Reflector
 {
-    private static final Logger LOGGER = LogManager.getLogger();
     private static boolean logForge = logEntry("*** Reflector Forge ***");
     public static ReflectorClass BetterFoliageClient = new ReflectorClass("mods.betterfoliage.client.BetterFoliageClient");
     public static ReflectorClass BlamingTransformer = new ReflectorClass("net.minecraftforge.fml.common.asm.transformers.BlamingTransformer");
@@ -275,10 +271,10 @@ public class Reflector
     public static ReflectorField ModelLoader_stateModels = new ReflectorField(ModelLoader, "stateModels");
     public static ReflectorMethod ModelLoader_onRegisterItems = new ReflectorMethod(ModelLoader, "onRegisterItems");
     public static ReflectorMethod ModelLoader_getInventoryVariant = new ReflectorMethod(ModelLoader, "getInventoryVariant");
-    public static ReflectorField ModelLoader_textures = new ReflectorField(ModelLoader, "textures");
-    public static ReflectorClass ModelLoader_VanillaLoader = new ReflectorClass("net.minecraftforge.client.model.ModelLoader$VanillaLoader");
-    public static ReflectorField ModelLoader_VanillaLoader_INSTANCE = new ReflectorField(ModelLoader_VanillaLoader, "instance");
-    public static ReflectorMethod ModelLoader_VanillaLoader_loadModel = new ReflectorMethod(ModelLoader_VanillaLoader, "loadModel");
+    public static ReflectorField ModelLoader_textures = new ReflectorField(ModelLoader, "textures", true);
+    public static ReflectorClass ModelLoader_VanillaLoader = new ReflectorClass("net.minecraftforge.client.model.ModelLoader$VanillaLoader", true);
+    public static ReflectorField ModelLoader_VanillaLoader_INSTANCE = new ReflectorField(ModelLoader_VanillaLoader, "instance", true);
+    public static ReflectorMethod ModelLoader_VanillaLoader_loadModel = new ReflectorMethod(ModelLoader_VanillaLoader, "loadModel", (Class[])null, true);
     public static ReflectorClass RenderBlockOverlayEvent_OverlayType = new ReflectorClass("net.minecraftforge.client.event.RenderBlockOverlayEvent$OverlayType");
     public static ReflectorField RenderBlockOverlayEvent_OverlayType_BLOCK = new ReflectorField(RenderBlockOverlayEvent_OverlayType, "BLOCK");
     public static ReflectorClass RenderingRegistry = new ReflectorClass("net.minecraftforge.fml.client.registry.RenderingRegistry");
@@ -746,7 +742,7 @@ public class Reflector
         }
         catch (Throwable throwable)
         {
-            Log.error("", throwable);
+            throwable.printStackTrace();
             return null;
         }
     }
@@ -769,7 +765,7 @@ public class Reflector
         }
         catch (Throwable throwable)
         {
-            Log.error("", throwable);
+            throwable.printStackTrace();
             return def;
         }
     }
@@ -792,7 +788,7 @@ public class Reflector
         }
         catch (Throwable throwable)
         {
-            Log.error("", throwable);
+            throwable.printStackTrace();
             return def;
         }
     }
@@ -827,7 +823,7 @@ public class Reflector
         }
         catch (Throwable throwable)
         {
-            Log.error("", throwable);
+            throwable.printStackTrace();
             return def;
         }
     }
@@ -850,7 +846,7 @@ public class Reflector
         }
         catch (Throwable throwable)
         {
-            Log.error("", throwable);
+            throwable.printStackTrace();
             return def;
         }
     }
@@ -873,7 +869,7 @@ public class Reflector
         }
         catch (Throwable throwable)
         {
-            Log.error("", throwable);
+            throwable.printStackTrace();
             return def;
         }
     }
@@ -901,7 +897,7 @@ public class Reflector
         }
         catch (Throwable throwable)
         {
-            Log.error("", throwable);
+            throwable.printStackTrace();
             return false;
         }
     }
@@ -929,7 +925,7 @@ public class Reflector
         }
         catch (Throwable throwable)
         {
-            Log.error("", throwable);
+            throwable.printStackTrace();
             return false;
         }
     }
@@ -1028,7 +1024,7 @@ public class Reflector
             s2 = " static";
         }
 
-        Log.dbg(callType + s2 + " " + s + "." + s1 + "(" + ArrayUtils.arrayToString(params) + ") => " + retVal);
+        Config.dbg(callType + s2 + " " + s + "." + s1 + "(" + Config.arrayToString(params) + ") => " + retVal);
     }
 
     private static void dbgCallVoid(boolean isStatic, String callType, ReflectorMethod refMethod, Object[] params)
@@ -1042,7 +1038,7 @@ public class Reflector
             s2 = " static";
         }
 
-        Log.dbg(callType + s2 + " " + s + "." + s1 + "(" + ArrayUtils.arrayToString(params) + ")");
+        Config.dbg(callType + s2 + " " + s + "." + s1 + "(" + Config.arrayToString(params) + ")");
     }
 
     private static void dbgFieldValue(boolean isStatic, String accessType, ReflectorField refField, Object val)
@@ -1056,7 +1052,7 @@ public class Reflector
             s2 = " static";
         }
 
-        Log.dbg(accessType + s2 + " " + s + "." + s1 + " => " + val);
+        Config.dbg(accessType + s2 + " " + s + "." + s1 + " => " + val);
     }
 
     private static void handleException(Throwable e, Object obj, ReflectorMethod refMethod, Object[] params)
@@ -1072,25 +1068,24 @@ public class Reflector
             }
             else
             {
-                Log.error("", e);
+                e.printStackTrace();
             }
         }
         else
         {
-            Log.warn("*** Exception outside of method ***");
-            Log.warn("Method deactivated: " + refMethod.getTargetMethod());
-            refMethod.deactivate();
-
             if (e instanceof IllegalArgumentException)
             {
-                Log.warn("*** IllegalArgumentException ***");
-                Log.warn("Method: " + refMethod.getTargetMethod());
-                Log.warn("Object: " + obj);
-                Log.warn("Parameter classes: " + ArrayUtils.arrayToString(getClasses(params)));
-                Log.warn("Parameters: " + ArrayUtils.arrayToString(params));
+                Config.warn("*** IllegalArgumentException ***");
+                Config.warn("Method: " + refMethod.getTargetMethod());
+                Config.warn("Object: " + obj);
+                Config.warn("Parameter classes: " + Config.arrayToString(getClasses(params)));
+                Config.warn("Parameters: " + Config.arrayToString(params));
             }
 
-            Log.warn("", e);
+            Config.warn("*** Exception outside of method ***");
+            Config.warn("Method deactivated: " + refMethod.getTargetMethod());
+            refMethod.deactivate();
+            e.printStackTrace();
         }
     }
 
@@ -1098,23 +1093,22 @@ public class Reflector
     {
         if (e instanceof InvocationTargetException)
         {
-            Log.error("", e);
+            e.printStackTrace();
         }
         else
         {
-            Log.warn("*** Exception outside of constructor ***");
-            Log.warn("Constructor deactivated: " + refConstr.getTargetConstructor());
-            refConstr.deactivate();
-
             if (e instanceof IllegalArgumentException)
             {
-                Log.warn("*** IllegalArgumentException ***");
-                Log.warn("Constructor: " + refConstr.getTargetConstructor());
-                Log.warn("Parameter classes: " + ArrayUtils.arrayToString(getClasses(params)));
-                Log.warn("Parameters: " + ArrayUtils.arrayToString(params));
+                Config.warn("*** IllegalArgumentException ***");
+                Config.warn("Constructor: " + refConstr.getTargetConstructor());
+                Config.warn("Parameter classes: " + Config.arrayToString(getClasses(params)));
+                Config.warn("Parameters: " + Config.arrayToString(params));
             }
 
-            Log.warn("", e);
+            Config.warn("*** Exception outside of constructor ***");
+            Config.warn("Constructor deactivated: " + refConstr.getTargetConstructor());
+            refConstr.deactivate();
+            e.printStackTrace();
         }
     }
 
@@ -1156,20 +1150,7 @@ public class Reflector
 
     private static boolean logEntry(String str)
     {
-        LOGGER.info("[OptiFine] " + str);
-        return true;
-    }
-
-    private static boolean registerResolvable(final String str)
-    {
-        IResolvable iresolvable = new IResolvable()
-        {
-            public void resolve()
-            {
-                Reflector.LOGGER.info("[OptiFine] " + str);
-            }
-        };
-        ReflectorResolver.register(iresolvable);
+        Config.dbg(str);
         return true;
     }
 }

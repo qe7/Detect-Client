@@ -6,6 +6,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 public class Property
 {
+    private int[] values = null;
     private int defaultValue = 0;
     private String propertyName = null;
     private String[] propertyValues = null;
@@ -58,29 +59,13 @@ public class Property
         }
     }
 
-    public void nextValue(boolean forward)
+    public void nextValue()
     {
-        int i = 0;
-        int j = this.propertyValues.length - 1;
-        this.value = Config.limit(this.value, i, j);
+        ++this.value;
 
-        if (forward)
+        if (this.value < 0 || this.value >= this.propertyValues.length)
         {
-            ++this.value;
-
-            if (this.value > j)
-            {
-                this.value = i;
-            }
-        }
-        else
-        {
-            --this.value;
-
-            if (this.value < i)
-            {
-                this.value = j;
-            }
+            this.value = 0;
         }
     }
 

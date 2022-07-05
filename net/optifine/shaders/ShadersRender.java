@@ -201,8 +201,8 @@ public class ShadersRender
             RenderGlobal renderglobal = minecraft.renderGlobal;
             Shaders.isShadowPass = true;
             Shaders.shadowPassCounter = Shaders.shadowPassInterval;
-            Shaders.preShadowPassThirdPersonView = minecraft.gameSettings.showDebugInfo;
-            minecraft.gameSettings.showDebugInfo = 1;
+            Shaders.preShadowPassThirdPersonView = minecraft.gameSettings.thirdPersonView;
+            minecraft.gameSettings.thirdPersonView = 1;
             Shaders.checkGLError("pre shadow");
             GL11.glMatrixMode(GL11.GL_PROJECTION);
             GL11.glPushMatrix();
@@ -331,7 +331,7 @@ public class ShadersRender
             GL11.glFlush();
             Shaders.checkGLError("shadow flush");
             Shaders.isShadowPass = false;
-            minecraft.gameSettings.showDebugInfo = Shaders.preShadowPassThirdPersonView;
+            minecraft.gameSettings.thirdPersonView = Shaders.preShadowPassThirdPersonView;
             minecraft.mcProfiler.endStartSection("shadow postprocess");
 
             if (Shaders.hasGlGenMipmap)
@@ -499,7 +499,7 @@ public class ShadersRender
             Config.getTextureManager().bindTexture(END_PORTAL_TEXTURE);
             Tessellator tessellator = Tessellator.getInstance();
             WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-            worldrenderer.begin(7, DefaultVertexFormats.BLOCK);
+            worldrenderer.func_181668_a(7, DefaultVertexFormats.BLOCK);
             float f = 0.5F;
             float f1 = f * 0.15F;
             float f2 = f * 0.3F;
@@ -508,10 +508,10 @@ public class ShadersRender
             float f5 = 0.2F;
             float f6 = (float)(System.currentTimeMillis() % 100000L) / 100000.0F;
             int i = 240;
-            worldrenderer.pos(x, y + (double)offset, z + 1.0D).color(f1, f2, f3, 1.0F).tex((double)(f4 + f6), (double)(f4 + f6)).lightmap(i, i).endVertex();
-            worldrenderer.pos(x + 1.0D, y + (double)offset, z + 1.0D).color(f1, f2, f3, 1.0F).tex((double)(f4 + f6), (double)(f5 + f6)).lightmap(i, i).endVertex();
-            worldrenderer.pos(x + 1.0D, y + (double)offset, z).color(f1, f2, f3, 1.0F).tex((double)(f5 + f6), (double)(f5 + f6)).lightmap(i, i).endVertex();
-            worldrenderer.pos(x, y + (double)offset, z).color(f1, f2, f3, 1.0F).tex((double)(f5 + f6), (double)(f4 + f6)).lightmap(i, i).endVertex();
+            worldrenderer.func_181662_b(x, y + (double)offset, z + 1.0D).func_181666_a(f1, f2, f3, 1.0F).func_181673_a((double)(f4 + f6), (double)(f4 + f6)).func_181671_a(i, i).func_181675_d();
+            worldrenderer.func_181662_b(x + 1.0D, y + (double)offset, z + 1.0D).func_181666_a(f1, f2, f3, 1.0F).func_181673_a((double)(f4 + f6), (double)(f5 + f6)).func_181671_a(i, i).func_181675_d();
+            worldrenderer.func_181662_b(x + 1.0D, y + (double)offset, z).func_181666_a(f1, f2, f3, 1.0F).func_181673_a((double)(f5 + f6), (double)(f5 + f6)).func_181671_a(i, i).func_181675_d();
+            worldrenderer.func_181662_b(x, y + (double)offset, z).func_181666_a(f1, f2, f3, 1.0F).func_181673_a((double)(f5 + f6), (double)(f4 + f6)).func_181671_a(i, i).func_181675_d();
             tessellator.draw();
             GlStateManager.enableLighting();
             return true;

@@ -43,20 +43,20 @@ public class BlockOldLog extends BlockLog
                 {
                     case OAK:
                     default:
-                        return BlockPlanks.EnumType.SPRUCE.getMapColor();
+                        return BlockPlanks.EnumType.SPRUCE.func_181070_c();
 
                     case SPRUCE:
-                        return BlockPlanks.EnumType.DARK_OAK.getMapColor();
+                        return BlockPlanks.EnumType.DARK_OAK.func_181070_c();
 
                     case BIRCH:
                         return MapColor.quartzColor;
 
                     case JUNGLE:
-                        return BlockPlanks.EnumType.SPRUCE.getMapColor();
+                        return BlockPlanks.EnumType.SPRUCE.func_181070_c();
                 }
 
             case Y:
-                return blockplanks$enumtype.getMapColor();
+                return blockplanks$enumtype.func_181070_c();
         }
     }
 

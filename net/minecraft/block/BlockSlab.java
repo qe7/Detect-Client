@@ -83,6 +83,8 @@ public abstract class BlockSlab extends Block
 
     /**
      * Add all collision boxes of this Block to the list that intersect with the given mask.
+     *  
+     * @param collidingEntity the Entity colliding with this Block
      */
     public void addCollisionBoxesToList(World worldIn, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity)
     {
@@ -152,9 +154,6 @@ public abstract class BlockSlab extends Block
      */
     public abstract String getUnlocalizedName(int meta);
 
-    /**
-     * Gets the meta to use for the Pick Block ItemStack result
-     */
     public int getDamageValue(World worldIn, BlockPos pos)
     {
         return super.getDamageValue(worldIn, pos) & 7;

@@ -35,7 +35,7 @@ import org.lwjgl.opengl.GL11;
 public abstract class RendererLivingEntity<T extends EntityLivingBase> extends Render<T>
 {
     private static final Logger logger = LogManager.getLogger();
-    private static final DynamicTexture textureBrightness = new DynamicTexture(16, 16);
+    private static final DynamicTexture field_177096_e = new DynamicTexture(16, 16);
     public ModelBase mainModel;
     protected FloatBuffer brightnessBuffer = GLAllocation.createDirectFloatBuffer(4);
     protected List<LayerRenderer<T>> layerRenderers = Lists.<LayerRenderer<T>>newArrayList();
@@ -104,7 +104,12 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
     }
 
     /**
-     * Renders the desired {@code T} type Entity.
+     * Actually renders the given argument. This is a synthetic bridge method, always casting down its argument and then
+     * handing it off to a worker function which does the actual work. In all probabilty, the class Render is generic
+     * (Render<T extends Entity>) and this method has signature public void doRender(T entity, double d, double d1,
+     * double d2, float f, float f1). But JAD is pre 1.5 so doe
+     *  
+     * @param entityYaw The yaw rotation of the passed entity
      */
     public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks)
     {
@@ -332,7 +337,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
     /**
      * Renders the model in RenderLiving
      */
-    protected void renderModel(T entitylivingbaseIn, float p_77036_2_, float p_77036_3_, float p_77036_4_, float p_77036_5_, float p_77036_6_, float scaleFactor)
+    protected void renderModel(T entitylivingbaseIn, float p_77036_2_, float p_77036_3_, float p_77036_4_, float p_77036_5_, float p_77036_6_, float p_77036_7_)
     {
         boolean flag = !entitylivingbaseIn.isInvisible();
         boolean flag1 = !flag && !entitylivingbaseIn.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer);
@@ -354,7 +359,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
                 GlStateManager.alphaFunc(516, 0.003921569F);
             }
 
-            this.mainModel.render(entitylivingbaseIn, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, scaleFactor);
+            this.mainModel.render(entitylivingbaseIn, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, p_77036_7_);
 
             if (flag1)
             {
@@ -447,7 +452,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
             GL11.glTexEnv(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_COLOR, (FloatBuffer)this.brightnessBuffer);
             GlStateManager.setActiveTexture(OpenGlHelper.GL_TEXTURE2);
             GlStateManager.enableTexture2D();
-            GlStateManager.bindTexture(textureBrightness.getGlTextureId());
+            GlStateManager.bindTexture(field_177096_e.getGlTextureId());
             GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, OpenGlHelper.GL_COMBINE);
             GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, OpenGlHelper.GL_COMBINE_RGB, GL11.GL_MODULATE);
             GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, OpenGlHelper.GL_SOURCE0_RGB, OpenGlHelper.GL_PREVIOUS);
@@ -534,7 +539,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
         }
         else
         {
-            String s = EnumChatFormatting.getTextWithoutFormattingCodes(bat.getName());
+            String s = EnumChatFormatting.getTextWithoutFormattingCodes(bat.getCommandSenderName());
 
             if (s != null && (s.equals("Dinnerbone") || s.equals("Grumm")) && (!(bat instanceof EntityPlayer) || ((EntityPlayer)bat).isWearing(EnumPlayerModelParts.CAPE)))
             {
@@ -659,11 +664,11 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
                         int i = fontrenderer.getStringWidth(s) / 2;
                         Tessellator tessellator = Tessellator.getInstance();
                         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-                        worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-                        worldrenderer.pos((double)(-i - 1), -1.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-                        worldrenderer.pos((double)(-i - 1), 8.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-                        worldrenderer.pos((double)(i + 1), 8.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-                        worldrenderer.pos((double)(i + 1), -1.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+                        worldrenderer.func_181668_a(7, DefaultVertexFormats.field_181706_f);
+                        worldrenderer.func_181662_b((double)(-i - 1), -1.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
+                        worldrenderer.func_181662_b((double)(-i - 1), 8.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
+                        worldrenderer.func_181662_b((double)(i + 1), 8.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
+                        worldrenderer.func_181662_b((double)(i + 1), -1.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
                         tessellator.draw();
                         GlStateManager.enableTexture2D();
                         GlStateManager.depthMask(true);
@@ -735,13 +740,13 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
 
     static
     {
-        int[] aint = textureBrightness.getTextureData();
+        int[] aint = field_177096_e.getTextureData();
 
         for (int i = 0; i < 256; ++i)
         {
             aint[i] = -1;
         }
 
-        textureBrightness.updateDynamicTexture();
+        field_177096_e.updateDynamicTexture();
     }
 }

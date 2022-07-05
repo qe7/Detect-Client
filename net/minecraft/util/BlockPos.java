@@ -44,6 +44,10 @@ public class BlockPos extends Vec3i
 
     /**
      * Add the given coordinates to the coordinates of this BlockPos
+     *  
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @param z Z coordinate
      */
     public BlockPos add(double x, double y, double z)
     {
@@ -52,6 +56,10 @@ public class BlockPos extends Vec3i
 
     /**
      * Add the given coordinates to the coordinates of this BlockPos
+     *  
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @param z Z coordinate
      */
     public BlockPos add(int x, int y, int z)
     {
@@ -180,6 +188,9 @@ public class BlockPos extends Vec3i
 
     /**
      * Offsets this BlockPos n blocks in the given direction
+     *  
+     * @param facing The direction of the offset
+     * @param n The number of blocks to offset by
      */
     public BlockPos offset(EnumFacing facing, int n)
     {
@@ -355,11 +366,11 @@ public class BlockPos extends Vec3i
             return this.z;
         }
 
-        public BlockPos.MutableBlockPos set(int xIn, int yIn, int zIn)
+        public BlockPos.MutableBlockPos func_181079_c(int p_181079_1_, int p_181079_2_, int p_181079_3_)
         {
-            this.x = xIn;
-            this.y = yIn;
-            this.z = zIn;
+            this.x = p_181079_1_;
+            this.y = p_181079_2_;
+            this.z = p_181079_3_;
             return this;
         }
     }

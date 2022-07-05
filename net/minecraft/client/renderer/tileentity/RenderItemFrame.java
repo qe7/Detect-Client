@@ -51,7 +51,12 @@ public class RenderItemFrame extends Render<EntityItemFrame>
     }
 
     /**
-     * Renders the desired {@code T} type Entity.
+     * Actually renders the given argument. This is a synthetic bridge method, always casting down its argument and then
+     * handing it off to a worker function which does the actual work. In all probabilty, the class Render is generic
+     * (Render<T extends Entity>) and this method has signature public void doRender(T entity, double d, double d1,
+     * double d2, float f, float f1). But JAD is pre 1.5 so doe
+     *  
+     * @param entityYaw The yaw rotation of the passed entity
      */
     public void doRender(EntityItemFrame entity, double x, double y, double z, float entityYaw, float partialTicks)
     {
@@ -154,7 +159,7 @@ public class RenderItemFrame extends Render<EntityItemFrame>
 
                     if (item == Items.compass)
                     {
-                        textureatlassprite = this.mc.getTextureMapBlocks().getAtlasSprite(TextureCompass.locationSprite);
+                        textureatlassprite = this.mc.getTextureMapBlocks().getAtlasSprite(TextureCompass.field_176608_l);
                         this.mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
 
                         if (textureatlassprite instanceof TextureCompass)
@@ -183,7 +188,7 @@ public class RenderItemFrame extends Render<EntityItemFrame>
 
                     GlStateManager.pushAttrib();
                     RenderHelper.enableStandardItemLighting();
-                    this.itemRenderer.renderItem(entityitem.getEntityItem(), ItemCameraTransforms.TransformType.FIXED);
+                    this.itemRenderer.func_181564_a(entityitem.getEntityItem(), ItemCameraTransforms.TransformType.FIXED);
                     RenderHelper.disableStandardItemLighting();
                     GlStateManager.popAttrib();
 
@@ -229,11 +234,11 @@ public class RenderItemFrame extends Render<EntityItemFrame>
                     WorldRenderer worldrenderer = tessellator.getWorldRenderer();
                     int i = fontrenderer.getStringWidth(s) / 2;
                     GlStateManager.disableTexture2D();
-                    worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-                    worldrenderer.pos((double)(-i - 1), -1.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-                    worldrenderer.pos((double)(-i - 1), 8.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-                    worldrenderer.pos((double)(i + 1), 8.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-                    worldrenderer.pos((double)(i + 1), -1.0D, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+                    worldrenderer.func_181668_a(7, DefaultVertexFormats.field_181706_f);
+                    worldrenderer.func_181662_b((double)(-i - 1), -1.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
+                    worldrenderer.func_181662_b((double)(-i - 1), 8.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
+                    worldrenderer.func_181662_b((double)(i + 1), 8.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
+                    worldrenderer.func_181662_b((double)(i + 1), -1.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
                     tessellator.draw();
                     GlStateManager.enableTexture2D();
                     GlStateManager.depthMask(true);
@@ -277,7 +282,7 @@ public class RenderItemFrame extends Render<EntityItemFrame>
     public static void updateItemRenderDistance()
     {
         Minecraft minecraft = Config.getMinecraft();
-        double d0 = (double)Config.limit(minecraft.gameSettings.gammaSetting, 1.0F, 120.0F);
+        double d0 = (double)Config.limit(minecraft.gameSettings.fovSetting, 1.0F, 120.0F);
         double d1 = Math.max(6.0D * (double)minecraft.displayHeight / d0, 16.0D);
         itemRenderDistanceSq = d1 * d1;
     }

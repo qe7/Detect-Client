@@ -39,6 +39,13 @@ public class ShadersTex
     public static final int defNormTexColor = -8421377;
     public static final int defSpecTexColor = 0;
     public static Map<Integer, MultiTexID> multiTexMap = new HashMap();
+    public static TextureMap updatingTextureMap = null;
+    public static TextureAtlasSprite updatingSprite = null;
+    public static MultiTexID updatingTex = null;
+    public static MultiTexID boundTex = null;
+    public static int updatingPage = 0;
+    public static String iconName = null;
+    public static IResourceManager resManager = null;
 
     public static IntBuffer getIntBuffer(int size)
     {
@@ -214,6 +221,8 @@ public class ShadersTex
 
     public static void bindTextures(MultiTexID multiTex)
     {
+        boundTex = multiTex;
+
         if (Shaders.isRenderingWorld && GlStateManager.getActiveTextureUnit() == 33984)
         {
             if (Shaders.configNormalMap)
@@ -260,6 +269,14 @@ public class ShadersTex
                 Shaders.uniform_atlasSize.setValue(Shaders.atlasSizeX, Shaders.atlasSizeY);
             }
         }
+    }
+
+    public static void bindTextureMapForUpdateAndRender(TextureManager tm, ResourceLocation resLoc)
+    {
+        TextureMap texturemap = (TextureMap)tm.getTexture(resLoc);
+        Shaders.atlasSizeX = texturemap.atlasWidth;
+        Shaders.atlasSizeY = texturemap.atlasHeight;
+        bindTextures(updatingTex = texturemap.getMultiTexID());
     }
 
     public static void bindTextures(int baseTex)
@@ -325,9 +342,11 @@ public class ShadersTex
     public static void allocateTextureMap(int texID, int mipmapLevels, int width, int height, Stitcher stitcher, TextureMap tex)
     {
         SMCLog.info("allocateTextureMap " + mipmapLevels + " " + width + " " + height + " ");
+        updatingTextureMap = tex;
         tex.atlasWidth = width;
         tex.atlasHeight = height;
         MultiTexID multitexid = getMultiTexID(tex);
+        updatingTex = multitexid;
         TextureUtil.allocateTextureImpl(multitexid.base, mipmapLevels, width, height);
 
         if (Shaders.configNormalMap)
@@ -343,32 +362,42 @@ public class ShadersTex
         GlStateManager.bindTexture(texID);
     }
 
-    public static void uploadTexSubForLoadAtlas(TextureMap textureMap, String iconName, int[][] data, int width, int height, int xoffset, int yoffset, boolean linear, boolean clamp)
+    public static TextureAtlasSprite setSprite(TextureAtlasSprite tas)
     {
-        MultiTexID multitexid = textureMap.multiTex;
+        updatingSprite = tas;
+        return tas;
+    }
+
+    public static String setIconName(String name)
+    {
+        iconName = name;
+        return name;
+    }
+
+    public static void uploadTexSubForLoadAtlas(int[][] data, int width, int height, int xoffset, int yoffset, boolean linear, boolean clamp)
+    {
         TextureUtil.uploadTextureMipmap(data, width, height, xoffset, yoffset, linear, clamp);
         boolean flag = false;
 
         if (Shaders.configNormalMap)
         {
-            int[][] aint = readImageAndMipmaps(textureMap, iconName + "_n", width, height, data.length, flag, -8421377);
-            GlStateManager.bindTexture(multitexid.norm);
+            int[][] aint = readImageAndMipmaps(iconName + "_n", width, height, data.length, flag, -8421377);
+            GlStateManager.bindTexture(updatingTex.norm);
             TextureUtil.uploadTextureMipmap(aint, width, height, xoffset, yoffset, linear, clamp);
         }
 
         if (Shaders.configSpecularMap)
         {
-            int[][] aint1 = readImageAndMipmaps(textureMap, iconName + "_s", width, height, data.length, flag, 0);
-            GlStateManager.bindTexture(multitexid.spec);
+            int[][] aint1 = readImageAndMipmaps(iconName + "_s", width, height, data.length, flag, 0);
+            GlStateManager.bindTexture(updatingTex.spec);
             TextureUtil.uploadTextureMipmap(aint1, width, height, xoffset, yoffset, linear, clamp);
         }
 
-        GlStateManager.bindTexture(multitexid.base);
+        GlStateManager.bindTexture(updatingTex.base);
     }
 
-    public static int[][] readImageAndMipmaps(TextureMap updatingTextureMap, String name, int width, int height, int numLevels, boolean border, int defColor)
+    public static int[][] readImageAndMipmaps(String name, int width, int height, int numLevels, boolean border, int defColor)
     {
-        MultiTexID multitexid = updatingTextureMap.multiTex;
         int[][] aint = new int[numLevels][];
         int[] aint1;
         aint[0] = aint1 = new int[width * height];
@@ -392,7 +421,7 @@ public class ShadersTex
             Arrays.fill(aint1, defColor);
         }
 
-        GlStateManager.bindTexture(multitexid.spec);
+        GlStateManager.bindTexture(updatingTex.spec);
         aint = genMipmapsSimple(aint.length - 1, width, aint);
         return aint;
     }
@@ -450,6 +479,28 @@ public class ShadersTex
         }
 
         return data;
+    }
+
+    public static void uploadTexSub(int[][] data, int width, int height, int xoffset, int yoffset, boolean linear, boolean clamp)
+    {
+        TextureUtil.uploadTextureMipmap(data, width, height, xoffset, yoffset, linear, clamp);
+
+        if (Shaders.configNormalMap || Shaders.configSpecularMap)
+        {
+            if (Shaders.configNormalMap)
+            {
+                GlStateManager.bindTexture(updatingTex.norm);
+                uploadTexSub1(data, width, height, xoffset, yoffset, 1);
+            }
+
+            if (Shaders.configSpecularMap)
+            {
+                GlStateManager.bindTexture(updatingTex.spec);
+                uploadTexSub1(data, width, height, xoffset, yoffset, 2);
+            }
+
+            GlStateManager.bindTexture(updatingTex.base);
+        }
     }
 
     public static void uploadTexSub1(int[][] src, int width, int height, int posX, int posY, int page)
@@ -850,13 +901,14 @@ public class ShadersTex
         int k = 0;
         int[] aint = null;
 
-        for (Object s : list)
+        for (Object e : list)
         {
+            String s = (String) e;
             if (s != null)
             {
                 try
                 {
-                    ResourceLocation resourcelocation = new ResourceLocation((String) s);
+                    ResourceLocation resourcelocation = new ResourceLocation(s);
                     InputStream inputstream = manager.getResource(resourcelocation).getInputStream();
                     BufferedImage bufferedimage = ImageIO.read(inputstream);
 

@@ -1,21 +1,36 @@
 package net.optifine.reflect;
 
-import net.optifine.Log;
+import net.minecraft.src.Config;
 
-public class ReflectorClass implements IResolvable
+public class ReflectorClass
 {
-    private String targetClassName = null;
-    private boolean checked = false;
-    private Class targetClass = null;
+    private String targetClassName;
+    private boolean checked;
+    private Class targetClass;
 
     public ReflectorClass(String targetClassName)
     {
+        this(targetClassName, false);
+    }
+
+    public ReflectorClass(String targetClassName, boolean lazyResolve)
+    {
+        this.targetClassName = null;
+        this.checked = false;
+        this.targetClass = null;
         this.targetClassName = targetClassName;
-        ReflectorResolver.register(this);
+
+        if (!lazyResolve)
+        {
+            Class oclass = this.getTargetClass();
+        }
     }
 
     public ReflectorClass(Class targetClass)
     {
+        this.targetClassName = null;
+        this.checked = false;
+        this.targetClass = null;
         this.targetClass = targetClass;
         this.targetClassName = targetClass.getName();
         this.checked = true;
@@ -37,7 +52,7 @@ public class ReflectorClass implements IResolvable
             }
             catch (ClassNotFoundException var2)
             {
-                Log.log("(Reflector) Class not present: " + this.targetClassName);
+                Config.log("(Reflector) Class not present: " + this.targetClassName);
             }
             catch (Throwable throwable)
             {
@@ -78,8 +93,8 @@ public class ReflectorClass implements IResolvable
         return new ReflectorMethod(this, name, paramTypes);
     }
 
-    public void resolve()
+    public ReflectorMethod makeMethod(String name, Class[] paramTypes, boolean lazyResolve)
     {
-        Class oclass = this.getTargetClass();
+        return new ReflectorMethod(this, name, paramTypes, lazyResolve);
     }
 }

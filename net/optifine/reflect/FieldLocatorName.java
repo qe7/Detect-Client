@@ -1,7 +1,7 @@
 package net.optifine.reflect;
 
 import java.lang.reflect.Field;
-import net.optifine.Log;
+import net.minecraft.src.Config;
 
 public class FieldLocatorName implements IFieldLocator
 {
@@ -32,7 +32,7 @@ public class FieldLocatorName implements IFieldLocator
             }
             catch (NoSuchFieldException var3)
             {
-                Log.log("(Reflector) Field not present: " + oclass.getName() + "." + this.targetFieldName);
+                Config.log("(Reflector) Field not present: " + oclass.getName() + "." + this.targetFieldName);
                 return null;
             }
             catch (SecurityException securityexception)

@@ -22,12 +22,12 @@ public class WorldChunkManager
     /** The biome list. */
     private BiomeCache biomeCache;
     private List<BiomeGenBase> biomesToSpawnIn;
-    private String generatorOptions;
+    private String field_180301_f;
 
     protected WorldChunkManager()
     {
         this.biomeCache = new BiomeCache(this);
-        this.generatorOptions = "";
+        this.field_180301_f = "";
         this.biomesToSpawnIn = Lists.<BiomeGenBase>newArrayList();
         this.biomesToSpawnIn.add(BiomeGenBase.forest);
         this.biomesToSpawnIn.add(BiomeGenBase.plains);
@@ -38,11 +38,11 @@ public class WorldChunkManager
         this.biomesToSpawnIn.add(BiomeGenBase.jungleHills);
     }
 
-    public WorldChunkManager(long seed, WorldType worldTypeIn, String options)
+    public WorldChunkManager(long seed, WorldType p_i45744_3_, String p_i45744_4_)
     {
         this();
-        this.generatorOptions = options;
-        GenLayer[] agenlayer = GenLayer.initializeAllBiomeGenerators(seed, worldTypeIn, options);
+        this.field_180301_f = p_i45744_4_;
+        GenLayer[] agenlayer = GenLayer.initializeAllBiomeGenerators(seed, p_i45744_3_, p_i45744_4_);
         this.genBiomes = agenlayer[0];
         this.biomeIndexLayer = agenlayer[1];
     }
@@ -170,6 +170,8 @@ public class WorldChunkManager
     /**
      * Return a list of biomes for the specified blocks. Args: listToReuse, x, y, width, length, cacheFlag (if false,
      * don't check biomeCache to avoid infinite loop in BiomeCacheBlock)
+     *  
+     * @param cacheFlag If false, don't check biomeCache to avoid infinite loop in BiomeCacheBlock
      */
     public BiomeGenBase[] getBiomeGenAt(BiomeGenBase[] listToReuse, int x, int z, int width, int length, boolean cacheFlag)
     {

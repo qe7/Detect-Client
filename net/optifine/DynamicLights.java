@@ -271,14 +271,13 @@ public class DynamicLights
         synchronized (mapDynamicLights)
         {
             List<DynamicLight> list = mapDynamicLights.valueList();
-            int i = list.size();
 
-            for (int j = 0; j < i; ++j)
+            for (int i = 0; i < list.size(); ++i)
             {
-                DynamicLight dynamiclight = (DynamicLight)list.get(j);
-                int k = dynamiclight.getLastLightLevel();
+                DynamicLight dynamiclight = (DynamicLight)list.get(i);
+                int j = dynamiclight.getLastLightLevel();
 
-                if (k > 0)
+                if (j > 0)
                 {
                     double d1 = dynamiclight.getLastPosX();
                     double d2 = dynamiclight.getLastPosY();
@@ -290,7 +289,7 @@ public class DynamicLights
 
                     if (dynamiclight.isUnderwater() && !Config.isClearWater())
                     {
-                        k = Config.limit(k - 2, 0, 15);
+                        j = Config.limit(j - 2, 0, 15);
                         d7 *= 2.0D;
                     }
 
@@ -298,7 +297,7 @@ public class DynamicLights
                     {
                         double d8 = Math.sqrt(d7);
                         double d9 = 1.0D - d8 / 7.5D;
-                        double d10 = d9 * (double)k;
+                        double d10 = d9 * (double)j;
 
                         if (d10 > d0)
                         {

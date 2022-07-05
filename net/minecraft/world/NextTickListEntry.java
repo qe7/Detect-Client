@@ -17,11 +17,11 @@ public class NextTickListEntry implements Comparable<NextTickListEntry>
     /** The id of the tick entry */
     private long tickEntryID;
 
-    public NextTickListEntry(BlockPos positionIn, Block blockIn)
+    public NextTickListEntry(BlockPos p_i45745_1_, Block p_i45745_2_)
     {
         this.tickEntryID = (long)(nextTickEntryID++);
-        this.position = positionIn;
-        this.block = blockIn;
+        this.position = p_i45745_1_;
+        this.block = p_i45745_2_;
     }
 
     public boolean equals(Object p_equals_1_)
@@ -45,15 +45,15 @@ public class NextTickListEntry implements Comparable<NextTickListEntry>
     /**
      * Sets the scheduled time for this tick entry
      */
-    public NextTickListEntry setScheduledTime(long scheduledTimeIn)
+    public NextTickListEntry setScheduledTime(long p_77176_1_)
     {
-        this.scheduledTime = scheduledTimeIn;
+        this.scheduledTime = p_77176_1_;
         return this;
     }
 
-    public void setPriority(int priorityIn)
+    public void setPriority(int p_82753_1_)
     {
-        this.priority = priorityIn;
+        this.priority = p_82753_1_;
     }
 
     public int compareTo(NextTickListEntry p_compareTo_1_)

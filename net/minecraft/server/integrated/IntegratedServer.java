@@ -95,9 +95,9 @@ public class IntegratedServer extends MinecraftServer
         return new IntegratedServerCommandManager();
     }
 
-    protected void loadAllWorlds(String saveName, String worldNameIn, long seed, WorldType type, String worldNameIn2)
+    protected void loadAllWorlds(String p_71247_1_, String p_71247_2_, long seed, WorldType type, String p_71247_6_)
     {
-        this.convertMapIfNeeded(saveName);
+        this.convertMapIfNeeded(p_71247_1_);
         boolean flag = Reflector.DimensionManager.exists();
 
         if (!flag)
@@ -106,17 +106,17 @@ public class IntegratedServer extends MinecraftServer
             this.timeOfLastDimensionTick = new long[this.worldServers.length][100];
         }
 
-        ISaveHandler isavehandler = this.getActiveAnvilConverter().getSaveLoader(saveName, true);
+        ISaveHandler isavehandler = this.getActiveAnvilConverter().getSaveLoader(p_71247_1_, true);
         this.setResourcePackFromWorld(this.getFolderName(), isavehandler);
         WorldInfo worldinfo = isavehandler.loadWorldInfo();
 
         if (worldinfo == null)
         {
-            worldinfo = new WorldInfo(this.theWorldSettings, worldNameIn);
+            worldinfo = new WorldInfo(this.theWorldSettings, p_71247_2_);
         }
         else
         {
-            worldinfo.setWorldName(worldNameIn);
+            worldinfo.setWorldName(p_71247_2_);
         }
 
         if (flag)
@@ -148,7 +148,7 @@ public class IntegratedServer extends MinecraftServer
 
             if (worldserver.getWorldInfo().getDifficulty() == null)
             {
-                this.setDifficultyForAllWorlds(this.mc.gameSettings.hideGUI);
+                this.setDifficultyForAllWorlds(this.mc.gameSettings.difficulty);
             }
         }
         else
@@ -192,7 +192,7 @@ public class IntegratedServer extends MinecraftServer
 
             if (this.worldServers[0].getWorldInfo().getDifficulty() == null)
             {
-                this.setDifficultyForAllWorlds(this.mc.gameSettings.hideGUI);
+                this.setDifficultyForAllWorlds(this.mc.gameSettings.difficulty);
             }
         }
 
@@ -263,7 +263,7 @@ public class IntegratedServer extends MinecraftServer
             {
                 while (!this.futureTaskQueue.isEmpty())
                 {
-                    Util.runTask((FutureTask)this.futureTaskQueue.poll(), logger);
+                    Util.func_181617_a((FutureTask)this.futureTaskQueue.poll(), logger);
                 }
             }
         }
@@ -318,7 +318,7 @@ public class IntegratedServer extends MinecraftServer
      */
     public EnumDifficulty getDifficulty()
     {
-        return this.mc.theWorld == null ? this.mc.gameSettings.hideGUI : this.mc.theWorld.getWorldInfo().getDifficulty();
+        return this.mc.theWorld == null ? this.mc.gameSettings.difficulty : this.mc.theWorld.getWorldInfo().getDifficulty();
     }
 
     /**
@@ -329,18 +329,12 @@ public class IntegratedServer extends MinecraftServer
         return this.theWorldSettings.getHardcoreEnabled();
     }
 
-    /**
-     * Get if RCON command events should be broadcast to ops
-     */
-    public boolean shouldBroadcastRconToOps()
+    public boolean func_181034_q()
     {
         return true;
     }
 
-    /**
-     * Get if console command events should be broadcast to ops
-     */
-    public boolean shouldBroadcastConsoleToOps()
+    public boolean func_183002_r()
     {
         return true;
     }
@@ -376,11 +370,7 @@ public class IntegratedServer extends MinecraftServer
         return false;
     }
 
-    /**
-     * Get if native transport should be used. Native transport means linux server performance improvements and
-     * optimized packet sending/receiving on linux
-     */
-    public boolean shouldUseNativeTransport()
+    public boolean func_181035_ah()
     {
         return false;
     }
@@ -513,7 +503,7 @@ public class IntegratedServer extends MinecraftServer
             {
                 public void run()
                 {
-                    for (EntityPlayerMP entityplayermp : Lists.newArrayList(IntegratedServer.this.getConfigurationManager().getPlayerList()))
+                    for (EntityPlayerMP entityplayermp : Lists.newArrayList(IntegratedServer.this.getConfigurationManager().func_181057_v()))
                     {
                         IntegratedServer.this.getConfigurationManager().playerLoggedOut(entityplayermp);
                     }

@@ -53,10 +53,7 @@ public class BlockSign extends BlockContainer
         return false;
     }
 
-    /**
-     * Return true if an entity can be spawned inside the block (used to get the player's bed spawn location)
-     */
-    public boolean canSpawnInBlock()
+    public boolean func_181623_g()
     {
         return true;
     }
@@ -71,12 +68,17 @@ public class BlockSign extends BlockContainer
 
     /**
      * Get the Item that this Block should drop when harvested.
+     *  
+     * @param fortune the level of the Fortune enchantment on the player's tool
      */
     public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
         return Items.sign;
     }
 
+    /**
+     * Used by pick block on the client to get a block's item form, if it exists.
+     */
     public Item getItem(World worldIn, BlockPos pos)
     {
         return Items.sign;
@@ -97,6 +99,6 @@ public class BlockSign extends BlockContainer
 
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
     {
-        return !this.hasInvalidNeighbor(worldIn, pos) && super.canPlaceBlockAt(worldIn, pos);
+        return !this.func_181087_e(worldIn, pos) && super.canPlaceBlockAt(worldIn, pos);
     }
 }

@@ -21,7 +21,12 @@ public class RenderSnowball<T extends Entity> extends Render<T>
     }
 
     /**
-     * Renders the desired {@code T} type Entity.
+     * Actually renders the given argument. This is a synthetic bridge method, always casting down its argument and then
+     * handing it off to a worker function which does the actual work. In all probabilty, the class Render is generic
+     * (Render<T extends Entity>) and this method has signature public void doRender(T entity, double d, double d1,
+     * double d2, float f, float f1). But JAD is pre 1.5 so doe
+     *  
+     * @param entityYaw The yaw rotation of the passed entity
      */
     public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks)
     {
@@ -32,7 +37,7 @@ public class RenderSnowball<T extends Entity> extends Render<T>
         GlStateManager.rotate(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
         this.bindTexture(TextureMap.locationBlocksTexture);
-        this.field_177083_e.renderItem(this.func_177082_d(entity), ItemCameraTransforms.TransformType.GROUND);
+        this.field_177083_e.func_181564_a(this.func_177082_d(entity), ItemCameraTransforms.TransformType.GROUND);
         GlStateManager.disableRescaleNormal();
         GlStateManager.popMatrix();
         super.doRender(entity, x, y, z, entityYaw, partialTicks);

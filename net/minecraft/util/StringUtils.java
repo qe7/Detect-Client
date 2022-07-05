@@ -17,9 +17,9 @@ public class StringUtils
         return i < 10 ? j + ":0" + i : j + ":" + i;
     }
 
-    public static String stripControlCodes(String text)
+    public static String stripControlCodes(String p_76338_0_)
     {
-        return patternControlCode.matcher(text).replaceAll("");
+        return patternControlCode.matcher(p_76338_0_).replaceAll("");
     }
 
     /**

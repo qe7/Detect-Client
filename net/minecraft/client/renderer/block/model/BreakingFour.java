@@ -7,26 +7,26 @@ public class BreakingFour extends BakedQuad
 {
     private final TextureAtlasSprite texture;
 
-    public BreakingFour(BakedQuad quad, TextureAtlasSprite textureIn)
+    public BreakingFour(BakedQuad p_i46217_1_, TextureAtlasSprite textureIn)
     {
-        super(Arrays.copyOf(quad.getVertexData(), quad.getVertexData().length), quad.tintIndex, FaceBakery.getFacingFromVertexData(quad.getVertexData()));
+        super(Arrays.copyOf(p_i46217_1_.getVertexData(), p_i46217_1_.getVertexData().length), p_i46217_1_.tintIndex, FaceBakery.getFacingFromVertexData(p_i46217_1_.getVertexData()));
         this.texture = textureIn;
-        this.remapQuad();
+        this.func_178217_e();
         this.fixVertexData();
     }
 
-    private void remapQuad()
+    private void func_178217_e()
     {
         for (int i = 0; i < 4; ++i)
         {
-            this.remapVert(i);
+            this.func_178216_a(i);
         }
     }
 
-    private void remapVert(int vertex)
+    private void func_178216_a(int p_178216_1_)
     {
         int i = this.vertexData.length / 4;
-        int j = i * vertex;
+        int j = i * p_178216_1_;
         float f = Float.intBitsToFloat(this.vertexData[j]);
         float f1 = Float.intBitsToFloat(this.vertexData[j + 1]);
         float f2 = Float.intBitsToFloat(this.vertexData[j + 2]);

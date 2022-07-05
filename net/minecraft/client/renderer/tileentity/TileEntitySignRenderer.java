@@ -5,7 +5,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiUtilRenderComponents;
-import net.minecraft.client.gui.inventory.GuiEditSign;
 import net.minecraft.client.model.ModelSign;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
@@ -107,7 +106,7 @@ public class TileEntitySignRenderer extends TileEntitySpecialRenderer<TileEntity
                     if (te.signText[j] != null)
                     {
                         IChatComponent ichatcomponent = te.signText[j];
-                        List<IChatComponent> list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false, true);
+                        List<IChatComponent> list = GuiUtilRenderComponents.func_178908_a(ichatcomponent, 90, fontrenderer, false, true);
                         String s = list != null && list.size() > 0 ? ((IChatComponent)list.get(0)).getFormattedText() : "";
 
                         if (j == te.lineBeingEdited)
@@ -142,10 +141,6 @@ public class TileEntitySignRenderer extends TileEntitySpecialRenderer<TileEntity
         {
             return false;
         }
-        else if (Config.getMinecraft().currentScreen instanceof GuiEditSign)
-        {
-            return true;
-        }
         else
         {
             if (!Config.zoomMode && p_isRenderText_0_.lineBeingEdited < 0)
@@ -166,7 +161,7 @@ public class TileEntitySignRenderer extends TileEntitySpecialRenderer<TileEntity
     public static void updateTextRenderDistance()
     {
         Minecraft minecraft = Config.getMinecraft();
-        double d0 = (double)Config.limit(minecraft.gameSettings.gammaSetting, 1.0F, 120.0F);
+        double d0 = (double)Config.limit(minecraft.gameSettings.fovSetting, 1.0F, 120.0F);
         double d1 = Math.max(1.5D * (double)minecraft.displayHeight / d0, 16.0D);
         textRenderDistanceSq = d1 * d1;
     }

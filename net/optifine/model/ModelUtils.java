@@ -14,7 +14,7 @@ public class ModelUtils
     {
         if (model != null)
         {
-            Config.dbg("Model: " + model + ", ao: " + model.isAmbientOcclusion() + ", gui3d: " + model.isGui3d() + ", builtIn: " + model.isBuiltInRenderer() + ", particle: " + model.getParticleTexture());
+            Config.dbg("Model: " + model + ", ao: " + model.isAmbientOcclusion() + ", gui3d: " + model.isGui3d() + ", builtIn: " + model.isBuiltInRenderer() + ", particle: " + model.getTexture());
             EnumFacing[] aenumfacing = EnumFacing.VALUES;
 
             for (int i = 0; i < aenumfacing.length; ++i)
@@ -31,10 +31,10 @@ public class ModelUtils
 
     private static void dbgQuads(String name, List quads, String prefix)
     {
-        for (Object bakedquad0 : quads)
+        for (Object e : quads)
         {
-            BakedQuad bakedQuad = (BakedQuad) bakedquad0;
-            dbgQuad(name, bakedQuad, prefix);
+            BakedQuad bakedquad = (BakedQuad) e;
+            dbgQuad(name, bakedquad, prefix);
         }
     }
 
@@ -76,7 +76,7 @@ public class ModelUtils
             list1.add(list3);
         }
 
-        SimpleBakedModel simplebakedmodel = new SimpleBakedModel(list, list1, model.isAmbientOcclusion(), model.isGui3d(), model.getParticleTexture(), model.getItemCameraTransforms());
+        SimpleBakedModel simplebakedmodel = new SimpleBakedModel(list, list1, model.isAmbientOcclusion(), model.isGui3d(), model.getTexture(), model.getItemCameraTransforms());
         return simplebakedmodel;
     }
 

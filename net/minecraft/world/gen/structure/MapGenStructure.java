@@ -29,7 +29,7 @@ public abstract class MapGenStructure extends MapGenBase
      */
     protected final void recursiveGenerate(World worldIn, final int chunkX, final int chunkZ, int p_180701_4_, int p_180701_5_, ChunkPrimer chunkPrimerIn)
     {
-        this.initializeStructureData(worldIn);
+        this.func_143027_a(worldIn);
 
         if (!this.structureMap.containsKey(Long.valueOf(ChunkCoordIntPair.chunkXZ2Int(chunkX, chunkZ))))
         {
@@ -41,7 +41,7 @@ public abstract class MapGenStructure extends MapGenBase
                 {
                     StructureStart structurestart = this.getStructureStart(chunkX, chunkZ);
                     this.structureMap.put(Long.valueOf(ChunkCoordIntPair.chunkXZ2Int(chunkX, chunkZ)), structurestart);
-                    this.setStructureStart(chunkX, chunkZ, structurestart);
+                    this.func_143026_a(chunkX, chunkZ, structurestart);
                 }
             }
             catch (Throwable throwable)
@@ -77,7 +77,7 @@ public abstract class MapGenStructure extends MapGenBase
 
     public boolean generateStructure(World worldIn, Random randomIn, ChunkCoordIntPair chunkCoord)
     {
-        this.initializeStructureData(worldIn);
+        this.func_143027_a(worldIn);
         int i = (chunkCoord.chunkXPos << 4) + 8;
         int j = (chunkCoord.chunkZPos << 4) + 8;
         boolean flag = false;
@@ -89,7 +89,7 @@ public abstract class MapGenStructure extends MapGenBase
                 structurestart.generateStructure(worldIn, randomIn, new StructureBoundingBox(i, j, i + 15, j + 15));
                 structurestart.func_175787_b(chunkCoord);
                 flag = true;
-                this.setStructureStart(structurestart.getChunkPosX(), structurestart.getChunkPosZ(), structurestart);
+                this.func_143026_a(structurestart.getChunkPosX(), structurestart.getChunkPosZ(), structurestart);
             }
         }
 
@@ -98,7 +98,7 @@ public abstract class MapGenStructure extends MapGenBase
 
     public boolean func_175795_b(BlockPos pos)
     {
-        this.initializeStructureData(this.worldObj);
+        this.func_143027_a(this.worldObj);
         return this.func_175797_c(pos) != null;
     }
 
@@ -134,9 +134,9 @@ public abstract class MapGenStructure extends MapGenBase
         return null;
     }
 
-    public boolean isPositionInStructure(World worldIn, BlockPos pos)
+    public boolean func_175796_a(World worldIn, BlockPos pos)
     {
-        this.initializeStructureData(worldIn);
+        this.func_143027_a(worldIn);
 
         for (StructureStart structurestart : this.structureMap.values())
         {
@@ -152,7 +152,7 @@ public abstract class MapGenStructure extends MapGenBase
     public BlockPos getClosestStrongholdPos(World worldIn, BlockPos pos)
     {
         this.worldObj = worldIn;
-        this.initializeStructureData(worldIn);
+        this.func_143027_a(worldIn);
         this.rand.setSeed(worldIn.getSeed());
         long i = this.rand.nextLong();
         long j = this.rand.nextLong();
@@ -216,7 +216,7 @@ public abstract class MapGenStructure extends MapGenBase
         return null;
     }
 
-    private void initializeStructureData(World worldIn)
+    private void func_143027_a(World worldIn)
     {
         if (this.structureData == null)
         {
@@ -256,9 +256,9 @@ public abstract class MapGenStructure extends MapGenBase
         }
     }
 
-    private void setStructureStart(int chunkX, int chunkZ, StructureStart start)
+    private void func_143026_a(int p_143026_1_, int p_143026_2_, StructureStart start)
     {
-        this.structureData.writeInstance(start.writeStructureComponentsToNBT(chunkX, chunkZ), chunkX, chunkZ);
+        this.structureData.writeInstance(start.writeStructureComponentsToNBT(p_143026_1_, p_143026_2_), p_143026_1_, p_143026_2_);
         this.structureData.markDirty();
     }
 

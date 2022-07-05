@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import net.optifine.Log;
+import net.minecraft.src.Config;
 
 public class FieldLocatorTypes implements IFieldLocator
 {
@@ -30,7 +30,7 @@ public class FieldLocatorTypes implements IFieldLocator
 
         if (l < 0)
         {
-            Log.log("(Reflector) Field not found: " + errorName);
+            Config.log("(Reflector) Field not found: " + errorName);
         }
         else
         {
@@ -38,7 +38,7 @@ public class FieldLocatorTypes implements IFieldLocator
 
             if (j >= 0)
             {
-                Log.log("(Reflector) More than one match found for field: " + errorName);
+                Config.log("(Reflector) More than one match found for field: " + errorName);
             }
             else
             {

@@ -42,12 +42,7 @@ public abstract class TileEntitySpecialRenderer<T extends TileEntity> implements
         return this.rendererDispatcher.getFontRenderer();
     }
 
-    /**
-     * If true the {@link TileEntitySpecialRenderer} will always be rendered while the player is in the render bounding
-     * box {@link TileEntity#getRenderBoundingBox()} and his squared distance with the {@link TileEntity} is smaller
-     * than {@link TileEntity#getMaxRenderDistanceSquared()}.
-     */
-    public boolean forceTileEntityRender()
+    public boolean func_181055_a()
     {
         return false;
     }
